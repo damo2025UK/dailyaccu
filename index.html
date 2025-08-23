@@ -1,0 +1,324 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>足球下注记录簿</title><style>
+:root{--panel:#fff;--muted:#64748b;--text:#0f172a;--pri:#0ea5e9;--pri2:#0284c7;--accent:#2563eb}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f8fafc,#f1f5f9 35%,#eef2f7);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text)}
+.navbar{position:sticky;top:0;z-index:10;background:#0f172a;color:#e5e7eb;border-bottom:1px solid rgba(255,255,255,.08);padding:8px 14px}
+.navbar h1{margin:0;color:#f1f5f9}
+.wrap{max-width:none;width:100%;margin:0;padding:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(15,23,42,.12);background:var(--pri);color:#ecfeff;font-weight:600;cursor:pointer}
+.btn.sec{background:#f8fafc;border-color:rgba(15,23,42,.12);color:#0f172a}.btn.warn{background:#fee2e2;border-color:#fecaca;color:#991b1b}
+.icon-btn{background:transparent;border:none;padding:4px;color:#e5e7eb;font-size:18px;cursor:pointer}
+.icon-btn:hover{filter:brightness(1.2)}
+input,select,button,textarea{font:inherit}input,select,textarea{width:100%;padding:8px 10px;border:1px solid rgba(15,23,42,.15);background:#fff;color:var(--text);border-radius:10px;outline:none}
+.card{background:var(--panel);border:1px solid rgba(15,23,42,.08);border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(15,23,42,.06)}
+.result-tag{padding:2px 6px;border-radius:999px;font-weight:600;font-size:12px}.result-win{color:#166534;background:rgba(22,101,52,.1)}.result-loss{color:#991b1b;background:rgba(185,28,28,.1)}.result-pending{color:#64748b;background:rgba(100,116,139,.12)}
+.link{background:transparent;border:none;color:var(--accent);padding:0 2px;cursor:pointer}.link.win{color:#166534}.link.loss{color:#b91c1c}
+.controls{display:flex;gap:8px;align-items:center}.controls .field{display:inline-flex;gap:6px;align-items:center;flex:0 0 auto}.controls input{width:100px}#currency{width:80px}
+.small{font-size:12px}.muted{color:var(--muted)}.balance strong{font-size:1em;color:#16a34a;font-style:italic}
+.layout{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start}
+.navlinks{display:flex;gap:10px;flex-wrap:wrap}
+.navlinks a{color:#cbd5e1;text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:inline-flex;gap:6px;align-items:center}
+.navlinks a .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.navlinks a.active{color:#fff;background:rgba(96,165,250,.18);border-color:#60a5fa}
+    /* KPI 样式 */
+    .meta-line .kpi{display:flex;flex-direction:column;align-items:flex-end;min-width:72px}
+    .meta-line .kpi .k-label{font-size:11px;color:var(--muted)}
+    .meta-line .kpi .k-val{font-weight:600}
+    .meta-line .kpi.balance .k-val{font-size:200%;font-weight:700}
+
+.ops-line .link:hover{text-decoration:underline}
+/* 输入区域样式 */.under input,.under select{border:none;border-bottom:1px solid rgba(15,23,42,.25);border-radius:0;background:transparent;padding-left:0;padding-right:0}
+.under input:focus,.under select:focus{border-bottom-color:var(--accent);box-shadow:none}.under label{display:block;color:#1f2937;font-weight:700;margin-bottom:4px}
+/* 抽屉样式 */
+.drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:saturate(120%) blur(2px);z-index:40;display:none}
+.drawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:90vw;background:#fff;color:#0f172a;border-left:1px solid rgba(15,23,42,.12);box-shadow:-8px 0 24px rgba(15,23,42,.15);transform:translateX(100%);transition:transform .25s ease;z-index:41;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(15,23,42,.08)}
+.drawer-body{padding:12px 14px;display:grid;gap:10px;align-content:start}
+.drawer .field{display:grid;gap:6px}
+.drawer hr{border:none;border-top:1px solid rgba(15,23,42,.08);margin:6px 0}
+.icon-btn svg{display:block}
+
+/* 表格 */table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px}th,td{padding:10px;border-bottom:1px solid rgba(15,23,42,.08);text-align:left}
+thead th{position:sticky;top:0;background:#f1f5f9;z-index:1;cursor:pointer}tbody tr:hover{background:#f8fafc}.right{text-align:right}
+tbody tr.win{background:rgba(16,185,129,.08)}
+tbody tr.loss{background:rgba(239,68,68,.08)}
+.pos{color:#16a34a;font-style:italic}
+.neg{color:#b91c1c;font-style:italic}
+
+/* 统计小表格 */.stats-table{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;border:1px solid rgba(15,23,42,.18)}
+.stats-table th,.stats-table td{padding:6px 8px;border-bottom:1px solid rgba(15,23,42,.08);font-size:13px}.stats-table th{background:#f8fafc;color:#334155;text-align:left}.stats-table td.right,.stats-table th.right{text-align:right}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}}@media(max-width:800px){.g-2{grid-template-columns:1fr}}
+</style></head><body>
+<div class="navbar"><div class="row" style="align-items:center;gap:12px">
+  <div style="display:flex;flex-direction:column;gap:6px;flex:1 1 auto">
+    <div class="row" style="align-items:center;gap:10px;flex-wrap:nowrap">
+      <h1 style="margin:0">⚽ 足球下注记录簿</h1>
+      <div class="iconbar" style="display:flex;gap:10px;align-items:center">
+        <button id="exportCsv" class="icon-btn" title="导出 CSV" aria-label="导出">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M21 21H3"/></svg>
+        </button>
+        <button id="importCsvBtn" class="icon-btn" title="导入 CSV" aria-label="导入">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m16 13-4-4-4 4"/><path d="M21 3H3"/></svg>
+        </button>
+        <button id="clearAll" class="icon-btn" title="清空当前分类" aria-label="清空">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+        <button id="manageProfiles" class="icon-btn" title="设置 / 新增分类" aria-label="设置">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16l-3.9-3.9a5 5 0 1 1-6.2-6.2L14 9"/><path d="M22 22l-5.5-5.5"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="navlinks" id="nav"></div>
+  </div>
+  <div class="controls" style="margin-left:auto;flex-direction:column;align-items:flex-end">
+    <div class="row controls-line" style="gap:8px;align-items:center;justify-content:flex-end">
+
+
+
+
+      </div>
+      <input id="csvFile" type="file" accept=".csv,text/csv" style="display:none"/>
+    </div>
+    <div class="meta-line small" style="margin-top:6px;display:flex;gap:16px;align-items:flex-end;justify-content:flex-end">
+      <span style="margin-right:auto"></span>
+      <div class="kpi"><div class="k-label">总笔数</div><div class="k-val" id="k_total">0</div></div>
+      <div class="kpi"><div class="k-label">已结算</div><div class="k-val" id="k_settled">0</div></div>
+      <div class="kpi"><div class="k-label">胜率</div><div class="k-val" id="k_wr">0%</div></div>
+      <div class="kpi"><div class="k-label">总投入</div><div class="k-val" id="k_stake">0</div></div>
+      <div class="kpi"><div class="k-label">总返还</div><div class="k-val" id="k_return">0</div></div>
+      <div class="kpi"><div class="k-label">净收益</div><div class="k-val" id="k_profit">0</div></div>
+      <div class="kpi"><div class="k-label">ROI</div><div class="k-val" id="k_roi">0%</div></div>
+      <div class="kpi balance"><div class="k-label">余额</div><div class="k-val" id="balance">—</div></div>
+    </div>
+  </div>
+</div></div>
+<div class="wrap"><div class="layout">
+  <div class="card">
+    <div class="row"><input id="search" placeholder="搜索（按内容/结果/日期/联赛/比赛）"/>
+      <div class="row" style="flex:0 0 auto;align-items:center;gap:6px"><label style="align-self:center;margin:0;flex:0 0 auto">每页</label><select id="pageSize" style="width:auto;min-width:72px;max-width:120px;margin:0;flex:0 0 auto"><option>10</option><option>20</option><option selected>50</option><option>100</option></select></div>
+    </div>
+    <table id="table"><thead><tr>
+      <th data-sort="date" style="width:110px">日期</th>
+      <th data-sort="league" style="width:380px">联赛/比赛</th>
+      <th data-sort="desc" style="width:160px">内容</th>
+      <th data-sort="odds" class="right" style="width:90px">赔率</th>
+      <th data-sort="stake" class="right" style="width:90px">金额</th>
+      <th data-sort="result" style="width:70px">结果</th>
+      <th class="right" style="width:110px">返还</th>
+      <th class="right" style="width:110px">收益</th>
+      <th style="width:140px">操作</th>
+    </tr></thead><tbody id="tbody"></tbody></table>
+    <div class="row" style="margin-top:8px;align-items:center"><div class="small muted" id="pagerInfo">—</div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn sec" id="prevPage">上一页</button><button class="btn sec" id="nextPage">下一页</button></div></div>
+    <div class="small" style="margin:12px 0;color:#64748b">数据保存在浏览器本地（localStorage）。导出 CSV 可备份/迁移。</div>
+  </div>
+<!-- 抽屉与遮罩 -->
+<div id="drawerBackdrop" class="drawer-backdrop"></div>
+<div id="settingsDrawer" class="drawer" aria-hidden="true">
+  <div class="drawer-header"><strong>设置 / 分类</strong>
+    <button id="closeDrawer" class="icon-btn" title="关闭">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>初始余额</label><input id="drawer_initial" type="number" min="0" step="0.01" placeholder="1000"/></div>
+    <div class="field"><label>币种（前缀，如 CNY、$、€）</label><input id="drawer_currency" type="text" placeholder="CNY"/></div>
+    <button id="drawer_save" class="btn" style="justify-self:start">保存设置</button>
+    <hr>
+    <div class="field"><label>新增分类（显示名称）</label><input id="drawer_label" type="text" placeholder="如 My Tips"/></div>
+    <div class="field"><label>英文标识（slug）</label><input id="drawer_slug" type="text" placeholder="如 my-tips"/></div>
+    <button id="drawer_add_profile" class="btn sec" style="justify-self:start">新增分类</button>
+    <hr>
+    <div class="field"><label>分类列表</label>
+      <div id="profileList" class="small" style="display:grid;gap:6px"></div>
+    </div>
+    <div class="field">
+      <label>导入/导出全部数据</label>
+      <div class="row" style="gap:8px">
+        <button id="drawer_export_all" class="btn sec">导出全部 (soccer.csv)</button>
+        <button id="drawer_import_all_btn" class="btn">导入全部 (soccer.csv)</button>
+      </div>
+      <input id="drawer_import_all_file" type="file" accept=".csv,text/csv" style="display:none"/>
+    </div>
+  </div>
+</div>
+
+  <div class="grid g-2" style="display:grid;grid-template-columns:1fr;gap:12px">
+    <div class="card" id="entryCard"><h3 class="small" style="margin:0 0 8px;color:#334155">新增记录</h3>
+      <div class="row under"><div><label>日期</label><input id="date" type="date"/></div><div><label>联赛</label><div style="position:relative"><input id="league" type="text" placeholder="例如 英超" list="leagueList" autocomplete="off"/><datalist id="leagueList"></datalist></div></div><div><label>比赛</label><input id="match" type="text" placeholder="例如 曼城 vs 阿森纳"/></div></div>
+      <div class="row under" style="margin-top:8px"><div><label>下注内容</label><input id="desc" type="text" placeholder="例：曼城胜"/></div><div><label>赔率 (小数)</label><input id="odds" type="number" step="0.01" min="1" placeholder="例如 1.85"/></div><div><label>金额</label><input id="stake" type="number" step="0.01" min="0" placeholder="例如 50"/></div><div><label>结果</label><select id="result"><option value="pending">待定</option><option value="win">赢</option><option value="loss">输</option></select></div></div>
+      <div class="row" style="margin-top:10px"><button id="add" class="btn">+ 录入</button><button id="resetForm" class="btn sec">清空表单</button></div>
+    </div>
+    <div class="card"><h3 class="small" style="margin:0 0 8px;color:#334155">内容准确率</h3>
+      <table class="small stats-table" id="underTable"></table>
+      <h3 class="small" style="margin:8px 0 8px;color:#334155">赔率准确度（按具体赔率）</h3>
+      <table class="small stats-table" id="oddsTable"></table>
+      <h3 class="small" style="margin:8px 0 8px;color:#334155">联赛统计</h3>
+      <table class="small stats-table" id="leagueTable"></table>
+    </div>
+  </div>
+</div></div>
+<script>
+const DEFAULT_PROFILES={
+  "under95":{label:"Under 95",settingsKey:"bet_settings_under95",betsKey:"bet_records_under95",exportName:"under 95.csv",categorizer:(b)=>{const d=String(b.desc||"");const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)}},
+  "hoods-web":{label:"hoods-web",settingsKey:"bet_settings_hoods_web",betsKey:"bet_records_hoods_web",exportName:"hoods-web.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/home\s*win/i,/away\s*win/i,/draw/i,/btts\s*yes/i,/btts\s*no/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
+  "hoods-whatsapp":{label:"hoods-whatsapp",settingsKey:"bet_settings_hoods_whatsapp",betsKey:"bet_records_hoods_whatsapp",exportName:"hoods-whatsapp.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/first\s*half/i,/second\s*half/i,/corner/i,/card/i,/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
+  "supertips":{label:"SuperTipsAPP",settingsKey:"bet_settings_supertips",betsKey:"bet_records_supertips",exportName:"supertips.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i,/home\s*win/i,/away\s*win/i,/draw/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}}
+};
+const LS_PROFILES_KEY='bet_profiles_v1';
+const $=s=>document.querySelector(s);const navEl=$('#nav');
+let PROFILES=load(LS_PROFILES_KEY)||DEFAULT_PROFILES;
+if(!PROFILES || Object.keys(PROFILES).length===0){ PROFILES=DEFAULT_PROFILES; }
+let current=location.hash.slice(1);
+if(!current || !PROFILES[current]){ current=Object.keys(PROFILES)[0]; }
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}}
+function firstWordCats(d){const m=d.match(/^[^,，\s]+/);return m?[m[0]]:[]}
+const PROFILE_COLORS={"under95":"#60a5fa","hoods-web":"#f59e0b","hoods-whatsapp":"#10b981","supertips":"#ef4444"};
+function renderNav(){navEl.innerHTML=Object.entries(PROFILES).map(([slug,p])=>{ const c=PROFILE_COLORS[slug]||"#94a3b8"; return `<a href="#${slug}" class="${slug===current?'active':''}"><span class="dot" style="background:${c}"></span><span>${p.label}</span></a>`; }).join('')}
+window.addEventListener('hashchange',()=>{const slug=location.hash.slice(1);if(slug&&PROFILES[slug]){current=slug;renderNav();applyProfile();render()}});
+function prof(){return PROFILES[current]} // shorthand
+let settings=load(prof().settingsKey)||{initial:0,currency:'CNY'};let bets=load(prof().betsKey)||[];let sortBy='created',sortDir='desc',page=1;
+function applyProfile(){settings=load(prof().settingsKey)||{initial:0,currency:'CNY'};bets=load(prof().betsKey)||[];page=1}
+function symbol(){return settings.currency||''}
+function fmtNum(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
+function compute(b){let ret=null,profit=null;if(b.result==='win'){ret=+b.stake*+b.odds;profit=ret-+b.stake}else if(b.result==='loss'){ret=0;profit=-+b.stake}return {ret,profit}}
+function sum(a){return a.reduce((x,y)=>x+(+y||0),0)}
+function updateKPIs(){const cur=$('#search').value.trim().toLowerCase();const rows=bets.filter(b=>[b.date,b.league,b.match,b.desc,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));const settled=rows.filter(b=>b.result!=='pending');const wins=rows.filter(b=>b.result==='win');const stake=sum(settled.map(b=>+b.stake));const totalReturn=sum(settled.map(b=>compute(b).ret??0));const profit=totalReturn-stake;const wr=settled.length?Math.round(wins.length/settled.length*100):0;const roi=stake?Math.round(profit/stake*100):0;$('#k_total').textContent=rows.length;$('#k_settled').textContent=settled.length;$('#k_wr').textContent=wr+'%';$('#k_stake').textContent=symbol()+fmtNum(stake);$('#k_return').textContent=symbol()+fmtNum(totalReturn);$('#k_profit').textContent=symbol()+fmtNum(profit);$('#k_roi').textContent=roi+'%';const allProfit=sum(bets.filter(b=>b.result!=='pending').map(b=>compute(b).profit??0));const bal=+settings.initial+allProfit;const bel=$('#balance');bel.textContent=symbol()+Number(bal).toFixed(2);bel.classList.remove('pos','neg');if(bal>0)bel.classList.add('pos');else if(bal<0)bel.classList.add('neg');renderStats()}
+function render(){const cur=$('#search').value.trim().toLowerCase();let rows=bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.desc,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));rows.sort((a,b)=>{let r=0;if(sortBy==='created')r=a.i-b.i;else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));else{const va=a[sortBy]??'';const vb=b[sortBy]??'';r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))}if(r===0)r=a.i-b.i;return sortDir==='asc'?r:-r});const ps=+$('#pageSize').value||50;const total=rows.length;const pages=Math.max(1,Math.ceil(total/ps));if(page>pages)page=pages;const start=(page-1)*ps;const pageRows=rows.slice(start,start+ps);$('#tbody').innerHTML=pageRows.map(r=>rowHTML(r)).join('')||`<tr><td colspan="10" class="muted">暂无数据</td></tr>`;$('#pagerInfo').textContent=`第 ${page}/${pages} 页，共 ${total} 条`;$('#prevPage').disabled=page<=1;$('#nextPage').disabled=page>=pages;updateKPIs();updateLeagueList()}
+function rowHTML(b){
+  const {ret,profit}=compute(b);
+  const retTxt=ret==null?'—':symbol()+Number(ret).toFixed(2);
+  const pTxt=profit==null?'—':(profit>=0?'+':'')+symbol()+Number(Math.abs(profit)).toFixed(2);
+  const pColor=profit==null?'':(profit>=0?'#16a34a':'#b91c1c');
+  return `<tr class="${b.result==='win'?'win':(b.result==='loss'?'loss':'')}">
+    <td contenteditable data-act="edit" data-field="date" data-idx="${b.i}">${b.date||''}</td>
+    <td><span contenteditable data-act="edit" data-field="league" data-idx="${b.i}">${escapeHTML(b.league||'')}</span><span class="muted"> / </span><span contenteditable data-act="edit" data-field="match" data-idx="${b.i}">${escapeHTML(b.match||'')}</span></td>
+    <td contenteditable data-act="edit" data-field="desc" data-idx="${b.i}">${escapeHTML(b.desc||'')}</td>
+    <td class="right" contenteditable data-act="edit" data-field="odds" data-idx="${b.i}">${(+b.odds).toFixed(3)}</td>
+    <td class="right" contenteditable data-act="edit" data-field="stake" data-idx="${b.i}">${symbol()+Number(b.stake).toFixed(2)}</td>
+    <td><span class="result-tag ${b.result==='win'?'result-win':(b.result==='loss'?'result-loss':'result-pending')}">${b.result==='win'?'赢':(b.result==='loss'?'输':'待定')}</span></td>
+    <td class="right">${retTxt}</td>
+    <td class="right" style="color:${pColor};font-weight:700;font-size:15px">${pTxt}</td>
+    <td><div class="row ops-line" style="gap:8px;align-items:center;flex-wrap:nowrap"><button class="link" data-act="set" data-value="pending" data-idx="${b.i}">待</button><button class="link win" data-act="set" data-value="win" data-idx="${b.i}">✓</button><button class="link loss" data-act="set" data-value="loss" data-idx="${b.i}">✗</button><button class="link" data-act="del" data-idx="${b.i}">🗑</button></div></td>
+  </tr>`;
+}
+
+// 抽屉开关
+const drawer=$('#settingsDrawer'), backdrop=$('#drawerBackdrop');
+function openDrawer(){drawer.classList.add('open');backdrop.style.display='block';drawer.setAttribute('aria-hidden','false')}
+function closeDrawer(){drawer.classList.remove('open');backdrop.style.display='none';drawer.setAttribute('aria-hidden','true')}
+backdrop.onclick=closeDrawer;$('#closeDrawer').onclick=closeDrawer;
+// 填充当前设置
+function fillSettings(){ $('#drawer_initial').value=settings.initial||0; $('#drawer_currency').value=settings.currency||''; }
+// 保存设置
+$('#drawer_save').onclick=()=>{ settings.initial=+$('#drawer_initial').value||0; settings.currency=$('#drawer_currency').value.trim()||''; save(prof().settingsKey,settings); render(); alert('已保存'); };
+// 新增分类
+$('#drawer_add_profile').onclick=()=>{ const label=$('#drawer_label').value.trim(); const slug=($('#drawer_slug').value||'').trim(); if(!label||!slug){alert('请填写名称和标识');return} if(!/^[a-z0-9-]{2,}$/.test(slug)){alert('标识不合法');return} if(PROFILES[slug]){alert('该标识已存在');return} const p={label,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}}; PROFILES={...PROFILES,[slug]:p}; save(LS_PROFILES_KEY,PROFILES); renderNav(); location.hash=slug; alert('已新增分类'); };
+// 入口：打开抽屉
+$('#manageProfiles').onclick=()=>{ fillSettings(); renderProfileList(); openDrawer(); };
+
+// 分类管理渲染与交互
+function renderProfileList(){
+  const el=$('#profileList');
+  const rows=Object.entries(PROFILES).map(([slug,p])=>{
+    const c=(p.color||PROFILE_COLORS[slug]||'#94a3b8');
+    const active=slug===current;
+    return `<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center">
+      <input data-k="label" data-slug="${slug}" value="${escapeHTML(p.label)}"/>
+      <input data-k="color" data-slug="${slug}" value="${c}" style="width:80px"/>
+      <button data-act="switch" data-slug="${slug}" class="icon-btn" title="切换到此分类">${active?'✅':'↪️'}</button>
+      <button data-act="delete" data-slug="${slug}" class="icon-btn" title="删除分类">🗑</button>
+    </div>`
+  }).join('');
+  el.innerHTML=rows||'<div class="muted">暂无分类</div>';
+}
+$('#profileList').addEventListener('input',e=>{
+  const t=e.target; const slug=t.getAttribute('data-slug'); const k=t.getAttribute('data-k'); if(!slug||!k) return;
+  if(!PROFILES[slug]) return; PROFILES[slug]={...PROFILES[slug],[k]:t.value}; save(LS_PROFILES_KEY,PROFILES); renderNav();
+});
+$('#profileList').addEventListener('click',e=>{
+  const t=e.target; const act=t.getAttribute('data-act'); const slug=t.getAttribute('data-slug'); if(!act||!slug) return;
+  if(act==='switch'){ if(PROFILES[slug]){ location.hash=slug; } }
+  if(act==='delete'){
+    if(!PROFILES[slug]) return; if(!confirm('删除该分类？此操作不会删除其数据，但导航将不再显示。')) return;
+    // 仅移除配置，数据保留在 localStorage
+    let newProfiles={...PROFILES}; delete newProfiles[slug];
+    if(Object.keys(newProfiles).length===0){ alert('已删除最后一个分类，系统将恢复默认分类'); newProfiles={...DEFAULT_PROFILES}; }
+    PROFILES=newProfiles; save(LS_PROFILES_KEY,PROFILES);
+    if(!PROFILES[current]){ const first=Object.keys(PROFILES)[0]; if(first){ location.hash=first; } }
+    renderNav(); renderProfileList();
+  }
+});
+// 打开抽屉时填充列表
+function openDrawerAndFill(){ fillSettings(); renderProfileList(); openDrawer(); }
+// 替换入口
+$('#manageProfiles').onclick=openDrawerAndFill;
+
+function escapeHTML(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function normalizeLeagueName(name){return name.trim().replace(/\s+/g,' ').toLowerCase()}
+function updateLeagueList(){const leagueMap=new Map();bets.forEach(b=>{if(b.league&&b.league.trim()){const original=b.league.trim();const normalized=normalizeLeagueName(original);if(!leagueMap.has(normalized)||leagueMap.get(normalized).length>original.length){leagueMap.set(normalized,original)}}});const uniqueLeagues=Array.from(leagueMap.values()).sort();const datalist=$('#leagueList');datalist.innerHTML=uniqueLeagues.map(league=>`<option value="${escapeHTML(league)}"></option>`).join('')}
+let leagueSortAlpha=false;function renderStats(){const underTable=$('#underTable'),oddsTable=$('#oddsTable'),leagueTable=$('#leagueTable');if(!underTable||!oddsTable||!leagueTable)return;const settled=bets.filter(b=>b.result!=='pending');const getCats=(prof()&&typeof prof().categorizer==='function')?prof().categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)};const mapCats={};settled.forEach(b=>{(getCats(b)||[]).forEach(k=>{if(!k)return;(mapCats[k]??={t:0,w:0}).t++;if(b.result==='win')mapCats[k].w++})});const catRows=Object.entries(mapCats).sort((a,b)=>b[1].t-a[1].t).map(([name,v])=>`<tr><td>${name}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');underTable.innerHTML=`<colgroup><col><col style="width:90px"><col style="width:70px"></colgroup><thead><tr><th>类型</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${catRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const map={};settled.forEach(b=>{const k=(+b.odds).toFixed(3);(map[k]??={t:0,w:0}).t++;if(b.result==='win')map[k].w++});const oddsRows=Object.entries(map).sort((a,b)=>parseFloat(a[0])-parseFloat(b[0])).map(([k,v])=>`<tr><td>${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');oddsTable.innerHTML=`<thead><tr><th>赔率</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${oddsRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const leagueMap=new Map();const leagues={};settled.forEach(b=>{const original=b.league||'未填';const normalized=normalizeLeagueName(original);if(!leagueMap.has(normalized)||leagueMap.get(normalized).length>original.length){leagueMap.set(normalized,original)}const displayName=leagueMap.get(normalized);(leagues[displayName]??={t:0,w:0}).t++;if(b.result==='win')leagues[displayName].w++});const leagueRows=Object.entries(leagues).sort(leagueSortAlpha?(a,b)=>a[0].localeCompare(b[0]):(a,b)=>b[1].t-a[1].t).map(([k,v])=>`<tr><td style="cursor:pointer" onclick="toggleLeagueSort()">${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');leagueTable.innerHTML=`<thead><tr><th style="cursor:pointer" onclick="toggleLeagueSort()">联赛 ${leagueSortAlpha?'(A-Z)':'(按数量)'}</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${leagueRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`}function toggleLeagueSort(){leagueSortAlpha=!leagueSortAlpha;renderStats()}
+function addBet(){const b={date:$('#date').value||new Date().toISOString().slice(0,10),league:($('#league').value||'').trim(),match:($('#match').value||'').trim(),desc:($('#desc').value||'').trim(),odds:+$('#odds').value,stake:+$('#stake').value,result:$('#result').value};if(!b.desc){alert('请填写下注内容');return}if(!(b.odds>=1)){alert('请填写正确的赔率');return}if(!(b.stake>0)){alert('请填写正确的金额');return}bets.push(b);save(prof().betsKey,bets);sortBy='created';sortDir='desc';page=1;render()}
+function setResult(i,v){bets[i].result=v;save(prof().betsKey,bets);render()}function delBet(i){if(confirm('确定删除该记录？')){bets.splice(i,1);save(prof().betsKey,bets);render()}}
+function onInlineEdit(e){const td=e.target;if(td.dataset.act!=='edit')return;const i=+td.dataset.idx;const field=td.dataset.field;let val=td.textContent.trim();if(field==='odds'||field==='stake'){val=val.replace(/[^0-9.\-]/g,'');const num=+val;if(!isFinite(num)){alert('数值不正确');render();return}bets[i][field]=num}else{bets[i][field]=val}save(prof().betsKey,bets);render()}
+function saveSettings(){settings.initial=+$('#initial').value||0;settings.currency=$('#currency').value.trim()||'';save(prof().settingsKey,settings);render()}
+function exportCSV(){const rows=[["kind","date","league","match","desc","odds","stake","result"],["settings","initial",settings.initial,",,,,"],["settings","currency",settings.currency,",,,,"]];bets.forEach(b=>rows.push(["bet",b.date,b.league||'',b.match||'',b.desc,b.odds,b.stake,b.result]));const csv=toCSV(rows);download(prof().exportName,csv)}
+function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const rows=parseCSV(String(reader.result||''));if(!rows.length){alert('CSV 内容为空');return}const header=rows[0].map(s=>s.toLowerCase());if(header[0]!=="kind"){alert('CSV 格式不兼容');return}const newSettings={...settings};const newBets=[];for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();if(kind==='settings'){const key=(r[1]||'').toLowerCase();const val=r[2]||'';if(key==='initial')newSettings.initial=+val||0;if(key==='currency')newSettings.currency=val}else if(kind==='bet'){let b={};if(rows[0].length>=8){b={date:r[1]||today(),league:r[2]||'',match:r[3]||'',desc:r[4]||'',odds:+r[5]||0,stake:+r[6]||0,result:(r[7]||'pending').toLowerCase()}} if(b.desc)newBets.push(b)}}settings=newSettings;bets=newBets;save(prof().settingsKey,settings);save(prof().betsKey,bets);applyProfile();sortBy='created';sortDir='desc';page=1;render();alert('导入成功')}catch(e){console.error(e);alert('导入失败：'+e.message)}finally{ev.target.value=''}};reader.readAsText(f)}
+function today(){return new Date().toISOString().slice(0,10)}
+function download(name,content){const blob=new Blob(["\uFEFF"+content],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function toCSV(rows){return rows.map(r=>r.map(csvEscape).join(',')).join('\n')}function csvEscape(s){if(s==null)s='';s=String(s);if(/[",\n]/.test(s))s='"'+s.replace(/"/g,'""')+'"';return s}
+function parseCSV(text){const out=[];let row=[],field='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){field+='"';i++;}else q=false}else field+=c}else{if(c==='"')q=true;else if(c===','){row.push(field);field='';}else if(c==='\n'){row.push(field);out.push(row);row=[];field='';}else if(c==='\r'){}else field+=c}}if(field!==''||row.length){row.push(field);out.push(row)}return out}
+
+function buildUI(){renderNav();applyProfile();render();updateLeagueList();
+document.querySelectorAll('th[data-sort]').forEach(th=>{th.addEventListener('click',()=>{const key=th.getAttribute('data-sort');if(sortBy===key){sortDir=sortDir==='asc'?'desc':'asc'}else{sortBy=key;sortDir='asc'};render()})});
+$('#prevPage').onclick=()=>{if(page>1){page--;render()}};$('#nextPage').onclick=()=>{page++;render()};
+
+function exportAllCSV(){
+  const rows=[["kind","profile","date","league","match","desc","odds","stake","result"]];
+  Object.entries(PROFILES).forEach(([slug,p])=>{
+    const s=load(p.settingsKey)||{};
+    rows.push(["settings",slug,"initial",s.initial||0]);
+    rows.push(["settings",slug,"currency",s.currency||""]);
+    (load(p.betsKey)||[]).forEach(b=>rows.push(["bet",slug,b.date,b.league||"",b.match||"",b.desc,b.odds,b.stake,b.result]));
+  });
+  download("soccer.csv",toCSV(rows));
+}
+
+function importAllCSV(ev){
+  const f=ev.target.files[0]; if(!f)return; const R={},S={};
+  const reader=new FileReader(); reader.onload=()=>{ try{
+    const rows=parseCSV(String(reader.result||'')); if(!rows.length){alert('CSV 内容为空');return}
+    const H=rows[0].map(s=>s.toLowerCase()); if(H[0]!=="kind"||H[1]!=="profile"){alert("CSV 不兼容");return}
+    for(let i=1;i<rows.length;i++){
+      const r=rows[i]; const kind=(r[0]||'').toLowerCase(); let slug=(r[1]||'').trim().toLowerCase();
+      if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;
+      if(!PROFILES[slug]){
+        const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}};
+        PROFILES={...PROFILES,[slug]:p};
+      }
+      if(kind==="settings"){
+        const k=(r[2]||'').toLowerCase(); const v=r[3]||'';
+        (S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;
+      }
+      if(kind==="bet"){
+        (R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',desc:r[5]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});
+      }
+    }
+    save(LS_PROFILES_KEY,PROFILES);
+    Object.entries(S).forEach(([slug,s])=>save(PROFILES[slug].settingsKey,s));
+    Object.entries(R).forEach(([slug,arr])=>save(PROFILES[slug].betsKey,arr));
+    applyProfile(); render(); alert('导入成功');
+  }catch(e){console.error(e);alert('导入失败：'+e.message)} finally{ ev.target.value=''; } };
+  reader.readAsText(f);
+}
+
+$('#add').onclick=addBet;$('#resetForm').onclick=()=>{$('#desc').value='';$('#odds').value='';$('#stake').value='';$('#result').value='pending'};$('#search').oninput=()=>{page=1;render()};
+$('#exportCsv').onclick=exportCSV;$('#importCsvBtn').onclick=()=>$('input#csvFile').click();$('#csvFile').onchange=importCSV;$('#clearAll').onclick=()=>{if(confirm('这将清空当前分类的所有设定与记录，确定？')){localStorage.removeItem(prof().settingsKey);localStorage.removeItem(prof().betsKey);applyProfile();render()}};
+$('#drawer_export_all').onclick=exportAllCSV;$('#drawer_import_all_btn').onclick=()=>$('input#drawer_import_all_file').click();$('#drawer_import_all_file').onchange=importAllCSV;
+
+$('#tbody').addEventListener('click',e=>{const t=e.target;const a=t.dataset.act;const i=+t.dataset.idx;if(a==='del')delBet(i);if(a==='set')setResult(i,t.dataset.value)});
+$('#tbody').addEventListener('blur',onInlineEdit,true);$('#tbody').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur();}})
+}
+
+document.addEventListener('DOMContentLoaded', buildUI);
+</script></body></html>
