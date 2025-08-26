@@ -1,0 +1,177 @@
+﻿kind,profile,date,league,match,desc,odds,stake,result
+settings,hoods-web,initial,0
+settings,hoods-web,currency,$
+bet,hoods-web,2025-08-10,,,四串一,1.663,4.55,win
+bet,hoods-web,2025-08-11,,,四串一,2.05,4.17,loss
+bet,hoods-web,2025-08-12,,,三串一,2.057,10,win
+bet,hoods-web,2025-08-14,,,三串一,1.866,10,win
+bet,hoods-web,2025-08-15,,,三串一,2.083,10,loss
+bet,hoods-web,2025-08-16,,,三串一,1.9095,20,loss
+bet,hoods-web,2025-08-17,,,三串一,2.2,22,loss
+bet,hoods-web,2025-08-18,,,三串一,2.06375,24,loss
+bet,hoods-web,2025-08-19,,,三串一,1.653,20,win
+bet,hoods-web,2025-08-20,,,三串一,1.901,10,loss
+bet,hoods-web,2025-08-21,,,三串一,1.75,10,loss
+bet,hoods-web,2025-08-22,,,三串一,2.091,20,loss
+bet,hoods-web,2025-08-23,,,三串一,2.013,20,win
+settings,hoods-whatsapp,initial,0
+settings,hoods-whatsapp,currency,$
+bet,hoods-whatsapp,2025-08-10,,,三串一,1.642,5,win
+bet,hoods-whatsapp,2025-08-12,,,三串一,2.28,10,win
+bet,hoods-whatsapp,2025-08-13,,,三串一,1.445,10,win
+bet,hoods-whatsapp,2025-08-14,,,三串一,1.8,10,loss
+bet,hoods-whatsapp,2025-08-15,,,三串一,1.7875,20,win
+bet,hoods-whatsapp,2025-08-16,,,三串一,2.095,20,win
+bet,hoods-whatsapp,2025-08-17,,,三串一,1.815,18,win
+bet,hoods-whatsapp,2025-08-18,,,三串一,1.94,16,win
+bet,hoods-whatsapp,2025-08-19,,,三串一,2.044,20,win
+bet,hoods-whatsapp,2025-08-22,,,三串一,1.9695,20,win
+bet,hoods-whatsapp,2025-08-23,,,三串一,1.8555,20,win
+settings,supertips,initial,0
+settings,supertips,currency,
+bet,supertips,2025-07-14,,,SuperDouble,2,10,win
+bet,supertips,2025-07-14,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-14,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-15,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-15,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-15,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-16,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-16,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-16,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-17,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-17,,,SuperTriple,2,10,win
+bet,supertips,2025-07-17,,,SuperDouble,2,10,win
+bet,supertips,2025-07-18,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-18,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-18,,,SuperTriple,2,10,win
+bet,supertips,2025-07-19,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-19,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-19,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-20,,,SuperDouble,2,10,win
+bet,supertips,2025-07-20,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-20,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-21,,,SuperTriple,2,10,win
+bet,supertips,2025-07-21,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-21,,,SuperDouble,2,10,win
+bet,supertips,2025-07-22,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-22,,,SuperTriple,2,10,win
+bet,supertips,2025-07-22,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-24,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-24,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-24,,,SuperDouble,2,10,win
+bet,supertips,2025-07-25,,,SuperDouble,2,10,win
+bet,supertips,2025-07-25,,,SuperTriple,2,10,win
+bet,supertips,2025-07-25,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-26,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-26,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-26,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-27,,,SuperDouble,2,10,win
+bet,supertips,2025-07-27,,,SuperTriple,2,10,win
+bet,supertips,2025-07-27,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-28,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-28,,,SuperTriple,2,10,win
+bet,supertips,2025-07-28,,,SuperDouble,2,10,win
+bet,supertips,2025-07-30,,,SuperDouble,2,10,loss
+bet,supertips,2025-07-30,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-30,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-07-31,,,SuperOdds,2.5,10,win
+bet,supertips,2025-07-31,,,SuperTriple,2,10,loss
+bet,supertips,2025-07-31,,,SuperDouble,2,10,win
+bet,supertips,2025-08-01,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-01,,,SuperTriple,2,10,win
+bet,supertips,2025-08-01,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-02,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-02,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-02,,,SuperDouble,2,10,win
+bet,supertips,2025-08-03,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-03,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-03,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-04,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-04,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-04,,,SuperTriple,2,10,win
+bet,supertips,2025-08-06,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-06,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-06,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-07,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-07,,,SuperTriple,2,10,win
+bet,supertips,2025-08-07,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-08,,,SuperDouble,2,10,win
+bet,supertips,2025-08-08,,,SuperTriple,2,10,win
+bet,supertips,2025-08-08,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-09,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-09,,,SuperTriple,2.5,10,loss
+bet,supertips,2025-08-09,,,SuperDouble,2.5,10,loss
+bet,supertips,2025-08-09,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-09,,,SuperTriple,2,10,win
+bet,supertips,2025-08-09,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-10,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-10,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-10,,,SuperDouble,2,10,win
+bet,supertips,2025-08-12,,,SuperDouble,2,10,win
+bet,supertips,2025-08-12,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-12,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-13,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-13,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-13,,,SuperDouble,2,10,win
+bet,supertips,2025-08-13,,,SuperDouble,2,10,win
+bet,supertips,2025-08-13,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-13,,,SuperOdds,2,10,loss
+bet,supertips,2025-08-15,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-15,,,SuperTriple,2,10,win
+bet,supertips,2025-08-15,,,SuperDouble,2,10,win
+bet,supertips,2025-08-15,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-15,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-15,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-17,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-17,,,SuperTriple,2,10,win
+bet,supertips,2025-08-17,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-18,,,SuperDouble,2,10,win
+bet,supertips,2025-08-18,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-18,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-19,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-19,,,SuperTriple,2,10,win
+bet,supertips,2025-08-19,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-20,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-20,,,SuperTriple,2,10,loss
+bet,supertips,2025-08-20,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-21,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-21,,,SuperTriple,2,10,win
+bet,supertips,2025-08-21,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-22,,,SuperDouble,2,10,loss
+bet,supertips,2025-08-22,,,SuperTriple,2,10,win
+bet,supertips,2025-08-22,,,SuperOdds,2.5,10,win
+bet,supertips,2025-08-23,,,SuperOdds,2.5,10,loss
+bet,supertips,2025-08-23,,,SuperTriple,2,10,win
+bet,supertips,2025-08-23,,,SuperDouble,2,10,win
+settings,double,initial,0
+settings,double,currency,$
+bet,double,2025-08-20,,,Home/Home,2.104,5,win
+bet,double,2025-08-22,,,Home/Away,2.09,5,loss
+bet,double,2025-08-23,,,Over25/Over25,2.299,4.78,win
+settings,xgscore,initial,0
+settings,xgscore,currency,$
+bet,xgscore,2025-08-23,England. Premier League,West Ham - Chelsea,Away Win,1.72,30,win
+bet,xgscore,2025-08-23,England. Premier League,Man City vs Tottenham,Home Win,1.48,30,loss
+bet,xgscore,2025-08-23,Japan. J1 League,Albirex N. vs Kashima,Over 2.5,2.2,30,win
+bet,xgscore,2025-08-23,Japan. J1 League,Yokohama FM vs Machida Zelvia,Away Win,2.05,30,loss
+bet,xgscore,2025-08-24,England. Premier League,Fulham vs Man United,Away Win,2.15,30,pending
+bet,xgscore,2025-08-23,Germany. Bundesliga,Eintracht - Werder,Home Win,1.66,40,win
+bet,xgscore,2025-08-23,Germany. Bundesliga,Freiburg vs Augsburg,Home Win,1.9,30,loss
+bet,xgscore,2025-08-23,Germany. Bundesliga,Heidenheim vs Wolfsburg,Away Win,2.2,40,win
+bet,xgscore,2025-08-23,France. Ligue 1,Marseille vs Paris,Home Win,1.38,30,win
+bet,xgscore,2025-08-23,France. Ligue 1,Lyon vs Metz,Home Win,1.4,40,win
+bet,xgscore,2025-08-23,France. Ligue 1,Le Havre vs Lens,Away Win,1.95,30,pending
+bet,xgscore,2025-08-24,France. Ligue 1,Toulouse vs Brest,Over 2.5,1.9,30,pending
+bet,xgscore,2025-08-24,France. Ligue 1,Strasbourg vs Nantes,BTTS,1.8,30,pending
+bet,xgscore,2025-08-24,Italy. Serie A,Sassuolo vs Napoli,Under 2.5,1.85,30,win
+bet,xgscore,2025-08-26,Italy. Serie A,Inter vs Torino,Home Win,1.42,30,pending
+bet,xgscore,2025-08-24,Mexico. Liga MX,León - Pachuca,Away Win,2.15,30,loss
+bet,xgscore,2025-08-24,Mexico. Liga MX,Monterrey - Necaxa,Home Win,1.55,30,pending
+bet,xgscore,2025-08-24,USA. MLS,LA Galaxy - Colorado Rapids,Away Over 1.5,2.1,30,pending
+bet,xgscore,2025-08-24,Norway. Eliteserien,Haugesund - Vålerenga,Away Win,1.53,30,pending
+bet,xgscore,2025-08-24,Netherlands. Eredivisie,Utrecht - Excelsior,Home Win,1.42,30,pending
+bet,xgscore,2025-08-24,Spain. La Liga,Osasuna - Valencia,Under 2.5,1.57,30,pending
+bet,xgscore,2025-08-25,Spain. La Liga,Villarreal - Girona,Home Win,1.53,40,pending
+bet,xgscore,2025-08-25,Brazil. Serie A,Bahia - Santos,Over 2.5,1.95,30,pending
+bet,xgscore,2025-08-25,Brazil. Serie A,Fortaleza - Mirassol,Away Over 0.5,1.44,30,pending
+bet,xgscore,2025-08-25,Portugal. Liga Portugal,Braga - AVS,Home Handicap (-1),1.5,40,pending

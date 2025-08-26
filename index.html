@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>足球下注记录簿</title><style>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>足球下注记录簿</title>
+<!-- Supabase JavaScript Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
 :root{--panel:#fff;--muted:#64748b;--text:#0f172a;--pri:#0ea5e9;--pri2:#0284c7;--accent:#2563eb}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f8fafc,#f1f5f9 35%,#eef2f7);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text)}
 .navbar{position:sticky;top:0;z-index:10;background:#0f172a;color:#e5e7eb;border-bottom:1px solid rgba(255,255,255,.08);padding:8px 14px}
@@ -16,6 +19,11 @@ input,select,button,textarea{font:inherit}input,select,textarea{width:100%;paddi
 .controls{display:flex;gap:8px;align-items:center}.controls .field{display:inline-flex;gap:6px;align-items:center;flex:0 0 auto}.controls input{width:100px}#currency{width:80px}
 .small{font-size:12px}.muted{color:var(--muted)}.balance strong{font-size:1em;color:#16a34a;font-style:italic}
 .layout{display:grid;grid-template-columns:3fr 2fr;gap:12px;align-items:start}
+.layout.narrow-right{grid-template-columns:3fr 0.5fr}
+#entryCardContent{transition:all 0.3s ease;overflow:hidden}
+#entryCardContent.collapsed{max-height:0;opacity:0;margin:0;padding:0}
+#toggleEntryCard svg{transition:transform 0.3s ease}
+#toggleEntryCard.collapsed svg{transform:rotate(-90deg)}
 .navlinks{display:flex;gap:10px;flex-wrap:wrap}
 .navlinks a{color:#cbd5e1;text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:inline-flex;gap:6px;align-items:center}
 .navlinks a .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -49,12 +57,33 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
 /* 统计小表格 */.stats-table{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;border:1px solid rgba(15,23,42,.18)}
 .stats-table th,.stats-table td{padding:6px 8px;border-bottom:1px solid rgba(15,23,42,.08);font-size:13px}.stats-table th{background:#f8fafc;color:#334155;text-align:left}.stats-table td.right,.stats-table th.right{text-align:right}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}}@media(max-width:800px){.g-2{grid-template-columns:1fr}}
+.tab-btn {
+  transition: all 0.2s ease;
+}
+.tab-btn:hover {
+  background: #e2e8f0 !important;
+}
+.tab-btn.active {
+  background: white !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
 </style></head><body>
 <div class="navbar"><div class="row" style="align-items:center;gap:12px">
   <div style="display:flex;flex-direction:column;gap:6px;flex:1 1 auto">
     <div class="row" style="align-items:center;gap:10px;flex-wrap:nowrap">
       <h1 style="margin:0">⚽ 足球下注记录簿</h1>
       <div class="iconbar" style="display:flex;gap:10px;align-items:center">
+        <button id="singleBetBtn" class="icon-btn" title="单场彩" aria-label="单场彩" onclick="window.location.href='index.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </button>
+        <button id="multiBetBtn" class="icon-btn" title="多重彩" aria-label="多重彩" onclick="window.location.href='multi-bet.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M9 9h6v6H9z"/><path d="M9 3v6"/><path d="M21 9h-6"/><path d="M15 21v-6"/><path d="M3 15h6"/></svg>
+        </button>
+        <button id="predictionTrackerBtn" class="icon-btn" title="预测来源记录验证" aria-label="预测来源记录验证" onclick="window.location.href='prediction-tracker.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/><path d="M20 16V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1"/><path d="M15 2v5"/><path d="M9 2v5"/><path d="M3 9h18"/><circle cx="16" cy="16" r="2"/><path d="m21 21-1.5-1.5"/></svg>
+        </button>
+        <div style="width:1px;height:20px;background:#e2e8f0;margin:0 4px"></div>
         <button id="exportCsv" class="icon-btn" title="导出 CSV" aria-label="导出">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M21 21H3"/></svg>
         </button>
@@ -93,24 +122,38 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
     </div>
   </div>
 </div></div>
+<!-- 全局加载指示器 -->
+<div id="loadingIndicator" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:white;padding:20px;border-radius:8px;z-index:1000;display:none;text-align:center">
+  <div style="margin-bottom:10px">数据处理中...</div>
+  <div style="width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto"></div>
+</div>
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
 <div class="wrap"><div class="layout">
   <div class="card">
     <div class="row"><input id="search" placeholder="搜索（按内容/结果/日期/联赛/比赛）"/>
-      <div class="row" style="flex:0 0 auto;align-items:center;gap:6px"><label style="align-self:center;margin:0;flex:0 0 auto">每页</label><select id="pageSize" style="width:auto;min-width:72px;max-width:120px;margin:0;flex:0 0 auto"><option>10</option><option>20</option><option selected>50</option><option>100</option></select></div>
+      <div class="row" style="flex:0 0 auto;align-items:center;gap:6px"><label style="align-self:center;margin:0;flex:0 0 auto">每页</label><select id="pageSize" style="width:auto;min-width:72px;max-width:120px;margin:0;flex:0 0 auto"><option>200</option><option selected>500</option><option>1000</option><option value="0">所有</option></select></div>
     </div>
     <table id="table"><thead><tr>
       <th data-sort="date" style="width:110px">日期</th>
-      <th data-sort="league" style="width:380px">联赛/比赛</th>
-      <th data-sort="desc" style="width:160px">内容</th>
+      <th data-sort="league" style="width:180px">联赛</th>
+      <th data-sort="match" style="width:200px">比赛</th>
+      <th data-sort="description" style="width:160px">内容</th>
       <th data-sort="odds" class="right" style="width:90px">赔率</th>
       <th data-sort="stake" class="right" style="width:90px">金额</th>
       <th data-sort="result" style="width:70px">结果</th>
       <th class="right" style="width:110px">返还</th>
       <th class="right" style="width:110px">收益</th>
+      <th class="right" style="width:110px">余额</th>
       <th style="width:140px">操作</th>
     </tr></thead><tbody id="tbody"></tbody></table>
     <div class="row" style="margin-top:8px;align-items:center"><div class="small muted" id="pagerInfo">—</div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn sec" id="prevPage">上一页</button><button class="btn sec" id="nextPage">下一页</button></div></div>
-    <div class="small" style="margin:12px 0;color:#64748b">数据保存在浏览器本地（localStorage）。导出 CSV 可备份/迁移。</div>
+    <div class="small" style="margin:12px 0;color:#64748b">数据保存在Supabase云数据库中。导出 CSV 可备份/迁移。</div>
   </div>
 <!-- 抽屉与遮罩 -->
 <div id="drawerBackdrop" class="drawer-backdrop"></div>
@@ -123,7 +166,14 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
   <div class="drawer-body">
     <div class="field"><label>初始余额</label><input id="drawer_initial" type="number" min="0" step="0.01" placeholder="1000"/></div>
     <div class="field"><label>币种（前缀，如 CNY、$、€）</label><input id="drawer_currency" type="text" placeholder="CNY"/></div>
-    <button id="drawer_save" class="btn" style="justify-self:start">保存设置</button>
+    <div class="row" style="gap:8px">
+      <button id="drawer_save" class="btn" style="justify-self:start">保存设置</button>
+      <button id="test_db_connection" class="btn sec" style="justify-self:start">测试数据库连接</button>
+      <button id="debug_database" class="btn sec" style="justify-self:start">调试数据库</button>
+    </div>
+    <div class="row" style="gap:8px;margin-top:8px">
+      <button id="remove_duplicates_btn" class="btn warn" style="justify-self:start">一键去重</button>
+    </div>
     <hr>
     <div class="field"><label>新增分类（显示名称）</label><input id="drawer_label" type="text" placeholder="如 My Tips"/></div>
     <div class="field"><label>英文标识（slug）</label><input id="drawer_slug" type="text" placeholder="如 my-tips"/></div>
@@ -144,47 +194,565 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
 </div>
 
   <div class="grid g-2" style="display:grid;grid-template-columns:1fr;gap:12px">
-    <div class="card" id="entryCard"><h3 class="small" style="margin:0 0 8px;color:#334155">新增记录</h3>
-      <div class="row under"><div><label>日期</label><input id="date" type="date"/></div><div><label>联赛</label><div style="position:relative"><input id="league" type="text" placeholder="例如 英超" list="leagueList" autocomplete="off"/><datalist id="leagueList"></datalist></div></div><div><label>比赛</label><input id="match" type="text" placeholder="例如 曼城 vs 阿森纳"/></div></div>
-      <div class="row under" style="margin-top:8px"><div><label>下注内容</label><input id="desc" type="text" placeholder="例：曼城胜"/></div><div><label>赔率 (小数)</label><input id="odds" type="number" step="0.01" min="1" placeholder="例如 1.85"/></div><div><label>金额</label><input id="stake" type="number" step="0.01" min="0" placeholder="例如 50"/></div><div><label>结果</label><select id="result"><option value="pending">待定</option><option value="win">赢</option><option value="loss">输</option></select></div></div>
-      <div class="row" style="margin-top:10px"><button id="add" class="btn">+ 录入</button><button id="resetForm" class="btn sec">清空表单</button></div>
+    <div class="card" id="entryCard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="tab-buttons" style="display:flex;gap:2px;background:#f1f5f9;border-radius:6px;padding:2px">
+            <button id="tabSingle" class="tab-btn active" style="padding:4px 12px;border:none;background:white;border-radius:4px;font-size:12px;cursor:pointer;color:#334155">单条录入</button>
+            <button id="tabBatch" class="tab-btn" style="padding:4px 12px;border:none;background:transparent;border-radius:4px;font-size:12px;cursor:pointer;color:#64748b">xGScore批量</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px">
+          <button id="toggleEntryCard" class="icon-btn" title="折叠/展开" style="color:#64748b;font-size:16px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <button id="toggleRightPanel" class="icon-btn" title="调整面板宽度" style="color:#64748b;font-size:16px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div id="entryCardContent">
+        <!-- 单条录入面板 -->
+        <div id="singleEntryPanel">
+          <div class="row under"><div><label>日期</label><input id="date" type="date"/></div><div><label>联赛</label><div style="position:relative"><input id="league" type="text" placeholder="例如 英超" list="leagueList" autocomplete="off"/><datalist id="leagueList"></datalist></div></div><div><label>比赛</label><input id="match" type="text" placeholder="例如 曼城 vs 阿森纳"/></div></div>
+          <div class="row under" style="margin-top:8px"><div><label>下注内容</label><div style="position:relative"><input id="description" type="text" placeholder="例：曼城胜" list="descList" autocomplete="off"/><datalist id="descList"></datalist></div></div><div><label>赔率 (小数)</label><input id="odds" type="number" step="0.01" min="1" placeholder="例如 1.85"/></div><div><label>金额</label><input id="stake" type="number" step="0.01" min="0" placeholder="例如 50"/></div><div><label>结果</label><select id="result"><option value="pending">待定</option><option value="win">赢</option><option value="loss">输</option></select></div></div>
+          <div class="row" style="margin-top:10px"><button id="add" class="btn">+ 录入</button><button id="resetForm" class="btn sec">清空表单</button></div>
+        </div>
+        <!-- xGScore批量录入面板 -->
+        <div id="batchEntryPanel" style="display:none">
+          <div style="margin-bottom:8px">
+            <label style="display:block;margin-bottom:4px;font-size:12px;color:#334155">批量数据 (表格格式，包含表头)</label>
+            <textarea id="batchData" placeholder="请粘贴包含以下列的表格数据：&#10;日期 | 赛事 | 主队 | 客队 | 比分 | 投注内容 | 结果 | Odds | Percentage&#10;&#10;注意：&#10;- Percentage会转换为投注金额 (3%=30, 4%=40)&#10;- Odds会从欧式赔率转换为小数赔率" style="width:100%;height:120px;resize:vertical;font-family:monospace;font-size:11px"></textarea>
+          </div>
+          <div class="row" style="margin-top:10px;gap:8px">
+            <button id="parseBatch" class="btn">解析数据</button>
+            <button id="importBatch" class="btn sec" disabled>批量导入</button>
+            <button id="clearBatch" class="btn sec">清空</button>
+          </div>
+          <div id="batchPreview" style="margin-top:12px;display:none">
+            <div style="font-size:12px;color:#334155;margin-bottom:6px">预览 (<span id="previewCount">0</span> 条记录)</div>
+            <div style="max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc">
+              <table style="width:100%;font-size:11px" id="previewTable">
+                <thead style="background:#e2e8f0;position:sticky;top:0">
+                  <tr><th style="padding:4px;text-align:left">日期</th><th style="padding:4px;text-align:left">联赛</th><th style="padding:4px;text-align:left">比赛</th><th style="padding:4px;text-align:left">内容</th><th style="padding:4px;text-align:left">赔率</th><th style="padding:4px;text-align:left">金额</th><th style="padding:4px;text-align:left">结果</th></tr>
+                </thead>
+                <tbody id="previewBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card"><h3 class="small" style="margin:0 0 8px;color:#334155">内容准确率</h3>
+    <div class="card">
+      <h3 class="small" style="margin:0 0 8px;color:#334155;display:flex;align-items:center;justify-content:space-between">
+        金额统计
+        <button class="collapse-btn" onclick="toggleTable('stakeTable')" style="background:none;border:none;font-size:14px;cursor:pointer;color:#64748b">▼</button>
+      </h3>
+      <table class="small stats-table" id="stakeTable"></table>
+      
+      <h3 class="small" style="margin:8px 0 8px;color:#334155;display:flex;align-items:center;justify-content:space-between">
+        内容准确率
+        <button class="collapse-btn" onclick="toggleTable('underTable')" style="background:none;border:none;font-size:14px;cursor:pointer;color:#64748b">▼</button>
+      </h3>
       <table class="small stats-table" id="underTable"></table>
-      <h3 class="small" style="margin:8px 0 8px;color:#334155">赔率准确度（按具体赔率）</h3>
+      
+      <h3 class="small" style="margin:8px 0 8px;color:#334155;display:flex;align-items:center;justify-content:space-between">
+        赔率准确度（按区间）
+        <button class="collapse-btn" onclick="toggleTable('oddsTable')" style="background:none;border:none;font-size:14px;cursor:pointer;color:#64748b">▼</button>
+      </h3>
       <table class="small stats-table" id="oddsTable"></table>
-      <h3 class="small" style="margin:8px 0 8px;color:#334155">联赛统计</h3>
+      
+      <h3 class="small" style="margin:8px 0 8px;color:#334155;display:flex;align-items:center;justify-content:space-between">
+        联赛统计
+        <button class="collapse-btn" onclick="toggleTable('leagueTable')" style="background:none;border:none;font-size:14px;cursor:pointer;color:#64748b">▼</button>
+      </h3>
       <table class="small stats-table" id="leagueTable"></table>
     </div>
   </div>
 </div></div>
 <script>
-const DEFAULT_PROFILES={
-  "under95":{label:"Under 95",settingsKey:"bet_settings_under95",betsKey:"bet_records_under95",exportName:"under 95.csv",categorizer:(b)=>{const d=String(b.desc||"");const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)}},
-  "hoods-web":{label:"hoods-web",settingsKey:"bet_settings_hoods_web",betsKey:"bet_records_hoods_web",exportName:"hoods-web.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/home\s*win/i,/away\s*win/i,/draw/i,/btts\s*yes/i,/btts\s*no/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
-  "hoods-whatsapp":{label:"hoods-whatsapp",settingsKey:"bet_settings_hoods_whatsapp",betsKey:"bet_records_hoods_whatsapp",exportName:"hoods-whatsapp.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/first\s*half/i,/second\s*half/i,/corner/i,/card/i,/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
-  "supertips":{label:"SuperTipsAPP",settingsKey:"bet_settings_supertips",betsKey:"bet_records_supertips",exportName:"supertips.csv",categorizer:(b)=>{const d=String(b.desc||"");const ks=[/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i,/home\s*win/i,/away\s*win/i,/draw/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}}
+// Supabase 配置
+// Supabase 配置
+const SUPABASE_URL = 'https://hutlxrvwqrmidragxmtx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1dGx4cnZ3cXJtaWRyYWd4bXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMjk3ODMsImV4cCI6MjA3MTYwNTc4M30.KhDGniZHLEnmYJQWugq-U0o6EyZwmCPiXNbat_8Tyg4';
+
+// Supabase 配置已完成
+
+// 初始化 Supabase 客户端
+let supabase;
+try {
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('Supabase 客户端初始化成功');
+} catch (error) {
+  console.error('Supabase 客户端初始化失败:', error);
+  alert('数据库连接失败，请检查配置');
+}
+
+// 已移除localStorage保存函数，现在只使用Supabase
+
+// 数据库操作对象
+const db = {
+  // 获取所有投注记录
+  async getBets(profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('betting_records')
+        .select('*')
+        .eq('profile_key', profileKey)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('获取投注记录失败:', error);
+      return [];
+    }
+  },
+
+  // 添加投注记录
+  async addBet(bet, profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('betting_records')
+        .insert([{
+          profile_key: profileKey,
+          date: bet.date,
+          league: bet.league,
+          match: bet.match,
+          description: bet.description,
+          odds: bet.odds,
+          stake: bet.stake,
+          result: bet.result
+        }])
+        .select();
+      
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('添加投注记录失败:', error);
+      throw error;
+    }
+  },
+
+  // 添加投注记录（带去重检查）
+  async addBetWithDeduplication(bet, profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      // 检查是否存在重复记录（基于联赛、比赛、内容、赔率）
+      const { data: existing, error: checkError } = await supabase
+        .from('betting_records')
+        .select('id')
+        .eq('profile_key', profileKey)
+        .eq('league', bet.league || '')
+        .eq('match', bet.match || '')
+        .eq('description', bet.description)
+        .eq('odds', bet.odds)
+        .maybeSingle();
+      
+      if (checkError) throw checkError;
+      
+      // 如果记录已存在，跳过插入
+      if (existing) {
+        console.log('跳过重复记录:', bet);
+        return null;
+      }
+      
+      // 插入新记录
+      return await this.addBet(bet, profileKey);
+    } catch (error) {
+      console.error('添加投注记录（去重）失败:', error);
+      throw error;
+    }
+  },
+
+  // 删除重复记录
+  async removeDuplicates(profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      // 获取所有记录
+      const { data: allRecords, error } = await supabase
+        .from('betting_records')
+        .select('*')
+        .eq('profile_key', profileKey)
+        .order('created_at', { ascending: true });
+      
+      if (error) throw error;
+      
+      const seen = new Set();
+      const duplicates = [];
+      
+      // 找出重复记录（基于联赛、比赛、内容、赔率）
+      for (const record of allRecords) {
+        const key = `${record.league || ''}-${record.match || ''}-${record.description}-${record.odds}`;
+        if (seen.has(key)) {
+          duplicates.push(record.id);
+        } else {
+          seen.add(key);
+        }
+      }
+      
+      // 删除重复记录
+      if (duplicates.length > 0) {
+        const { error: deleteError } = await supabase
+          .from('betting_records')
+          .delete()
+          .in('id', duplicates);
+        
+        if (deleteError) throw deleteError;
+      }
+      
+      return { deletedCount: duplicates.length };
+    } catch (error) {
+      console.error('删除重复记录失败:', error);
+      throw error;
+    }
+  },
+
+  // 更新投注记录
+  async updateBet(id, updates) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('betting_records')
+        .update(updates)
+        .eq('id', id)
+        .select();
+      
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('更新投注记录失败:', error);
+      throw error;
+    }
+  },
+
+  // 删除投注记录
+  async deleteBet(id) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { error } = await supabase
+        .from('betting_records')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('删除投注记录失败:', error);
+      throw error;
+    }
+  },
+
+  // 获取设置
+  async getSettings(profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('profile_key', profileKey)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data ? { initial: data.initial_balance, currency: data.currency } : { initial: 0, currency: 'CNY' };
+    } catch (error) {
+      console.error('获取设置失败:', error);
+      return { initial: 0, currency: 'CNY' };
+    }
+  },
+
+  // 保存设置
+  async saveSettings(settings, profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .upsert({
+          profile_key: profileKey,
+          initial_balance: settings.initial,
+          currency: settings.currency
+        }, {
+          onConflict: 'profile_key'
+        })
+        .select();
+      
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('保存设置失败:', error);
+      throw error;
+    }
+  },
+
+  // 清空所有数据
+  async clearAllData(profileKey) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      // 删除投注记录
+      const { error: betsError } = await supabase
+        .from('betting_records')
+        .delete()
+        .eq('profile_key', profileKey);
+      
+      if (betsError) throw betsError;
+      
+      // 删除设置
+      const { error: settingsError } = await supabase
+        .from('user_settings')
+        .delete()
+        .eq('profile_key', profileKey);
+      
+      if (settingsError) throw settingsError;
+      
+      return true;
+    } catch (error) {
+      console.error('清空数据失败:', error);
+      throw error;
+    }
+  },
+
+  // 获取所有profiles配置
+  async getProfiles() {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('profiles_config')
+        .select('*')
+        .order('created_at', { ascending: true });
+      
+      if (error) throw error;
+      
+      // 转换为PROFILES格式
+      const profiles = {};
+      (data || []).forEach(profile => {
+        profiles[profile.slug] = {
+          label: profile.label,
+          settingsKey: profile.settings_key,
+          betsKey: profile.bets_key,
+          exportName: profile.export_name,
+          color: profile.color,
+          categorizer: (b) => {
+            const d = String(b.description || '');
+            const m = d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);
+            if (m) {
+              return [(m[1][0].toUpperCase() + m[1].slice(1).toLowerCase()) + " " + (+m[2]).toFixed(m[2].includes('.') ? 1 : 0)];
+            }
+            return firstWordCats(d);
+          }
+        };
+      });
+      
+      return Object.keys(profiles).length > 0 ? profiles : DEFAULT_PROFILES;
+    } catch (error) {
+      console.error('获取profiles配置失败:', error);
+      return DEFAULT_PROFILES;
+    }
+  },
+
+  // 保存profile配置
+  async saveProfile(slug, profileData) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { data, error } = await supabase
+        .from('profiles_config')
+        .upsert({
+          slug: slug,
+          label: profileData.label,
+          settings_key: profileData.settingsKey,
+          bets_key: profileData.betsKey,
+          export_name: profileData.exportName,
+          color: profileData.color || '#94a3b8',
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'slug'
+        })
+        .select();
+      
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('保存profile配置失败:', error);
+      throw error;
+    }
+  },
+
+  // 删除profile配置
+  async deleteProfile(slug) {
+    if (!supabase) {
+      throw new Error('Supabase 未初始化');
+    }
+    try {
+      const { error } = await supabase
+        .from('profiles_config')
+        .delete()
+        .eq('slug', slug);
+      
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('删除profile配置失败:', error);
+      throw error;
+    }
+  }
 };
-const LS_PROFILES_KEY='bet_profiles_v1';
+
+const DEFAULT_PROFILES={
+  "under95":{label:"Under 95",settingsKey:"bet_settings_under95",betsKey:"bet_records_under95",exportName:"under 95.csv",categorizer:(b)=>{const d=String(b.description||"");const m=d.match(/\\b(under|over)\\s*([0-9]+(?:\\.[0-9]+)?)\\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)}},
+  "hoods-web":{label:"hoods-web",settingsKey:"bet_settings_hoods_web",betsKey:"bet_records_hoods_web",exportName:"hoods-web.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/home\s*win/i,/away\s*win/i,/draw/i,/btts\s*yes/i,/btts\s*no/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
+  "hoods-whatsapp":{label:"hoods-whatsapp",settingsKey:"bet_settings_hoods_whatsapp",betsKey:"bet_records_hoods_whatsapp",exportName:"hoods-whatsapp.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/first\s*half/i,/second\s*half/i,/corner/i,/card/i,/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
+  "supertips":{label:"SuperTipsAPP",settingsKey:"bet_settings_supertips",betsKey:"bet_records_supertips",exportName:"supertips.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i,/home\s*win/i,/away\s*win/i,/draw/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}}
+};
 const $=s=>document.querySelector(s);const navEl=$('#nav');
-let PROFILES=load(LS_PROFILES_KEY)||DEFAULT_PROFILES;
-if(!PROFILES || Object.keys(PROFILES).length===0){ PROFILES=DEFAULT_PROFILES; }
+let PROFILES=DEFAULT_PROFILES; // 临时初始化，将从数据库加载
 let current=location.hash.slice(1);
-if(!current || !PROFILES[current]){ current=Object.keys(PROFILES)[0]; }
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}}
+// 已移除localStorage函数，现在只使用Supabase
+
+// 从数据库加载PROFILES配置
+async function loadProfiles() {
+  try {
+    PROFILES = await db.getProfiles();
+    if(!current || !PROFILES[current]){ 
+      current=Object.keys(PROFILES)[0]; 
+      if(current) location.hash = current;
+    }
+    renderNav();
+  } catch (error) {
+    console.error('加载profiles配置失败:', error);
+    PROFILES = DEFAULT_PROFILES;
+    if(!current || !PROFILES[current]){ 
+      current=Object.keys(PROFILES)[0]; 
+      if(current) location.hash = current;
+    }
+    renderNav();
+  }
+}
+
+// 加载指示器辅助函数
+function showLoading() {
+  document.getElementById('loadingIndicator').style.display = 'block';
+}
+
+function hideLoading() {
+  document.getElementById('loadingIndicator').style.display = 'none';
+}
+
+// 新的异步数据操作函数 - 只使用Supabase
+async function loadData() {
+  showLoading();
+  try {
+    if (!supabase) {
+      throw new Error('Supabase客户端未初始化');
+    }
+    
+    const profileKey = current;
+    console.log('正在加载profile数据:', profileKey);
+    
+    const [loadedSettings, loadedBets] = await Promise.all([
+      db.getSettings(profileKey),
+      db.getBets(profileKey)
+    ]);
+    
+    console.log('加载的设置:', loadedSettings);
+    console.log('加载的投注记录:', loadedBets);
+    
+    settings = loadedSettings;
+    bets = loadedBets.map((bet, index) => ({
+      date: bet.date,
+      league: bet.league,
+      match: bet.match,
+      description: bet.description,
+      odds: bet.odds,
+      stake: bet.stake,
+      result: bet.result,
+      id: bet.id,
+      i: index
+    }));
+    
+    render();
+  } catch (error) {
+    console.error('加载数据失败:', error);
+    alert('数据加载失败：' + error.message + '\n请检查数据库连接或联系管理员。');
+    // 设置默认值但不使用localStorage
+    settings = {initial: 0, currency: 'CNY'};
+    bets = [];
+    render();
+  } finally {
+    hideLoading();
+  }
+}
 function firstWordCats(d){const m=d.match(/^[^,，\s]+/);return m?[m[0]]:[]}
 const PROFILE_COLORS={"under95":"#60a5fa","hoods-web":"#f59e0b","hoods-whatsapp":"#10b981","supertips":"#ef4444"};
 function renderNav(){navEl.innerHTML=Object.entries(PROFILES).map(([slug,p])=>{ const c=PROFILE_COLORS[slug]||"#94a3b8"; return `<a href="#${slug}" class="${slug===current?'active':''}"><span class="dot" style="background:${c}"></span><span>${p.label}</span></a>`; }).join('')}
 window.addEventListener('hashchange',()=>{const slug=location.hash.slice(1);if(slug&&PROFILES[slug]){current=slug;renderNav();applyProfile();render()}});
 function prof(){return PROFILES[current]} // shorthand
-let settings=load(prof().settingsKey)||{initial:0,currency:'CNY'};let bets=load(prof().betsKey)||[];let sortBy='created',sortDir='desc',page=1;
-function applyProfile(){settings=load(prof().settingsKey)||{initial:0,currency:'CNY'};bets=load(prof().betsKey)||[];page=1}
+let settings={initial:0,currency:'CNY'};let bets=[];let sortBy='created',sortDir='desc',page=1;
+async function applyProfile(){page=1;await loadData()}
 function symbol(){return settings.currency||''}
 function fmtNum(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
 function compute(b){let ret=null,profit=null;if(b.result==='win'){ret=+b.stake*+b.odds;profit=ret-+b.stake}else if(b.result==='loss'){ret=0;profit=-+b.stake}return {ret,profit}}
 function sum(a){return a.reduce((x,y)=>x+(+y||0),0)}
-function updateKPIs(){const cur=$('#search').value.trim().toLowerCase();const rows=bets.filter(b=>[b.date,b.league,b.match,b.desc,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));const settled=rows.filter(b=>b.result!=='pending');const wins=rows.filter(b=>b.result==='win');const stake=sum(settled.map(b=>+b.stake));const totalReturn=sum(settled.map(b=>compute(b).ret??0));const profit=totalReturn-stake;const wr=settled.length?Math.round(wins.length/settled.length*100):0;const roi=stake?Math.round(profit/stake*100):0;$('#k_total').textContent=rows.length;$('#k_settled').textContent=settled.length;$('#k_wr').textContent=wr+'%';$('#k_stake').textContent=symbol()+fmtNum(stake);$('#k_return').textContent=symbol()+fmtNum(totalReturn);$('#k_profit').textContent=symbol()+fmtNum(profit);$('#k_roi').textContent=roi+'%';const allProfit=sum(bets.filter(b=>b.result!=='pending').map(b=>compute(b).profit??0));const bal=+settings.initial+allProfit;const bel=$('#balance');bel.textContent=symbol()+Number(bal).toFixed(2);bel.classList.remove('pos','neg');if(bal>0)bel.classList.add('pos');else if(bal<0)bel.classList.add('neg');renderStats()}
-function render(){const cur=$('#search').value.trim().toLowerCase();let rows=bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.desc,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));rows.sort((a,b)=>{let r=0;if(sortBy==='created')r=a.i-b.i;else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));else{const va=a[sortBy]??'';const vb=b[sortBy]??'';r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))}if(r===0)r=a.i-b.i;return sortDir==='asc'?r:-r});const ps=+$('#pageSize').value||50;const total=rows.length;const pages=Math.max(1,Math.ceil(total/ps));if(page>pages)page=pages;const start=(page-1)*ps;const pageRows=rows.slice(start,start+ps);$('#tbody').innerHTML=pageRows.map(r=>rowHTML(r)).join('')||`<tr><td colspan="10" class="muted">暂无数据</td></tr>`;$('#pagerInfo').textContent=`第 ${page}/${pages} 页，共 ${total} 条`;$('#prevPage').disabled=page<=1;$('#nextPage').disabled=page>=pages;updateKPIs();updateLeagueList()}
+function updateKPIs(){const cur=$('#search').value.trim().toLowerCase();const rows=bets.filter(b=>[b.date,b.league,b.match,b.description,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));const settled=rows.filter(b=>b.result!=='pending');const wins=rows.filter(b=>b.result==='win');const stake=sum(settled.map(b=>+b.stake));const totalReturn=sum(settled.map(b=>compute(b).ret??0));const profit=totalReturn-stake;const wr=settled.length?Math.round(wins.length/settled.length*100):0;const roi=stake?Math.round(profit/stake*100):0;$('#k_total').textContent=rows.length;$('#k_settled').textContent=settled.length;$('#k_wr').textContent=wr+'%';$('#k_stake').textContent=symbol()+fmtNum(stake);$('#k_return').textContent=symbol()+fmtNum(totalReturn);$('#k_profit').textContent=symbol()+fmtNum(profit);$('#k_roi').textContent=roi+'%';const allProfit=sum(bets.filter(b=>b.result!=='pending').map(b=>compute(b).profit??0));const bal=+settings.initial+allProfit;const bel=$('#balance');bel.textContent=symbol()+Number(bal).toFixed(2);bel.classList.remove('pos','neg');if(bal>0)bel.classList.add('pos');else if(bal<0)bel.classList.add('neg');renderStats()}
+function updateBalances(pageRows) {
+  // 获取当前排序后的所有数据
+  const cur = $('#search').value.trim().toLowerCase();
+  let allRows = bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.description,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));
+  allRows.sort((a,b)=>{
+    let r=0;
+    if(sortBy==='created')r=a.i-b.i;
+    else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));
+    else{
+      const va=a[sortBy]??'';
+      const vb=b[sortBy]??'';
+      r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))
+    }
+    if(r===0)r=a.i-b.i;
+    return sortDir==='asc'?r:-r
+  });
+  
+  // 从最后一行开始计算余额
+  let runningBalance = +settings.initial;
+  for(let i = allRows.length - 1; i >= 0; i--) {
+    const b = allRows[i];
+    const {profit} = compute(b);
+    if(profit !== null) runningBalance += profit;
+    
+    // 如果这一行在当前页面中，更新显示
+    const pageRow = pageRows.find(pr => pr.i === b.i);
+    if(pageRow) {
+      const balanceEl = $(`#balance-${b.i}`);
+      if(balanceEl) {
+        balanceEl.textContent = symbol() + runningBalance.toFixed(2);
+        balanceEl.style.color = runningBalance >= 0 ? '#16a34a' : '#b91c1c';
+      }
+    }
+  }
+}
+
+function render(){const cur=$('#search').value.trim().toLowerCase();let rows=bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.description,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));rows.sort((a,b)=>{let r=0;if(sortBy==='created')r=a.i-b.i;else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));else{const va=a[sortBy]??'';const vb=b[sortBy]??'';r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))}if(r===0)r=a.i-b.i;return sortDir==='asc'?r:-r});const psValue=$('#pageSize').value;const ps=psValue==='0'?rows.length:(+psValue||500);const total=rows.length;const pages=Math.max(1,Math.ceil(total/ps));if(page>pages)page=pages;const start=(page-1)*ps;const pageRows=rows.slice(start,start+ps);$('#tbody').innerHTML=pageRows.map(r=>rowHTML(r)).join('')||`<tr><td colspan="12" class="muted">暂无数据</td></tr>`;$('#pagerInfo').textContent=psValue==='0'?`显示全部 ${total} 条`:`第 ${page}/${pages} 页，共 ${total} 条`;$('#prevPage').disabled=page<=1||psValue==='0';$('#nextPage').disabled=page>=pages||psValue==='0';updateBalances(pageRows);updateKPIs();updateLeagueList();updateDescList()}
 function rowHTML(b){
   const {ret,profit}=compute(b);
   const retTxt=ret==null?'—':symbol()+Number(ret).toFixed(2);
@@ -192,13 +760,15 @@ function rowHTML(b){
   const pColor=profit==null?'':(profit>=0?'#16a34a':'#b91c1c');
   return `<tr class="${b.result==='win'?'win':(b.result==='loss'?'loss':'')}">
     <td contenteditable data-act="edit" data-field="date" data-idx="${b.i}">${b.date||''}</td>
-    <td><span contenteditable data-act="edit" data-field="league" data-idx="${b.i}">${escapeHTML(b.league||'')}</span><span class="muted"> / </span><span contenteditable data-act="edit" data-field="match" data-idx="${b.i}">${escapeHTML(b.match||'')}</span></td>
-    <td contenteditable data-act="edit" data-field="desc" data-idx="${b.i}">${escapeHTML(b.desc||'')}</td>
+    <td contenteditable data-act="edit" data-field="league" data-idx="${b.i}">${escapeHTML(b.league||'')}</td>
+    <td contenteditable data-act="edit" data-field="match" data-idx="${b.i}">${escapeHTML(b.match||'')}</td>
+    <td contenteditable data-act="edit" data-field="description" data-idx="${b.i}">${escapeHTML(b.description||'')}</td>
     <td class="right" contenteditable data-act="edit" data-field="odds" data-idx="${b.i}">${(+b.odds).toFixed(3)}</td>
     <td class="right" contenteditable data-act="edit" data-field="stake" data-idx="${b.i}">${symbol()+Number(b.stake).toFixed(2)}</td>
     <td><span class="result-tag ${b.result==='win'?'result-win':(b.result==='loss'?'result-loss':'result-pending')}">${b.result==='win'?'赢':(b.result==='loss'?'输':'待定')}</span></td>
     <td class="right">${retTxt}</td>
     <td class="right" style="color:${pColor};font-weight:700;font-size:15px">${pTxt}</td>
+    <td class="right" id="balance-${b.i}">${symbol()}0.00</td>
     <td><div class="row ops-line" style="gap:8px;align-items:center;flex-wrap:nowrap"><button class="link" data-act="set" data-value="pending" data-idx="${b.i}">待</button><button class="link win" data-act="set" data-value="win" data-idx="${b.i}">✓</button><button class="link loss" data-act="set" data-value="loss" data-idx="${b.i}">✗</button><button class="link" data-act="del" data-idx="${b.i}">🗑</button></div></td>
   </tr>`;
 }
@@ -211,9 +781,100 @@ backdrop.onclick=closeDrawer;$('#closeDrawer').onclick=closeDrawer;
 // 填充当前设置
 function fillSettings(){ $('#drawer_initial').value=settings.initial||0; $('#drawer_currency').value=settings.currency||''; }
 // 保存设置
-$('#drawer_save').onclick=()=>{ settings.initial=+$('#drawer_initial').value||0; settings.currency=$('#drawer_currency').value.trim()||''; save(prof().settingsKey,settings); render(); alert('已保存'); };
+$('#drawer_save').onclick=async()=>{ 
+  const newSettings = {initial:+$('#drawer_initial').value||0, currency:$('#drawer_currency').value.trim()||''};
+  showLoading();
+  try{
+    await db.saveSettings(newSettings, current);
+    settings = newSettings;
+    render();
+    alert('已保存');
+  }catch(error){
+    console.error('保存设置失败:', error);
+    alert('保存设置失败，请重试');
+  }finally{
+    hideLoading();
+  }
+};
+$('#test_db_connection').onclick=async()=>{
+  showLoading();
+  try{
+    const testSettings = await db.getSettings(current);
+    const testBets = await db.getBets(current);
+    alert('数据库连接成功！\n设置数据：' + (testSettings ? '已找到' : '未找到') + '\n投注记录：' + (testBets ? testBets.length + ' 条' : '0 条'));
+  }catch(error){
+    console.error('数据库连接测试失败:', error);
+    alert('数据库连接失败：' + error.message);
+  }finally{
+    hideLoading();
+  }
+};
+
+// 调试数据库函数
+$('#debug_database').onclick=async()=>{
+  showLoading();
+  try{
+    console.log('=== 数据库调试信息 ===');
+    console.log('当前profile:', current);
+    console.log('Supabase客户端状态:', supabase ? '已初始化' : '未初始化');
+    
+    // 检查所有profile的数据
+    const allProfiles = Object.keys(PROFILES);
+    let debugInfo = `当前profile: ${current}\nSupabase状态: ${supabase ? '已初始化' : '未初始化'}\n\n=== Supabase数据 ===\n`;
+    
+    for(const profileKey of allProfiles) {
+      try {
+        const settings = await db.getSettings(profileKey);
+        const bets = await db.getBets(profileKey);
+        debugInfo += `Profile: ${profileKey}\n`;
+        debugInfo += `- 设置: ${settings ? JSON.stringify(settings) : '不存在'}\n`;
+        debugInfo += `- 投注记录: ${bets ? bets.length : 0} 条\n`;
+        if(bets && bets.length > 0) {
+          debugInfo += `- 最新记录: ${bets[0].description}\n`;
+        }
+        debugInfo += '\n';
+        console.log(`Profile ${profileKey}:`, { settings, bets });
+      } catch(err) {
+        debugInfo += `Profile: ${profileKey}\n- 错误: ${err.message}\n\n`;
+        console.error(`Profile ${profileKey} 错误:`, err);
+      }
+    }
+    
+    alert(debugInfo);
+  }catch(error){
+    console.error('调试失败:', error);
+    alert('调试失败：' + error.message);
+  }finally{
+    hideLoading();
+  }
+};
+
+// 一键去重按钮事件处理
+$('#remove_duplicates_btn').onclick = async () => {
+  if (!confirm('确定要删除重复的投注记录吗？\n\n去重规则：基于联赛、比赛、内容、赔率四个字段判断重复\n系统将保留最早添加的记录，删除后续的重复项。\n此操作不可恢复！')) {
+    return;
+  }
+  
+  showLoading();
+  try {
+    const result = await db.removeDuplicates(current);
+    if (result && result.deletedCount > 0) {
+      alert(`去重完成！删除了 ${result.deletedCount} 条重复记录。`);
+      render(); // 刷新显示
+    } else {
+      alert('没有发现重复记录。');
+    }
+  } catch (error) {
+    console.error('去重失败:', error);
+    alert('去重失败：' + error.message);
+  } finally {
+    hideLoading();
+  }
+};
 // 新增分类
-$('#drawer_add_profile').onclick=()=>{ const label=$('#drawer_label').value.trim(); const slug=($('#drawer_slug').value||'').trim(); if(!label||!slug){alert('请填写名称和标识');return} if(!/^[a-z0-9-]{2,}$/.test(slug)){alert('标识不合法');return} if(PROFILES[slug]){alert('该标识已存在');return} const p={label,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}}; PROFILES={...PROFILES,[slug]:p}; save(LS_PROFILES_KEY,PROFILES); renderNav(); location.hash=slug; alert('已新增分类'); };
+$('#drawer_add_profile').onclick=async()=>{ const label=$('#drawer_label').value.trim(); const slug=($('#drawer_slug').value||'').trim(); if(!label||!slug){alert('请填写名称和标识');return} if(!/^[a-z0-9-]{2,}$/.test(slug)){alert('标识不合法');return} if(PROFILES[slug]){alert('该标识已存在');return} const p={label,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.description||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}}; try{showLoading();await db.saveProfile(slug,p);PROFILES={...PROFILES,[slug]:p};hideLoading();}catch(error){console.error('保存分类失败:',error);alert('保存分类失败，请重试');hideLoading();return;} 
+  // 不再使用localStorage，PROFILES只在内存中管理
+  renderNav(); location.hash=slug; alert('已新增分类'); };
 // 入口：打开抽屉
 $('#manageProfiles').onclick=()=>{ fillSettings(); renderProfileList(); openDrawer(); };
 
@@ -234,19 +895,42 @@ function renderProfileList(){
 }
 $('#profileList').addEventListener('input',e=>{
   const t=e.target; const slug=t.getAttribute('data-slug'); const k=t.getAttribute('data-k'); if(!slug||!k) return;
-  if(!PROFILES[slug]) return; PROFILES[slug]={...PROFILES[slug],[k]:t.value}; save(LS_PROFILES_KEY,PROFILES); renderNav();
+  if(!PROFILES[slug]) return; PROFILES[slug]={...PROFILES[slug],[k]:t.value}; 
+  // 不再使用localStorage，PROFILES只在内存中管理
+  renderNav();
 });
 $('#profileList').addEventListener('click',e=>{
   const t=e.target; const act=t.getAttribute('data-act'); const slug=t.getAttribute('data-slug'); if(!act||!slug) return;
   if(act==='switch'){ if(PROFILES[slug]){ location.hash=slug; } }
   if(act==='delete'){
-    if(!PROFILES[slug]) return; if(!confirm('删除该分类？此操作不会删除其数据，但导航将不再显示。')) return;
-    // 仅移除配置，数据保留在 localStorage
-    let newProfiles={...PROFILES}; delete newProfiles[slug];
-    if(Object.keys(newProfiles).length===0){ alert('已删除最后一个分类，系统将恢复默认分类'); newProfiles={...DEFAULT_PROFILES}; }
-    PROFILES=newProfiles; save(LS_PROFILES_KEY,PROFILES);
-    if(!PROFILES[current]){ const first=Object.keys(PROFILES)[0]; if(first){ location.hash=first; } }
-    renderNav(); renderProfileList();
+    if(!PROFILES[slug]) return; 
+    if(!confirm('删除该分类？此操作将同时删除数据库中该分类的所有数据，包括投注记录和设置。此操作不可恢复！')) return;
+    
+    // 删除数据库中的所有数据和配置
+    showLoading();
+    Promise.all([
+      db.clearAllData(slug),
+      db.deleteProfile(slug)
+    ]).then(() => {
+      // 删除成功后移除内存中的配置
+      let newProfiles={...PROFILES}; delete newProfiles[slug];
+      if(Object.keys(newProfiles).length===0){ 
+        alert('已删除最后一个分类，系统将恢复默认分类'); 
+        newProfiles={...DEFAULT_PROFILES}; 
+      }
+      PROFILES=newProfiles;
+      if(!PROFILES[current]){ 
+        const first=Object.keys(PROFILES)[0]; 
+        if(first){ location.hash=first; } 
+      }
+      renderNav(); renderProfileList();
+      alert('分类及其所有数据已成功删除');
+    }).catch(error => {
+      console.error('删除分类失败:', error);
+      alert('删除失败：' + error.message);
+    }).finally(() => {
+      hideLoading();
+    });
   }
 });
 // 打开抽屉时填充列表
@@ -257,68 +941,333 @@ $('#manageProfiles').onclick=openDrawerAndFill;
 function escapeHTML(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function normalizeLeagueName(name){return name.trim().replace(/\s+/g,' ').toLowerCase()}
 function updateLeagueList(){const leagueMap=new Map();bets.forEach(b=>{if(b.league&&b.league.trim()){const original=b.league.trim();const normalized=normalizeLeagueName(original);if(!leagueMap.has(normalized)||leagueMap.get(normalized).length>original.length){leagueMap.set(normalized,original)}}});const uniqueLeagues=Array.from(leagueMap.values()).sort();const datalist=$('#leagueList');datalist.innerHTML=uniqueLeagues.map(league=>`<option value="${escapeHTML(league)}"></option>`).join('')}
-let leagueSortAlpha=false;function renderStats(){const underTable=$('#underTable'),oddsTable=$('#oddsTable'),leagueTable=$('#leagueTable');if(!underTable||!oddsTable||!leagueTable)return;const settled=bets.filter(b=>b.result!=='pending');const getCats=(prof()&&typeof prof().categorizer==='function')?prof().categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)};const mapCats={};settled.forEach(b=>{(getCats(b)||[]).forEach(k=>{if(!k)return;(mapCats[k]??={t:0,w:0}).t++;if(b.result==='win')mapCats[k].w++})});const catRows=Object.entries(mapCats).sort((a,b)=>b[1].t-a[1].t).map(([name,v])=>`<tr><td>${name}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');underTable.innerHTML=`<colgroup><col><col style="width:90px"><col style="width:70px"></colgroup><thead><tr><th>类型</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${catRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const map={};settled.forEach(b=>{const k=(+b.odds).toFixed(3);(map[k]??={t:0,w:0}).t++;if(b.result==='win')map[k].w++});const oddsRows=Object.entries(map).sort((a,b)=>parseFloat(a[0])-parseFloat(b[0])).map(([k,v])=>`<tr><td>${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');oddsTable.innerHTML=`<thead><tr><th>赔率</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${oddsRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const leagueMap=new Map();const leagues={};settled.forEach(b=>{const original=b.league||'未填';const normalized=normalizeLeagueName(original);if(!leagueMap.has(normalized)||leagueMap.get(normalized).length>original.length){leagueMap.set(normalized,original)}const displayName=leagueMap.get(normalized);(leagues[displayName]??={t:0,w:0}).t++;if(b.result==='win')leagues[displayName].w++});const leagueRows=Object.entries(leagues).sort(leagueSortAlpha?(a,b)=>a[0].localeCompare(b[0]):(a,b)=>b[1].t-a[1].t).map(([k,v])=>`<tr><td style="cursor:pointer" onclick="toggleLeagueSort()">${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');leagueTable.innerHTML=`<thead><tr><th style="cursor:pointer" onclick="toggleLeagueSort()">联赛 ${leagueSortAlpha?'(A-Z)':'(按数量)'}</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${leagueRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`}function toggleLeagueSort(){leagueSortAlpha=!leagueSortAlpha;renderStats()}
-function addBet(){const b={date:$('#date').value||new Date().toISOString().slice(0,10),league:($('#league').value||'').trim(),match:($('#match').value||'').trim(),desc:($('#desc').value||'').trim(),odds:+$('#odds').value,stake:+$('#stake').value,result:$('#result').value};if(!b.desc){alert('请填写下注内容');return}if(!(b.odds>=1)){alert('请填写正确的赔率');return}if(!(b.stake>0)){alert('请填写正确的金额');return}bets.push(b);save(prof().betsKey,bets);sortBy='created';sortDir='desc';page=1;render()}
-function setResult(i,v){bets[i].result=v;save(prof().betsKey,bets);render()}function delBet(i){if(confirm('确定删除该记录？')){bets.splice(i,1);save(prof().betsKey,bets);render()}}
-function onInlineEdit(e){const td=e.target;if(td.dataset.act!=='edit')return;const i=+td.dataset.idx;const field=td.dataset.field;let val=td.textContent.trim();if(field==='odds'||field==='stake'){val=val.replace(/[^0-9.\-]/g,'');const num=+val;if(!isFinite(num)){alert('数值不正确');render();return}bets[i][field]=num}else{bets[i][field]=val}save(prof().betsKey,bets);render()}
-function saveSettings(){settings.initial=+$('#initial').value||0;settings.currency=$('#currency').value.trim()||'';save(prof().settingsKey,settings);render()}
-function exportCSV(){const rows=[["kind","date","league","match","desc","odds","stake","result"],["settings","initial",settings.initial,",,,,"],["settings","currency",settings.currency,",,,,"]];bets.forEach(b=>rows.push(["bet",b.date,b.league||'',b.match||'',b.desc,b.odds,b.stake,b.result]));const csv=toCSV(rows);download(prof().exportName,csv)}
-function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const rows=parseCSV(String(reader.result||''));if(!rows.length){alert('CSV 内容为空');return}const header=rows[0].map(s=>s.toLowerCase());if(header[0]!=="kind"){alert('CSV 格式不兼容');return}const newSettings={...settings};const newBets=[];for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();if(kind==='settings'){const key=(r[1]||'').toLowerCase();const val=r[2]||'';if(key==='initial')newSettings.initial=+val||0;if(key==='currency')newSettings.currency=val}else if(kind==='bet'){let b={};if(rows[0].length>=8){b={date:r[1]||today(),league:r[2]||'',match:r[3]||'',desc:r[4]||'',odds:+r[5]||0,stake:+r[6]||0,result:(r[7]||'pending').toLowerCase()}} if(b.desc)newBets.push(b)}}settings=newSettings;bets=newBets;save(prof().settingsKey,settings);save(prof().betsKey,bets);applyProfile();sortBy='created';sortDir='desc';page=1;render();alert('导入成功')}catch(e){console.error(e);alert('导入失败：'+e.message)}finally{ev.target.value=''}};reader.readAsText(f)}
+function updateDescList(){const descMap=new Map();bets.forEach(b=>{if(b.description&&b.description.trim()){const original=b.description.trim();const normalized=original.toLowerCase();if(!descMap.has(normalized)||descMap.get(normalized).length>original.length){descMap.set(normalized,original)}}});const uniqueDescs=Array.from(descMap.values()).sort();const datalist=$('#descList');datalist.innerHTML=uniqueDescs.map(description=>`<option value="${escapeHTML(description)}"></option>`).join('')}
+let leagueSortAlpha=false;function renderStats(){const stakeTable=$('#stakeTable'),underTable=$('#underTable'),oddsTable=$('#oddsTable'),leagueTable=$('#leagueTable');if(!stakeTable||!underTable||!oddsTable||!leagueTable)return;const settled=bets.filter(b=>b.result!=='pending');const allBets=bets.filter(b=>b.stake>0);const stakeMap={};let totalStake=0,totalReturn=0;allBets.forEach(b=>{const stake=+b.stake;const stakeRange=getStakeRange(stake);totalStake+=stake;if(b.result==='win'){totalReturn+=stake*b.odds}else if(b.result==='loss'){totalReturn+=0}else{totalReturn+=stake}(stakeMap[stakeRange]??={t:0,w:0,totalStake:0,totalReturn:0}).t++;if(b.result==='win')stakeMap[stakeRange].w++;stakeMap[stakeRange].totalStake+=stake;if(b.result==='win'){stakeMap[stakeRange].totalReturn+=stake*b.odds}else if(b.result==='loss'){stakeMap[stakeRange].totalReturn+=0}else{stakeMap[stakeRange].totalReturn+=stake}});const profit=totalReturn-totalStake;const stakeRows=Object.entries(stakeMap).sort((a,b)=>parseFloat(a[0].split('-')[0])-parseFloat(b[0].split('-')[0])).map(([range,v])=>{const rangeProfit=v.totalReturn-v.totalStake;const profitColor=rangeProfit>=0?'color:#059669':'color:#dc2626';return `<tr><td>${range}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td><td class="right">${v.totalStake.toFixed(0)}</td><td class="right" style="${profitColor}">${rangeProfit>=0?'+':''}${rangeProfit.toFixed(0)}</td></tr>`}).join('');const totalProfitColor=profit>=0?'color:#059669':'color:#dc2626';stakeTable.innerHTML=`<colgroup><col><col style="width:70px"><col style="width:60px"><col style="width:70px"><col style="width:80px"></colgroup><thead><tr><th>金额范围</th><th class="right">胜/总</th><th class="right">胜率</th><th class="right">总投注</th><th class="right">盈亏</th></tr></thead><tbody>${stakeRows||'<tr><td colspan=5 class="muted">—</td></tr>'}<tr style="border-top:2px solid #e2e8f0;font-weight:bold"><td>总计</td><td class="right">${allBets.filter(b=>b.result==='win').length}/${allBets.length}</td><td class="right">${allBets.length?Math.round(allBets.filter(b=>b.result==='win').length/allBets.length*100):0}%</td><td class="right">${totalStake.toFixed(0)}</td><td class="right" style="${totalProfitColor}">${profit>=0?'+':''}${profit.toFixed(0)}</td></tr></tbody>`;const getCats=(prof()&&typeof prof().categorizer==='function')?prof().categorizer:(b)=>{const description=String(b.description||'').trim();if(!description)return [];return [description];};const mapCats={};settled.forEach(b=>{(getCats(b)||[]).forEach(k=>{if(!k)return;(mapCats[k]??={t:0,w:0}).t++;if(b.result==='win')mapCats[k].w++})});const catRows=Object.entries(mapCats).sort((a,b)=>b[1].t-a[1].t).map(([name,v])=>`<tr><td>${name}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');underTable.innerHTML=`<colgroup><col><col style="width:90px"><col style="width:70px"></colgroup><thead><tr><th>类型</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${catRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const map={};settled.forEach(b=>{const odds=+b.odds;let k;if(odds<=1.2)k='≤1.2';else if(odds<=1.5)k='1.21-1.5';else if(odds<=1.8)k='1.51-1.80';else if(odds<=2.0)k='1.81-2.0';else if(odds<=2.5)k='2.01-2.5';else k='2.51+';(map[k]??={t:0,w:0}).t++;if(b.result==='win')map[k].w++});const oddsOrder=['≤1.2','1.21-1.5','1.51-1.80','1.81-2.0','2.01-2.5','2.51+'];const oddsRows=oddsOrder.filter(k=>map[k]).map(k=>{const v=map[k];return `<tr><td>${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`}).join('');oddsTable.innerHTML=`<thead><tr><th>赔率</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${oddsRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`;const leagueMap=new Map();const leagues={};settled.forEach(b=>{const original=b.league||'未填';const normalized=normalizeLeagueName(original);if(!leagueMap.has(normalized)||leagueMap.get(normalized).length>original.length){leagueMap.set(normalized,original)}const displayName=leagueMap.get(normalized);(leagues[displayName]??={t:0,w:0}).t++;if(b.result==='win')leagues[displayName].w++});const leagueRows=Object.entries(leagues).sort(leagueSortAlpha?(a,b)=>a[0].localeCompare(b[0]):(a,b)=>b[1].t-a[1].t).map(([k,v])=>`<tr><td style="cursor:pointer" onclick="toggleLeagueSort()">${k}</td><td class="right">${v.w}/${v.t}</td><td class="right">${v.t?Math.round(v.w/v.t*100):0}%</td></tr>`).join('');leagueTable.innerHTML=`<thead><tr><th style="cursor:pointer" onclick="toggleLeagueSort()">联赛 ${leagueSortAlpha?'(A-Z)':'(按数量)'}</th><th class="right">胜/总</th><th class="right">胜率</th></tr></thead><tbody>${leagueRows||'<tr><td colspan=3 class="muted">—</td></tr>'}</tbody>`}function toggleLeagueSort(){leagueSortAlpha=!leagueSortAlpha;renderStats()}
+
+// 表格折叠/展开功能
+function toggleTable(tableId) {
+  const table = document.getElementById(tableId);
+  const button = document.querySelector(`button[onclick="toggleTable('${tableId}')"]`);
+  
+  if (table.style.display === 'none') {
+    table.style.display = 'table';
+    button.textContent = '▼';
+    button.title = '折叠表格';
+  } else {
+    table.style.display = 'none';
+    button.textContent = '▶';
+    button.title = '展开表格';
+  }
+}
+function getStakeRange(stake){if(stake<=10)return '0-10';if(stake<=20)return '11-20';if(stake<=30)return '21-30';if(stake<=50)return '31-50';if(stake<=100)return '51-100';if(stake<=200)return '101-200';if(stake<=500)return '201-500';return '500+'}
+async function addBet(){const b={date:$('#date').value||new Date().toISOString().slice(0,10),league:($('#league').value||'').trim(),match:($('#match').value||'').trim(),description:($('#description').value||'').trim(),odds:+$('#odds').value,stake:+$('#stake').value,result:$('#result').value};if(!b.description){alert('请填写下注内容');return}if(!(b.odds>=1)){alert('请填写正确的赔率');return}if(!(b.stake>0)){alert('请填写正确的金额');return}showLoading();try{const newBet=await db.addBet(b,current);bets.unshift({...b,id:newBet.id,i:0});bets.forEach((bet,index)=>bet.i=index);sortBy='created';sortDir='desc';page=1;render();$('#description').value='';$('#odds').value='';$('#stake').value='';$('#result').value='pending'}catch(error){console.error('添加记录失败:',error);alert('添加记录失败，请重试')}finally{hideLoading()}}
+async function setResult(i,v){showLoading();try{const bet=bets[i];await db.updateBet(bet.id,{result:v});bets[i].result=v;render()}catch(error){console.error('更新结果失败:',error);alert('更新失败，请重试')}finally{hideLoading()}}async function delBet(i){if(confirm('确定删除该记录？')){showLoading();try{const bet=bets[i];await db.deleteBet(bet.id);bets.splice(i,1);bets.forEach((bet,index)=>bet.i=index);render()}catch(error){console.error('删除记录失败:',error);alert('删除失败，请重试')}finally{hideLoading()}}}
+async function onInlineEdit(e){const td=e.target;if(td.dataset.act!=='edit')return;const i=+td.dataset.idx;const field=td.dataset.field;let val=td.textContent.trim();if(field==='odds'||field==='stake'){val=val.replace(/[^0-9.\-]/g,'');const num=+val;if(!isFinite(num)){alert('数值不正确');render();return}val=num}showLoading();try{const bet=bets[i];await db.updateBet(bet.id,{[field]:val});bets[i][field]=val;render()}catch(error){console.error('更新失败:',error);alert('更新失败，请重试');render()}finally{hideLoading()}}
+async function saveSettings(){const newSettings={initial:+$('#initial').value||0,currency:$('#currency').value.trim()||''};showLoading();try{await db.saveSettings(newSettings,current);settings=newSettings;render()}catch(error){console.error('保存设置失败:',error);alert('保存设置失败，请重试')}finally{hideLoading()}}
+function exportCSV(){const rows=[["kind","date","league","match","description","odds","stake","result"],["settings","initial",settings.initial,",,,,"],["settings","currency",settings.currency,",,,,"]];bets.forEach(b=>rows.push(["bet",b.date,b.league||'',b.match||'',b.description,b.odds,b.stake,b.result]));const csv=toCSV(rows);download(prof().exportName,csv)}
+async function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=async()=>{try{const rows=parseCSV(String(reader.result||''));if(!rows.length){alert('CSV 内容为空');return}const header=rows[0].map(s=>s.toLowerCase());if(header[0]!=="kind"){alert('CSV 格式不兼容');return}if(header[1]==="profile"){showLoading();try{const R={},S={};let profilesUpdated=false;for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();let slug=(r[1]||'').trim().toLowerCase();if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;if(!PROFILES[slug]){const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.description||'');return firstWordCats(d)}};PROFILES={...PROFILES,[slug]:p};profilesUpdated=true;}if(kind==="settings"){const k=(r[2]||'').toLowerCase();const v=r[3]||'';(S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;}if(kind==="bet"){const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');(R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',description:r[descIndex]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});}}for(const [slug,settingsData] of Object.entries(S)){try{await db.saveSettings(settingsData,slug);}catch(error){console.warn(`保存设置失败 ${slug}:`,error);if(error.message&&error.message.includes('duplicate key')){try{await supabase.from('user_settings').delete().eq('profile_key',slug);await db.saveSettings(settingsData,slug);}catch(retryError){console.error(`重试保存设置失败 ${slug}:`,retryError);throw retryError;}}else{throw error;}}}for(const [slug,betsData] of Object.entries(R)){for(const bet of betsData){try{await db.addBet(bet,slug);}catch(error){console.warn(`保存投注记录失败:`,error);}}}if(profilesUpdated){renderNav();}await applyProfile();render();alert('导入成功');}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}return;}const newSettings={...settings};const newBets=[];const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();if(kind==='settings'){const key=(r[1]||'').toLowerCase();const val=r[2]||'';if(key==='initial')newSettings.initial=+val||0;if(key==='currency')newSettings.currency=val}else if(kind==='bet'){let b={};if(rows[0].length>=8){b={date:r[1]||today(),league:r[2]||'',match:r[3]||'',description:r[descIndex]||'',odds:+r[5]||0,stake:+r[6]||0,result:(r[7]||'pending').toLowerCase()}} if(b.description)newBets.push(b)}}showLoading();try{await db.saveSettings(newSettings,current);for(const bet of newBets){await db.addBet(bet,current);}settings=newSettings;const allBets=await db.getBets(current);bets=allBets.map((bet,index)=>({date:bet.date,league:bet.league,match:bet.match,description:bet.description,odds:bet.odds,stake:bet.stake,result:bet.result,id:bet.id,i:index}));sortBy='created';sortDir='desc';page=1;render();alert('导入成功')}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}}catch(e){console.error(e);alert('导入失败：'+e.message)}finally{ev.target.value=''}};reader.readAsText(f)}
 function today(){return new Date().toISOString().slice(0,10)}
 function download(name,content){const blob=new Blob(["\uFEFF"+content],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
 function toCSV(rows){return rows.map(r=>r.map(csvEscape).join(',')).join('\n')}function csvEscape(s){if(s==null)s='';s=String(s);if(/[",\n]/.test(s))s='"'+s.replace(/"/g,'""')+'"';return s}
 function parseCSV(text){const out=[];let row=[],field='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){field+='"';i++;}else q=false}else field+=c}else{if(c==='"')q=true;else if(c===','){row.push(field);field='';}else if(c==='\n'){row.push(field);out.push(row);row=[];field='';}else if(c==='\r'){}else field+=c}}if(field!==''||row.length){row.push(field);out.push(row)}return out}
 
-function buildUI(){renderNav();applyProfile();render();updateLeagueList();
+async function buildUI(){
+  // 首先从数据库加载profiles配置
+  await loadProfiles();
+  // 然后执行其他初始化操作
+  await applyProfile();render();updateLeagueList();updateDescList();
 document.querySelectorAll('th[data-sort]').forEach(th=>{th.addEventListener('click',()=>{const key=th.getAttribute('data-sort');if(sortBy===key){sortDir=sortDir==='asc'?'desc':'asc'}else{sortBy=key;sortDir='asc'};render()})});
 $('#prevPage').onclick=()=>{if(page>1){page--;render()}};$('#nextPage').onclick=()=>{page++;render()};
 
-function exportAllCSV(){
-  const rows=[["kind","profile","date","league","match","desc","odds","stake","result"]];
-  Object.entries(PROFILES).forEach(([slug,p])=>{
-    const s=load(p.settingsKey)||{};
-    rows.push(["settings",slug,"initial",s.initial||0]);
-    rows.push(["settings",slug,"currency",s.currency||""]);
-    (load(p.betsKey)||[]).forEach(b=>rows.push(["bet",slug,b.date,b.league||"",b.match||"",b.desc,b.odds,b.stake,b.result]));
-  });
-  download("soccer.csv",toCSV(rows));
-}
-
-function importAllCSV(ev){
-  const f=ev.target.files[0]; if(!f)return; const R={},S={};
-  const reader=new FileReader(); reader.onload=()=>{ try{
-    const rows=parseCSV(String(reader.result||'')); if(!rows.length){alert('CSV 内容为空');return}
-    const H=rows[0].map(s=>s.toLowerCase()); if(H[0]!=="kind"||H[1]!=="profile"){alert("CSV 不兼容");return}
-    for(let i=1;i<rows.length;i++){
-      const r=rows[i]; const kind=(r[0]||'').toLowerCase(); let slug=(r[1]||'').trim().toLowerCase();
-      if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;
-      if(!PROFILES[slug]){
-        const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.desc||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}};
-        PROFILES={...PROFILES,[slug]:p};
-      }
-      if(kind==="settings"){
-        const k=(r[2]||'').toLowerCase(); const v=r[3]||'';
-        (S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;
-      }
-      if(kind==="bet"){
-        (R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',desc:r[5]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});
+async function exportAllCSV(){
+  showLoading();
+  try {
+    const rows=[["kind","profile","date","league","match","description","odds","stake","result"]];
+    
+    for (const [slug, p] of Object.entries(PROFILES)) {
+      try {
+        // 获取设置
+        const settings = await db.getSettings(slug);
+        rows.push(["settings",slug,"initial",settings.initial||0]);
+        rows.push(["settings",slug,"currency",settings.currency||""]);
+        
+        // 获取投注记录
+        const bets = await db.getBets(slug);
+        bets.forEach(b=>rows.push(["bet",slug,b.date,b.league||"",b.match||"",b.description,b.odds,b.stake,b.result]));
+      } catch (error) {
+        console.warn(`导出 ${slug} 数据失败:`, error);
       }
     }
-    save(LS_PROFILES_KEY,PROFILES);
-    Object.entries(S).forEach(([slug,s])=>save(PROFILES[slug].settingsKey,s));
-    Object.entries(R).forEach(([slug,arr])=>save(PROFILES[slug].betsKey,arr));
-    applyProfile(); render(); alert('导入成功');
-  }catch(e){console.error(e);alert('导入失败：'+e.message)} finally{ ev.target.value=''; } };
+    
+    download("soccer.csv",toCSV(rows));
+  } catch (error) {
+    console.error('导出失败:', error);
+    alert('导出失败：' + error.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+async function importAllCSV(ev){
+  const f=ev.target.files[0]; if(!f)return;
+  const reader=new FileReader(); reader.onload=async()=>{ 
+    showLoading();
+    try{
+      const rows=parseCSV(String(reader.result||'')); if(!rows.length){alert('CSV 内容为空');return}
+      const H=rows[0].map(s=>s.toLowerCase()); if(H[0]!=="kind"||H[1]!=="profile"){alert("CSV 不兼容");return}
+      
+      const R={},S={};
+      let profilesUpdated = false;
+      for(let i=1;i<rows.length;i++){
+        const r=rows[i]; const kind=(r[0]||'').toLowerCase(); let slug=(r[1]||'').trim().toLowerCase();
+        if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;
+        if(!PROFILES[slug]){
+          const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.description||'');const m=d.match(/\b(under|over)\s*([0-9]+(?:\.[0-9]+)?)\b/i);if(m){return[(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0)]}return firstWordCats(d)}};
+          PROFILES={...PROFILES,[slug]:p};
+          profilesUpdated = true;
+          // 保存新的profile到数据库
+          try{
+            await db.saveProfile(slug,p);
+          }catch(error){
+            console.warn(`保存profile配置失败 ${slug}:`,error);
+          }
+        }
+        if(kind==="settings"){
+          const k=(r[2]||'').toLowerCase(); const v=r[3]||'';
+          (S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;
+        }
+        if(kind==="bet"){
+          (R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',description:r[5]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});
+        }
+      }
+      
+      // 保存到Supabase
+      for(const [slug,settingsData] of Object.entries(S)){
+        try {
+          await db.saveSettings(settingsData,slug);
+        } catch (error) {
+          console.warn(`保存设置失败 ${slug}:`, error);
+          // 如果是重复键错误，尝试先删除再插入
+          if (error.message && error.message.includes('duplicate key')) {
+            try {
+              await supabase.from('user_settings').delete().eq('profile_key', slug);
+              await db.saveSettings(settingsData,slug);
+            } catch (retryError) {
+              console.error(`重试保存设置失败 ${slug}:`, retryError);
+              throw retryError;
+            }
+          } else {
+            throw error;
+          }
+        }
+      }
+      for(const [slug,betsData] of Object.entries(R)){
+        for(const bet of betsData){
+          try {
+            await db.addBetWithDeduplication(bet,slug);
+          } catch (error) {
+            console.warn(`保存投注记录失败:`, error);
+            // 继续处理其他记录，不中断整个导入过程
+          }
+        }
+      }
+      
+      // 如果有新的profile被创建，重新渲染导航
+      if (profilesUpdated) {
+        renderNav();
+      }
+      
+      await applyProfile(); render(); alert('导入成功');
+    }catch(e){console.error(e);alert('导入失败：'+e.message)} finally{ ev.target.value=''; hideLoading(); } };
   reader.readAsText(f);
 }
 
-$('#add').onclick=addBet;$('#resetForm').onclick=()=>{$('#desc').value='';$('#odds').value='';$('#stake').value='';$('#result').value='pending'};$('#search').oninput=()=>{page=1;render()};
-$('#exportCsv').onclick=exportCSV;$('#importCsvBtn').onclick=()=>$('input#csvFile').click();$('#csvFile').onchange=importCSV;$('#clearAll').onclick=()=>{if(confirm('这将清空当前分类的所有设定与记录，确定？')){localStorage.removeItem(prof().settingsKey);localStorage.removeItem(prof().betsKey);applyProfile();render()}};
+$('#add').onclick=addBet;$('#resetForm').onclick=()=>{$('#description').value='';$('#odds').value='';$('#stake').value='';$('#result').value='pending'};$('#search').oninput=()=>{page=1;render()};
+$('#exportCsv').onclick=exportCSV;$('#importCsvBtn').onclick=()=>$('input#csvFile').click();$('#csvFile').onchange=importCSV;$('#clearAll').onclick=async()=>{if(confirm('这将清空当前分类的所有设定与记录，确定？')){showLoading();try{await db.clearAllData(current);await applyProfile();}catch(error){console.error('清空数据失败:',error);alert('清空数据失败：'+error.message);}finally{hideLoading();}}};
 $('#drawer_export_all').onclick=exportAllCSV;$('#drawer_import_all_btn').onclick=()=>$('input#drawer_import_all_file').click();$('#drawer_import_all_file').onchange=importAllCSV;
 
 $('#tbody').addEventListener('click',e=>{const t=e.target;const a=t.dataset.act;const i=+t.dataset.idx;if(a==='del')delBet(i);if(a==='set')setResult(i,t.dataset.value)});
-$('#tbody').addEventListener('blur',onInlineEdit,true);$('#tbody').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur();}})
+$('#tbody').addEventListener('blur',onInlineEdit,true);$('#tbody').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur();}});
+
+// 折叠/展开新增记录卡片
+$('#toggleEntryCard').onclick=()=>{
+  const content=$('#entryCardContent');
+  const btn=$('#toggleEntryCard');
+  if(content.classList.contains('collapsed')){
+    content.classList.remove('collapsed');
+    btn.classList.remove('collapsed');
+  }else{
+    content.classList.add('collapsed');
+    btn.classList.add('collapsed');
+  }
+};
+
+// 调整右侧面板宽度
+$('#toggleRightPanel').onclick=()=>{
+  const layout=document.querySelector('.layout');
+  if(layout.classList.contains('narrow-right')){
+    layout.classList.remove('narrow-right');
+  }else{
+    layout.classList.add('narrow-right');
+  }
+};
+
+// 选项卡切换功能
+$('#tabSingle').onclick=()=>{
+  $('#tabSingle').classList.add('active');
+  $('#tabBatch').classList.remove('active');
+  $('#singleEntryPanel').style.display='block';
+  $('#batchEntryPanel').style.display='none';
+};
+
+$('#tabBatch').onclick=()=>{
+  $('#tabBatch').classList.add('active');
+  $('#tabSingle').classList.remove('active');
+  $('#singleEntryPanel').style.display='none';
+  $('#batchEntryPanel').style.display='block';
+};
+
+// 批量数据处理功能
+let parsedBatchData=[];
+
+$('#parseBatch').onclick=()=>{
+  const data=$('#batchData').value.trim();
+  if(!data){
+    alert('请输入批量数据');
+    return;
+  }
+  
+  try{
+    parsedBatchData=parseBatchData(data);
+    if(parsedBatchData.length===0){
+      alert('未找到有效数据');
+      return;
+    }
+    
+    // 显示预览
+    $('#previewCount').textContent=parsedBatchData.length;
+    const tbody=$('#previewBody');
+    tbody.innerHTML=parsedBatchData.map(item=>
+      `<tr>
+        <td style="padding:4px">${item.date}</td>
+        <td style="padding:4px">${item.league}</td>
+        <td style="padding:4px">${item.match}</td>
+        <td style="padding:4px">${item.description}</td>
+        <td style="padding:4px">${item.odds}</td>
+        <td style="padding:4px">${item.stake}</td>
+        <td style="padding:4px">${item.result}</td>
+      </tr>`
+    ).join('');
+    
+    $('#batchPreview').style.display='block';
+    $('#importBatch').disabled=false;
+  }catch(e){
+    alert('数据解析失败：'+e.message);
+  }
+};
+
+$('#importBatch').onclick=()=>{
+  if(parsedBatchData.length===0){
+    alert('没有可导入的数据');
+    return;
+  }
+  
+  if(confirm(`确定导入${parsedBatchData.length}条记录？`)){
+    bets.push(...parsedBatchData);
+    save(prof().betsKey,bets);
+    sortBy='created';
+    sortDir='desc';
+    page=1;
+    render();
+    
+    // 清空批量输入
+    $('#batchData').value='';
+    $('#batchPreview').style.display='none';
+    $('#importBatch').disabled=true;
+    parsedBatchData=[];
+    
+    alert('批量导入成功');
+  }
+};
+
+$('#clearBatch').onclick=()=>{
+  $('#batchData').value='';
+  $('#batchPreview').style.display='none';
+  $('#importBatch').disabled=true;
+  parsedBatchData=[];
+};
+
+// 解析批量数据函数
+function parseBatchData(text){
+  const lines=text.split('\n').map(line=>line.trim()).filter(line=>line);
+  if(lines.length<2)throw new Error('数据格式不正确，至少需要表头和一行数据');
+  
+  const results=[];
+  
+  for(let i=1;i<lines.length;i++){
+    const line=lines[i];
+    // 支持制表符或多个空格分隔
+    const parts=line.split(/\t|\s{2,}/).map(p=>p.trim()).filter(p=>p);
+    
+    if(parts.length<9)continue; // 跳过不完整的行
+    
+    try{
+      const dateStr=parts[0];
+      const league=parts[1];
+      const homeTeam=parts[2];
+      const awayTeam=parts[3];
+      const score=parts[4];
+      const description=parts[5];
+      const resultStr=parts[6];
+      const oddsStr=parts[7].replace(',','.');
+      const percentageStr=parts[8];
+      
+      // 转换日期格式
+      let date=dateStr;
+      if(dateStr.includes('年')){
+        // 处理中文日期格式
+        const match=dateStr.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+        if(match){
+          const year=match[1];
+          const month=match[2].padStart(2,'0');
+          const day=match[3].padStart(2,'0');
+          date=`${year}-${month}-${day}`;
+        }
+      }
+      
+      // 转换赔率（从欧式赔率到小数赔率，实际上欧式赔率就是小数赔率）
+      const odds=parseFloat(oddsStr);
+      if(isNaN(odds)||odds<1)continue;
+      
+      // 转换百分比为金额
+      const percentage=parseFloat(percentageStr.replace('%',''));
+      if(isNaN(percentage)||percentage<=0)continue;
+      const stake=percentage*10; // 3%=30, 4%=40
+      
+      // 转换结果
+      let result='pending';
+      if(resultStr==='赢')result='win';
+      else if(resultStr==='输')result='loss';
+      else if(resultStr==='平')result='push';
+      
+      results.push({
+        date:date,
+        league:league,
+        match:`${homeTeam} vs ${awayTeam}`,
+        description:description,
+        odds:odds,
+        stake:stake,
+        result:result
+      });
+    }catch(e){
+      console.warn('跳过无效行：',line,e.message);
+    }
+  }
+  
+  return results;
+}
 }
 
 document.addEventListener('DOMContentLoaded', buildUI);
 </script></body></html>
+
