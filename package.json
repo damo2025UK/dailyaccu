@@ -1,0 +1,30 @@
+{
+  "name": "sports-betting-management",
+  "version": "0.1.0",
+  "description": "体育博彩管理系统 - 包含单场彩、多重彩投注管理和预测来源记录验证功能",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Static site - no build required'",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "sports",
+    "betting",
+    "management",
+    "prediction",
+    "tracker",
+    "football",
+    "soccer"
+  ],
+  "author": "Sports Betting Management Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sports-betting-management.git"
+  },
+  "homepage": "https://sports-betting-management.vercel.app",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
