@@ -73,6 +73,12 @@ thead th{position:sticky;top:0;background:#f1f5f9;z-index:1;cursor:pointer}
 tbody tr:hover{background:#f8fafc}
 .right{text-align:right}
 
+/* 小表格样式 */
+table.small{font-size:12px;border-collapse:collapse;border:1px solid #e2e8f0}
+table.small th,table.small td{padding:6px 8px;border:1px solid #e2e8f0;text-align:left}
+table.small th{background:#f8fafc;font-weight:600;color:#374151;font-size:11px}
+table.small .right{text-align:right}
+
 /* 结果标签 */
 .result-tag{padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500}
 .result-win{background:#dcfce7;color:#166534}
@@ -106,6 +112,86 @@ tbody tr:hover{background:#f8fafc}
   background:#3b82f6;
   color:#fff;
   border-color:#3b82f6;
+}
+
+/* 视图切换按钮样式 */
+.view-btn{
+  padding:6px 12px;
+  font-size:12px;
+  border:1px solid #d1d5db;
+  border-radius:4px;
+  background:#fff;
+  color:#374151;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.view-btn:hover{
+  background:#f3f4f6;
+  border-color:#9ca3af;
+}
+.view-btn.active{
+  background:#3b82f6;
+  color:#fff;
+  border-color:#3b82f6;
+}
+
+/* 日期卡片视图样式 */
+.date-view-container {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.date-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.date-header {
+  background: #f1f5f9;
+  padding: 10px 16px;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-content {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.date-bet-card {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  transition: all 0.2s;
+  background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.date-bet-card:hover {
+  background: #f8fafc;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.date-bet-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* 小按钮样式 */
@@ -162,6 +248,37 @@ tbody tr:hover{background:#f8fafc}
 .category-nav-link.active {
   background: #007bff;
   color: white;
+}
+
+/* 分类描述样式 */
+.category-description {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 6px;
+  border-left: 4px solid #3b82f6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.category-description:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.category-desc-text {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.category-description::before {
+  content: "💡";
+  margin-right: 6px;
+  font-size: 14px;
+}
   border-color: #007bff;
 }
 
@@ -174,16 +291,6 @@ tbody tr:hover{background:#f8fafc}
 
 
 
-/* 录入表单折叠样式 */
-.form-collapsed .tab-nav,
-.form-collapsed .tab-content {
-  display: none !important;
-}
-
-.form-collapsed {
-  transition: all 0.3s ease;
-}
-
 
 
 .category-nav-link.active .dot {
@@ -191,8 +298,8 @@ tbody tr:hover{background:#f8fafc}
 }
 
 /* 多重彩表格样式 */
-.multi-bet-table{width:100%;border-collapse:collapse;font-size:12px;background:white}
-.multi-bet-table th,.multi-bet-table td{padding:6px 8px;border:1px solid #e2e8f0;text-align:left;vertical-align:middle}
+.multi-bet-table{width:100%;border-collapse:collapse;font-size:12px;background:white;table-layout:fixed}
+.multi-bet-table th,.multi-bet-table td{padding:6px 8px;border:1px solid #e2e8f0;text-align:left;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .multi-bet-table th{background:#f8fafc;font-weight:600;color:#374151;position:sticky;top:0;z-index:10;font-size:11px;text-align:center}
 .multi-bet-table tbody tr:hover{background:#f1f5f9}
 .multi-bet-table .group-row{background:#f1f5f9;font-weight:600}
@@ -214,7 +321,14 @@ tbody tr:hover{background:#f8fafc}
 .tab-btn:hover{color:#3b82f6 !important;background:#f1f5f9}
 .tab-btn.active:hover{background:transparent}
 .result-buttons{white-space:nowrap}
+.multi-bet-table .result-buttons{white-space:nowrap;overflow:visible}
 .category-tag{white-space:nowrap}
+
+/* 可编辑本金样式 */
+.editable-stake:hover {
+  background-color: #f1f5f9 !important;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
 
 /* 响应式设计 */
 @media(max-width:1200px){
@@ -233,6 +347,7 @@ tbody tr:hover{background:#f8fafc}
   <div class="wrap">
     <div class="row" style="align-items:center;gap:12px">
       <h1>⚽ 多重彩记录簿</h1>
+      <div style="width:1px;height:20px;background:#e2e8f0;margin:0 4px"></div>
       <div class="iconbar">
         <button class="icon-btn" title="单场彩" onclick="window.location.href='index.html'">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -243,13 +358,13 @@ tbody tr:hover{background:#f8fafc}
         <button class="icon-btn" title="预测来源记录验证" onclick="window.location.href='prediction-tracker.html'">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/><path d="M20 16V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1"/><path d="M15 2v5"/><path d="M9 2v5"/><path d="M3 9h18"/><circle cx="16" cy="16" r="2"/><path d="m21 21-1.5-1.5"/></svg>
         </button>
-        <div style="width:1px;height:20px;background:#e2e8f0;margin:0 4px"></div>
-        <button id="exportMultiBet" class="icon-btn" title="导出多重彩数据">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M21 21H3"/></svg>
+        <button class="icon-btn" title="xG 追踪分析" onclick="window.location.href='xg-tracker.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12l3-3 3 3 5-5"/><circle cx="7" cy="12" r="1"/><circle cx="10" cy="9" r="1"/><circle cx="13" cy="12" r="1"/><circle cx="18" cy="7" r="1"/></svg>
         </button>
-        <button id="clearAllMultiBet" class="icon-btn" title="清空所有多重彩">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        <button class="icon-btn" title="记事本" onclick="window.location.href='notebook.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
         </button>
+
       </div>
       
 
@@ -280,6 +395,10 @@ tbody tr:hover{background:#f8fafc}
         <div id="categoryNav" class="category-nav" style="display:flex;flex-wrap:wrap;gap:6px">
           <!-- 分类导航将在这里动态生成 -->
         </div>
+        <!-- 分类描述显示区域 -->
+        <div id="categoryDescription" class="category-description" style="display:none">
+          <div class="category-desc-text"></div>
+        </div>
       </div>
       
       <div class="card">
@@ -290,24 +409,37 @@ tbody tr:hover{background:#f8fafc}
           <button id="filterPending" class="filter-btn" data-status="pending">待定</button>
           <button id="filterWin" class="filter-btn" data-status="win">已赢</button>
           <button id="filterLoss" class="filter-btn" data-status="loss">已输</button>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button id="viewTable" class="view-btn" data-view="table">📋 表格</button>
+            <button id="viewDate" class="view-btn active" data-view="date">📅 日期</button>
+          </div>
         </div>
         <div>
-          <table class="multi-bet-table" id="multiBetTable">
-            <thead>
-              <tr>
-                <th style="width:80px">日期</th>
-                <th style="width:100px">联赛</th>
-                <th style="width:150px">比赛</th>
-                <th style="width:100px">投注内容</th>
-                <th style="width:60px">赔率</th>
-                <th style="width:80px">结果</th>
-                <th style="width:100px">操作</th>
-              </tr>
-            </thead>
-            <tbody id="multiBetList">
-              <!-- 多重彩表格内容将在这里动态生成 -->
-            </tbody>
-          </table>
+          <!-- 表格视图 -->
+          <div id="tableView" class="view-container" style="display:block">
+            <table class="multi-bet-table" id="multiBetTable">
+              <thead>
+                <tr>
+                  <th style="width:80px">日期</th>
+                  <th style="width:100px">联赛</th>
+                  <th style="width:150px">比赛</th>
+                  <th style="width:100px">投注内容</th>
+                  <th style="width:60px">赔率</th>
+                  <th style="width:80px">结果</th>
+                  <th style="width:100px">操作</th>
+                </tr>
+              </thead>
+              <tbody id="multiBetList">
+                <!-- 多重彩表格内容将在这里动态生成 -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- 日期视图 -->
+          <div id="dateView" class="date-view-container">
+            <!-- 日期卡片将在这里动态生成 -->
+          </div>
+          
           <!-- 总结信息容器 -->
           <div id="multiBetSummary"></div>
         </div>
@@ -321,15 +453,23 @@ tbody tr:hover{background:#f8fafc}
       <div class="card">
         <div class="row" style="align-items:center;margin-bottom:16px">
           <h3 style="margin:0;color:#334155">📝 多重彩管理</h3>
-          <button id="formIndentToggle" class="btn-small" style="margin-left:auto">📁 折叠</button>
+          <button id="formIndentToggle" class="btn-small" style="margin-left:auto;background:#10b981;color:white">📂 展开</button>
         </div>
         
-        <!-- 标签页导航 -->
-        <div class="tab-nav" style="display:flex;border-bottom:1px solid #e2e8f0;margin-bottom:16px">
-          <button class="tab-btn active" data-tab="new-multibet" style="padding:8px 16px;border:none;background:none;color:#3b82f6;border-bottom:2px solid #3b82f6;cursor:pointer;font-weight:500">新建多重彩</button>
-          <button class="tab-btn" data-tab="category-manage" style="padding:8px 16px;border:none;background:none;color:#64748b;border-bottom:2px solid transparent;cursor:pointer;font-weight:500">分类管理</button>
-          <button class="tab-btn" data-tab="league-manage" style="padding:8px 16px;border:none;background:none;color:#64748b;border-bottom:2px solid transparent;cursor:pointer;font-weight:500">联赛管理</button>
+        <!-- 密码保护提示 -->
+        <div id="passwordHint" style="text-align:center;padding:20px;color:#64748b;font-size:14px;border:1px dashed #e2e8f0;border-radius:6px;margin-bottom:16px">
+          🔒 此区域需要密码验证才能访问<br>
+          <small style="color:#9ca3af">点击上方"展开"按钮并输入密码</small>
         </div>
+        
+        <!-- 密码保护的内容区域 -->
+        <div id="protectedContent" style="display:none">
+          <!-- 标签页导航 -->
+          <div class="tab-nav" style="display:flex;border-bottom:1px solid #e2e8f0;margin-bottom:16px">
+            <button class="tab-btn active" data-tab="new-multibet" style="padding:8px 16px;border:none;background:none;color:#3b82f6;border-bottom:2px solid #3b82f6;cursor:pointer;font-weight:500">新建多重彩</button>
+            <button class="tab-btn" data-tab="category-manage" style="padding:8px 16px;border:none;background:none;color:#64748b;border-bottom:2px solid transparent;cursor:pointer;font-weight:500">分类管理</button>
+            <button class="tab-btn" data-tab="league-manage" style="padding:8px 16px;border:none;background:none;color:#64748b;border-bottom:2px solid transparent;cursor:pointer;font-weight:500">联赛管理</button>
+          </div>
         
         <!-- 新建多重彩标签页 -->
         <div class="tab-content" id="new-multibet" style="display:block">
@@ -347,7 +487,7 @@ tbody tr:hover{background:#f8fafc}
             </div>
             <div class="field" style="flex:1">
               <label>总投注金额</label>
-              <input id="totalStake" type="number" step="0.01" placeholder="100.00">
+              <input id="totalStake" type="number" step="0.01" placeholder="$100.00">
             </div>
           </div>
           
@@ -444,6 +584,7 @@ tbody tr:hover{background:#f8fafc}
             </div>
           </div>
         </div>
+        </div>
       </div>
       
       <!-- 统计报表 -->
@@ -466,6 +607,28 @@ tbody tr:hover{background:#f8fafc}
             </thead>
             <tbody id="overallStatsBody">
               <!-- 统计数据将在这里动态生成 -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 按分类统计 -->
+        <div style="margin-bottom:16px">
+          <h4 style="margin:0 0 8px;color:#475569">按分类统计（基于多重彩组）</h4>
+          <table class="small">
+            <thead>
+              <tr>
+                <th>分类</th>
+                <th class="right">总数量</th>
+                <th class="right">已赢</th>
+                <th class="right">已输</th>
+                <th class="right">待定</th>
+                <th class="right">胜率</th>
+                <th class="right">投入金额</th>
+                <th class="right">净收益</th>
+              </tr>
+            </thead>
+            <tbody id="categoryStatsBody">
+              <!-- 分类统计将在这里动态生成 -->
             </tbody>
           </table>
         </div>
@@ -518,6 +681,11 @@ tbody tr:hover{background:#f8fafc}
   <div style="width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid #3498db;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto"></div>
 </div>
 
+<!-- 全局联赛数据列表 -->
+<datalist id="leagueDatalist">
+  <!-- 联赛选项将在这里动态生成 -->
+</datalist>
+
 <style>
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -544,7 +712,7 @@ try {
 let multiBetGroups = [];
 let currentMatches = [];
 let profileKey = 'default'; // 可以根据需要扩展多用户支持
-let isFormCollapsed = false; // 录入表单折叠状态
+let isFormCollapsed = true; // 录入表单折叠状态，默认折叠
 
 // 工具函数
 function $(selector) {
@@ -561,22 +729,33 @@ function hideLoading() {
 
 
 
-// 切换录入表单折叠功能
+// 切换录入表单折叠功能（带密码保护）
 function toggleFormCollapse() {
-  isFormCollapsed = !isFormCollapsed;
-  const managementPanel = $('#formIndentToggle').closest('.card');
+  const protectedContent = $('#protectedContent');
+  const passwordHint = $('#passwordHint');
   const formCollapseToggle = $('#formIndentToggle');
   
-  if (isFormCollapsed) {
-    managementPanel.classList.add('form-collapsed');
+  if (protectedContent.style.display === 'none' || protectedContent.style.display === '') {
+    // 当前是折叠状态，需要验证密码才能展开
+    const password = prompt('请输入管理密码：');
+    if (password === '8888') {
+      protectedContent.style.display = 'block';
+      passwordHint.style.display = 'none';
+      formCollapseToggle.textContent = '📁 折叠';
+      formCollapseToggle.style.backgroundColor = '#ef4444';
+      formCollapseToggle.style.color = 'white';
+      isFormCollapsed = false;
+    } else if (password !== null) {
+      alert('密码错误！');
+    }
+  } else {
+    // 当前是展开状态，直接折叠
+    protectedContent.style.display = 'none';
+    passwordHint.style.display = 'block';
     formCollapseToggle.textContent = '📂 展开';
     formCollapseToggle.style.backgroundColor = '#10b981';
     formCollapseToggle.style.color = 'white';
-  } else {
-    managementPanel.classList.remove('form-collapsed');
-    formCollapseToggle.textContent = '📁 折叠';
-    formCollapseToggle.style.backgroundColor = '';
-    formCollapseToggle.style.color = '';
+    isFormCollapsed = true;
   }
 }
 
@@ -851,17 +1030,32 @@ const multiBetDB = {
       .eq('id', groupId);
     
     if (error) throw error;
+  },
+  
+  // 更新多重彩组本金
+  async updateGroupStake(groupId, newStake) {
+    if (!supabase) throw new Error('Supabase 未初始化');
+    
+    const { error } = await supabase
+      .from('multi_bet_groups')
+      .update({ total_stake: newStake })
+      .eq('id', groupId);
+    
+    if (error) throw error;
   }
 };
 
 // UI 渲染函数
 function renderMultiBetList() {
-  const container = $('#multiBetList');
+  const tableContainer = $('#multiBetList');
+  const dateContainer = $('#dateView');
   const summaryContainer = $('#multiBetSummary');
   const searchTerm = $('#searchGroups').value.toLowerCase();
   const activeFilterBtn = document.querySelector('.filter-btn.active');
   const statusFilter = activeFilterBtn ? activeFilterBtn.dataset.status : 'all';
   const categoryFilter = window.currentCategoryFilter;
+  const activeViewBtn = document.querySelector('.view-btn.active');
+  const currentView = activeViewBtn ? activeViewBtn.dataset.view : 'table';
   
   let filteredGroups = multiBetGroups;
   
@@ -888,17 +1082,31 @@ function renderMultiBetList() {
   }
   
   if (filteredGroups.length === 0) {
-    container.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#64748b">暂无多重彩记录</td></tr>';
+    tableContainer.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#64748b">暂无多重彩记录</td></tr>';
+    dateContainer.innerHTML = '<div style="text-align:center;padding:20px;color:#64748b">暂无多重彩记录</div>';
     summaryContainer.innerHTML = '';
     return;
   }
   
-  // 生成分组显示的内容
-  let allContent = [];
+  // 根据当前视图渲染
+  if (currentView === 'table') {
+    renderTableView(filteredGroups, tableContainer);
+    $('#tableView').style.display = 'block';
+    $('#dateView').style.display = 'none';
+  } else if (currentView === 'date') {
+    renderDateView(filteredGroups, dateContainer);
+    $('#tableView').style.display = 'none';
+    $('#dateView').style.display = 'flex';
+  }
   
-  // 按分类对多重彩组进行分组，并为每个分类内的组分配序号
-  const groupsByCategory = {};
-  filteredGroups.forEach(group => {
+  // 表格视图渲染函数
+  function renderTableView(groups, container) {
+    // 生成分组显示的内容
+    let allContent = [];
+    
+    // 按分类对多重彩组进行分组，并为每个分类内的组分配序号
+    const groupsByCategory = {};
+  groups.forEach(group => {
     const categoryId = group.category_id || 'uncategorized';
     if (!groupsByCategory[categoryId]) {
       groupsByCategory[categoryId] = [];
@@ -935,14 +1143,16 @@ function renderMultiBetList() {
           <span style="font-size:14px;font-weight:600;color:${resultTextColor}">
              赔率 <span style="color:#1f2937;font-size:18px;font-weight:700">${group.total_odds.toFixed(2)}</span>
            </span>
-           <span style="font-size:14px;font-weight:600">
-             本金 ¥${group.total_stake.toFixed(2)}
-           </span>
+           <span class="editable-stake" style="font-size:14px;font-weight:600;cursor:pointer;padding:2px 4px;border-radius:3px;transition:background 0.2s" 
+                  ondblclick="editStake(${group.id}, ${group.total_stake})" 
+                  title="双击修改本金">
+              本金 $${group.total_stake.toFixed(2)}
+            </span>
            <span style="font-size:14px;font-weight:600">
              ${group.result === 'win' ? 
-               '利润 <span style="color:#16a34a;font-size:18px;font-weight:700">+¥' + ((group.total_odds * group.total_stake) - group.total_stake).toFixed(2) + '</span>' : 
+               '利润 <span style="color:#16a34a;font-size:18px;font-weight:700">+$' + ((group.total_odds * group.total_stake) - group.total_stake).toFixed(2) + '</span>' : 
                group.result === 'loss' ? 
-               '亏损 <span style="color:#dc2626;font-size:18px;font-weight:700">-¥' + group.total_stake.toFixed(2) + '</span>' : 
+               '亏损 <span style="color:#dc2626;font-size:18px;font-weight:700">-$' + group.total_stake.toFixed(2) + '</span>' : 
                '<span style="color:#64748b">待定</span>'}
            </span>
           <span class="result-tag" style="font-size:14px;padding:4px 12px;border-radius:6px;font-weight:700;background:${group.result === 'win' ? '#16a34a' : group.result === 'loss' ? '#dc2626' : '#64748b'};color:white">
@@ -962,19 +1172,19 @@ function renderMultiBetList() {
       let row = '<tr class="' + groupResultClass + '">';
       
       row += `
-        <td style="padding:6px;font-size:12px">${match.date || '未知'}</td>
-        <td style="padding:6px;font-size:12px">${match.league || '未知联赛'}</td>
-        <td style="padding:6px;font-size:12px" title="${match.match || '未知比赛'}">
+        <td style="padding:6px;font-size:12px;width:80px">${match.date || '未知'}</td>
+        <td style="padding:6px;font-size:12px;width:100px">${match.league || '未知联赛'}</td>
+        <td style="padding:6px;font-size:12px;width:150px" title="${match.match || '未知比赛'}">
           ${match.match || '未知比赛'}
         </td>
-        <td style="padding:6px;font-size:12px">${match.description || '未知内容'}</td>
-        <td style="padding:6px;font-size:12px;font-weight:500">${match.odds ? match.odds.toFixed(3) : '0.000'}</td>
-        <td style="padding:6px;text-align:center">
+        <td style="padding:6px;font-size:12px;width:100px">${match.description || '未知内容'}</td>
+        <td style="padding:6px;font-size:12px;font-weight:500;width:60px;text-align:right">${match.odds ? match.odds.toFixed(3) : '0.000'}</td>
+        <td style="padding:6px;text-align:center;width:80px">
           <span class="result-tag result-${match.result}" style="font-size:10px;padding:2px 6px;border-radius:3px">
             ${match.result === 'win' ? '✓ 赢' : match.result === 'loss' ? '✗ 输' : '⏳ 待定'}
           </span>
         </td>
-        <td style="padding:6px;text-align:center">
+        <td style="padding:6px;text-align:center;width:100px">
           <div class="result-buttons" style="display:flex;gap:2px;justify-content:center">
             <button class="result-btn ${match.result === 'win' ? 'active' : ''}" 
                     style="padding:2px 6px;font-size:10px;border:1px solid #22c55e;background:${match.result === 'win' ? '#22c55e' : 'white'};color:${match.result === 'win' ? 'white' : '#22c55e'};border-radius:3px;cursor:pointer" 
@@ -1007,7 +1217,190 @@ function renderMultiBetList() {
   
   // 清空容器并添加所有内容
   container.innerHTML = '';
-  summaryContainer.innerHTML = allContent.join('');
+  $('#multiBetSummary').innerHTML = allContent.join('');
+  }
+  
+  // 日期视图渲染函数
+  function renderDateView(groups, container) {
+    // 按日期对多重彩组进行分组
+    const groupsByDate = {};
+    
+    groups.forEach(group => {
+      // 获取第一场比赛的日期作为组的日期
+      const matches = group.multi_bet_matches || [];
+      const firstMatch = matches[0] || {};
+      const date = firstMatch.date || '未知日期';
+      
+      if (!groupsByDate[date]) {
+        groupsByDate[date] = [];
+      }
+      groupsByDate[date].push(group);
+    });
+    
+    // 清空容器
+    container.innerHTML = '';
+    
+    // 按日期降序排列（最新的日期在前）
+    const sortedDates = Object.keys(groupsByDate).sort((a, b) => {
+      // 处理'未知日期'的情况
+      if (a === '未知日期') return 1;
+      if (b === '未知日期') return -1;
+      return new Date(b) - new Date(a);
+    });
+    
+    // 为每个日期创建卡片
+    sortedDates.forEach(date => {
+      const dateGroups = groupsByDate[date];
+      const formattedDate = date === '未知日期' ? date : formatDate(date);
+      
+      // 为每个日期的多重彩重新编号
+      dateGroups.forEach((group, index) => {
+        group.dateIndex = index + 1;
+      });
+      
+      // 创建日期卡片
+      const dateCard = document.createElement('div');
+      dateCard.className = 'date-card';
+      
+      // 创建日期标题
+      const dateHeader = document.createElement('div');
+      dateHeader.className = 'date-header';
+      dateHeader.innerHTML = `
+        <span>${formattedDate}</span>
+        <span>${dateGroups.length}个多重彩</span>
+      `;
+      dateCard.appendChild(dateHeader);
+      
+      // 创建日期内容容器
+      const dateContent = document.createElement('div');
+      dateContent.className = 'date-content';
+      
+      // 为每个多重彩组创建卡片
+      dateGroups.forEach(group => {
+        const matches = group.multi_bet_matches || [];
+        const categoryName = group.multi_bet_categories?.name || '未分类';
+        const categoryColor = group.multi_bet_categories?.color || '#6b7280';
+        // 使用日期作为多重彩名称的一部分，使用dateIndex作为编号
+        const groupName = group.group_name || `多重彩${formattedDate} #${group.dateIndex || group.id}`;
+        
+        // 根据结果设置样式
+        const resultBgColor = group.result === 'win' ? '#dcfce7' : 
+                             group.result === 'loss' ? '#fee2e2' : '#f1f5f9';
+        const resultTextColor = group.result === 'win' ? '#166534' : 
+                               group.result === 'loss' ? '#991b1b' : '#475569';
+        
+        // 创建多重彩卡片
+        const betCard = document.createElement('div');
+        betCard.className = 'date-bet-card';
+        betCard.style.borderLeft = `4px solid ${categoryColor}`;
+        // 根据结果设置卡片背景颜色
+        if (group.result === 'win') {
+          betCard.style.backgroundColor = '#dcfce7'; // 加深的绿色背景
+        } else if (group.result === 'loss') {
+          betCard.style.backgroundColor = '#fee2e2'; // 加深的红色背景
+        }
+        // 移除卡片的点击事件，改为按钮点击事件
+        betCard.onclick = null;
+        
+        // 创建多重彩卡片内容
+        betCard.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <span class="category-tag" style="background:${categoryColor};color:white;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-right:8px">
+                ${categoryName}
+              </span>
+              <span style="font-weight:600">${groupName}</span>
+            </div>
+            <span class="result-tag" style="font-size:12px;padding:2px 8px;border-radius:4px;font-weight:600;background:${group.result === 'win' ? '#16a34a' : group.result === 'loss' ? '#dc2626' : '#64748b'};color:white">
+              ${(group.result || 'pending') === 'win' ? '✓ 赢' : (group.result || 'pending') === 'loss' ? '✗ 输' : '⏳ 待定'}
+            </span>
+          </div>
+          
+          <div class="date-bet-card-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+              <span><i class="fas fa-futbol" style="margin-right:4px;color:#6b7280"></i>${matches.length}场比赛</span>
+              <span>赔率 <b>${group.total_odds.toFixed(2)}</b></span>
+            </div>
+            
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+              <span>本金 $${group.total_stake.toFixed(2)}</span>
+              <span>
+                ${group.result === 'win' ? 
+                  '利润 <span style="color:#16a34a;font-weight:600">+$' + ((group.total_odds * group.total_stake) - group.total_stake).toFixed(2) + '</span>' : 
+                  group.result === 'loss' ? 
+                  '亏损 <span style="color:#dc2626;font-weight:600">-$' + group.total_stake.toFixed(2) + '</span>' : 
+                  '<span style="color:#64748b">待定</span>'}
+              </span>
+            </div>
+            
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+              <div style="font-size:12px;color:#64748b;">比赛详情</div>
+              <button class="btn-small toggle-details" style="background:#f1f5f9;color:#475569;border:none;border-radius:4px;cursor:pointer;">
+                <i class="fas fa-chevron-up"></i> 收起
+              </button>
+            </div>
+            
+            <div class="match-details-section" style="display:block;margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px">
+              <div style="font-size:12px;">
+                ${matches.map((match, idx) => `
+                  <div style="margin-bottom:4px;padding:4px;background:${idx % 2 === 0 ? '#f8fafc' : 'white'};border-radius:3px">
+                    <div style="display:flex;justify-content:space-between">
+                      <span style="font-weight:500">${match.match || '未知比赛'}</span>
+                      <span style="color:${match.result === 'win' ? '#16a34a' : match.result === 'loss' ? '#dc2626' : '#64748b'}">
+                        ${match.result === 'win' ? '✓' : match.result === 'loss' ? '✗' : '⏳'}
+                      </span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b7280">
+                      <span>${match.league || '未知联赛'}</span>
+                      <span>@${match.odds ? match.odds.toFixed(2) : '未知'}</span>
+                    </div>
+                    <div style="font-size:11px;color:#6b7280;margin-top:2px">
+                      <span>预测: ${match.description || '未知'}</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        dateContent.appendChild(betCard);
+        
+        // 为展开/收起按钮添加点击事件
+        const toggleBtn = betCard.querySelector('.toggle-details');
+        const detailsSection = betCard.querySelector('.match-details-section');
+        
+        if (toggleBtn && detailsSection) {
+          toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            const isExpanded = detailsSection.style.display !== 'none';
+            
+            // 切换详情区域显示状态
+            detailsSection.style.display = isExpanded ? 'none' : 'block';
+            
+            // 更新按钮文本和图标
+            toggleBtn.innerHTML = isExpanded ? 
+              '<i class="fas fa-chevron-down"></i> 展开' : 
+              '<i class="fas fa-chevron-up"></i> 收起';
+          });
+        }
+      });
+      
+      dateCard.appendChild(dateContent);
+      container.appendChild(dateCard);
+    });
+  }
+  
+  // 格式化日期函数
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()];
+    
+    return `${year}年${month}月${day}日 ${weekday}`;
+  }
 }
 
 function addMatchInput() {
@@ -1030,9 +1423,6 @@ function addMatchInput() {
           <label>联赛</label>
           <div style="position:relative">
             <input type="text" data-field="league" data-index="${index}" placeholder="如：英超" list="leagueDatalist" autocomplete="off">
-            <datalist id="leagueDatalist">
-              <!-- 联赛选项将在这里动态生成 -->
-            </datalist>
           </div>
         </div>
       </div>
@@ -1148,7 +1538,6 @@ function updateSaveButton() {
       const oddsInput = matchInput.querySelector('[data-field="odds"]');
       
       return dateInput?.value && 
-             leagueInput?.value.trim() && 
              matchNameInput?.value.trim() && 
              descriptionInput?.value.trim() && 
              parseFloat(oddsInput?.value) > 0;
@@ -1188,6 +1577,32 @@ async function deleteMultiBetGroup(groupId) {
   } catch (error) {
     console.error('删除多重彩失败:', error);
     alert('删除失败: ' + error.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+// 编辑本金
+async function editStake(groupId, currentStake) {
+  const newStakeStr = prompt('请输入新的本金金额:', currentStake.toFixed(2));
+  
+  if (newStakeStr === null) return; // 用户取消
+  
+  const newStake = parseFloat(newStakeStr);
+  
+  if (isNaN(newStake) || newStake <= 0) {
+    alert('请输入有效的金额（大于0）');
+    return;
+  }
+  
+  try {
+    showLoading();
+    await multiBetDB.updateGroupStake(groupId, newStake);
+    await loadData(); // 重新加载数据以更新显示
+    alert('本金修改成功！');
+  } catch (error) {
+    console.error('修改本金失败:', error);
+    alert('修改失败: ' + error.message);
   } finally {
     hideLoading();
   }
@@ -1255,9 +1670,9 @@ function updateKPIs() {
   $('#k_total_groups').textContent = totalGroups;
   $('#k_settled_groups').textContent = settledGroups.length;
   $('#k_win_rate').textContent = winRate.toFixed(1) + '%';
-  $('#k_total_stake').textContent = '¥' + totalStake.toFixed(2);
-  $('#k_total_return').textContent = '¥' + totalReturn.toFixed(2);
-  $('#k_net_profit').textContent = '¥' + netProfit.toFixed(2);
+  $('#k_total_stake').textContent = '$' + totalStake.toFixed(2);
+  $('#k_total_return').textContent = '$' + totalReturn.toFixed(2);
+  $('#k_net_profit').textContent = '$' + netProfit.toFixed(2);
   $('#k_net_profit').className = 'k-val ' + (netProfit >= 0 ? 'pos' : 'neg');
   $('#k_roi').textContent = roi.toFixed(1) + '%';
   $('#k_roi').className = 'k-val ' + (roi >= 0 ? 'pos' : 'neg');
@@ -1289,9 +1704,9 @@ function renderStats() {
     const statusText = status === 'pending' ? '待定' : status === 'win' ? '已赢' : '已输';
     
     // 待定状态的金额显示为横线
-    const stakeDisplay = status === 'pending' ? '-' : `¥${stake.toFixed(2)}`;
-    const returnsDisplay = status === 'pending' ? '-' : `¥${returns.toFixed(2)}`;
-    const profitDisplay = status === 'pending' ? '-' : `¥${profit.toFixed(2)}`;
+    const stakeDisplay = status === 'pending' ? '-' : `$${stake.toFixed(2)}`;
+    const returnsDisplay = status === 'pending' ? '-' : `$${returns.toFixed(2)}`;
+    const profitDisplay = status === 'pending' ? '-' : `$${profit.toFixed(2)}`;
     
     return `
       <tr>
@@ -1374,6 +1789,81 @@ function renderStats() {
     }).join('');
   
   $('#contentStatsBody').innerHTML = contentStatsHtml || '<tr><td colspan="5" class="muted" style="text-align:center">暂无数据</td></tr>';
+  
+  // 按分类统计（基于多重彩组）
+  renderCategoryStats();
+}
+
+// 按分类统计函数
+async function renderCategoryStats() {
+  try {
+    const categories = await multiBetDB.getAllCategories();
+    const categoryStats = {};
+    
+    // 初始化分类统计
+    categories.forEach(category => {
+      categoryStats[category.id] = {
+        name: category.name,
+        color: category.color,
+        total: 0,
+        win: 0,
+        loss: 0,
+        pending: 0,
+        totalStake: 0,
+        totalReturn: 0
+      };
+    });
+    
+    // 统计各分类的数据
+    multiBetGroups.forEach(group => {
+      if (group.category_id && categoryStats[group.category_id]) {
+        const stats = categoryStats[group.category_id];
+        stats.total++;
+        
+        if (group.result === 'win') {
+          stats.win++;
+          stats.totalStake += group.total_stake;
+          stats.totalReturn += group.total_stake * group.total_odds;
+        } else if (group.result === 'loss') {
+          stats.loss++;
+          stats.totalStake += group.total_stake;
+        } else if (group.result === 'pending') {
+          stats.pending++;
+        }
+      }
+    });
+    
+    // 生成HTML
+    const categoryStatsHtml = Object.entries(categoryStats)
+      .filter(([, stats]) => stats.total > 0) // 只显示有数据的分类
+      .sort(([,a], [,b]) => b.total - a.total)
+      .map(([categoryId, stats]) => {
+        const settledCount = stats.win + stats.loss;
+        const winRate = settledCount > 0 ? (stats.win / settledCount * 100) : 0;
+        const netProfit = stats.totalReturn - stats.totalStake;
+        
+        return `
+          <tr>
+            <td>
+              <span class="dot" style="background:${stats.color};display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>
+              ${stats.name}
+            </td>
+            <td class="right">${stats.total}</td>
+            <td class="right">${stats.win}</td>
+            <td class="right">${stats.loss}</td>
+            <td class="right">${stats.pending}</td>
+            <td class="right">${settledCount > 0 ? winRate.toFixed(1) + '%' : '-'}</td>
+            <td class="right">${stats.totalStake > 0 ? '$' + stats.totalStake.toFixed(2) : '-'}</td>
+            <td class="right ${netProfit >= 0 ? 'pos' : 'neg'}">${stats.totalStake > 0 ? '$' + netProfit.toFixed(2) : '-'}</td>
+          </tr>
+        `;
+      }).join('');
+    
+    $('#categoryStatsBody').innerHTML = categoryStatsHtml || '<tr><td colspan="8" class="muted" style="text-align:center">暂无数据</td></tr>';
+  } catch (error) {
+    console.error('渲染分类统计失败:', error);
+    $('#categoryStatsBody').innerHTML = '<tr><td colspan="8" class="muted" style="text-align:center">加载失败</td></tr>';
+  }
 }
 
 // 加载分类数据
@@ -1419,10 +1909,12 @@ async function renderCategoryNav() {
   try {
     const categories = await multiBetDB.getAllCategories();
     const categoryNavEl = $('#categoryNav');
+    const categoryDescEl = $('#categoryDescription');
+    const categoryDescTextEl = categoryDescEl.querySelector('.category-desc-text');
     
     // 添加"全部"选项
     let navHtml = `
-      <a href="#" class="category-nav-link active" data-category-id="all">
+      <a href="#" class="category-nav-link active" data-category-id="all" data-description="显示所有分类的多重彩记录">
         <span class="dot" style="background:#6b7280"></span>
         全部
       </a>
@@ -1431,7 +1923,7 @@ async function renderCategoryNav() {
     // 添加各个分类
     categories.forEach(category => {
       navHtml += `
-        <a href="#" class="category-nav-link" data-category-id="${category.id}">
+        <a href="#" class="category-nav-link" data-category-id="${category.id}" data-description="${category.description || '暂无描述'}">
           <span class="dot" style="background:${category.color}"></span>
           ${category.name}
         </a>
@@ -1439,6 +1931,10 @@ async function renderCategoryNav() {
     });
     
     categoryNavEl.innerHTML = navHtml;
+    
+    // 显示默认描述（全部）
+    categoryDescTextEl.textContent = "显示所有分类的多重彩记录";
+    categoryDescEl.style.display = 'block';
     
     // 绑定点击事件
     categoryNavEl.querySelectorAll('.category-nav-link').forEach(link => {
@@ -1448,6 +1944,11 @@ async function renderCategoryNav() {
         // 更新激活状态
         categoryNavEl.querySelectorAll('.category-nav-link').forEach(l => l.classList.remove('active'));
         link.classList.add('active');
+        
+        // 显示分类描述
+        const description = link.dataset.description;
+        categoryDescTextEl.textContent = description;
+        categoryDescEl.style.display = 'block';
         
         // 设置当前选中的分类
         const categoryId = link.dataset.categoryId;
@@ -1786,6 +2287,8 @@ function initTabs() {
   });
 }
 
+// 注意：renderMultiBetList函数内部已经有currentView变量，这里不需要再定义全局变量
+
 // 初始化
 document.addEventListener('DOMContentLoaded', async () => {
   // 初始化标签页
@@ -1810,6 +2313,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       // 激活当前按钮
       this.classList.add('active');
+      // 重新渲染列表
+      renderMultiBetList();
+    });
+  });
+  
+  // 视图切换按钮事件
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      // 移除所有视图按钮的激活状态
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      // 激活当前按钮
+      this.classList.add('active');
+      // 设置当前视图
+      currentView = this.dataset.view;
       // 重新渲染列表
       renderMultiBetList();
     });

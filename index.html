@@ -68,6 +68,102 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
   color: #334155 !important;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
+
+/* 视图切换按钮样式 */
+.view-btn {
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.view-btn:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+.view-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* 日期视图容器样式 */
+.date-view-container .date-card.total-summary {
+    border: 2px solid #3b82f6;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    margin-top: 20px;
+  }
+  
+  .date-view-container .date-card.total-summary .date-header {
+    background: #3b82f6;
+    color: white;
+  }
+  
+  .date-view-container .date-card.total-summary .date-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .date-view-container .date-card.total-summary .date-stats .stat-item {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .date-view-container {
+  display: none;
+}
+.date-view-container.active {
+  display: block;
+}
+.date-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.date-header {
+  background: #e2e8f0;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 1px solid #cbd5e1;
+}
+.date-content {
+  padding: 0;
+}
+.date-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.date-table th,
+.date-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+.date-table th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+  font-size: 12px;
+}
+.date-table tbody tr:hover {
+  background: #f1f5f9;
+}
+.date-table .right {
+  text-align: right;
+}
+.date-table tbody tr.win {
+  background: rgba(16,185,129,.08);
+}
+.date-table tbody tr.loss {
+  background: rgba(239,68,68,.08);
+}
 </style></head><body>
 <div class="navbar"><div class="row" style="align-items:center;gap:12px">
   <div style="display:flex;flex-direction:column;gap:6px;flex:1 1 auto">
@@ -82,6 +178,12 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
         </button>
         <button id="predictionTrackerBtn" class="icon-btn" title="预测来源记录验证" aria-label="预测来源记录验证" onclick="window.location.href='prediction-tracker.html'">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/><path d="M20 16V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1"/><path d="M15 2v5"/><path d="M9 2v5"/><path d="M3 9h18"/><circle cx="16" cy="16" r="2"/><path d="m21 21-1.5-1.5"/></svg>
+        </button>
+        <button id="xgTrackerBtn" class="icon-btn" title="xG 追踪分析" aria-label="xG 追踪分析" onclick="window.location.href='xg-tracker.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12l3-3 3 3 5-5"/><circle cx="7" cy="12" r="1"/><circle cx="10" cy="9" r="1"/><circle cx="13" cy="12" r="1"/><circle cx="18" cy="7" r="1"/></svg>
+        </button>
+        <button id="notebookBtn" class="icon-btn" title="记事本" aria-label="记事本" onclick="window.location.href='notebook.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
         </button>
         <div style="width:1px;height:20px;background:#e2e8f0;margin:0 4px"></div>
         <button id="exportCsv" class="icon-btn" title="导出 CSV" aria-label="导出">
@@ -137,22 +239,51 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
 <div class="wrap"><div class="layout">
   <div class="card">
     <div class="row"><input id="search" placeholder="搜索（按内容/结果/日期/联赛/比赛）"/>
-      <div class="row" style="flex:0 0 auto;align-items:center;gap:6px"><label style="align-self:center;margin:0;flex:0 0 auto">每页</label><select id="pageSize" style="width:auto;min-width:72px;max-width:120px;margin:0;flex:0 0 auto"><option>200</option><option selected>500</option><option>1000</option><option value="0">所有</option></select></div>
+      <div class="row" style="flex:0 0 auto;align-items:center;gap:6px">
+        <!-- 视图切换按钮 -->
+        <div class="view-toggle-buttons" style="display:flex;gap:4px;margin-right:8px">
+          <button id="tableViewBtn" class="view-btn active" title="表格视图">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+            </svg>
+          </button>
+          <button id="dateViewBtn" class="view-btn" title="按日期分组">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </button>
+        </div>
+        <label style="align-self:center;margin:0;flex:0 0 auto">每页</label><select id="pageSize" style="width:auto;min-width:72px;max-width:120px;margin:0;flex:0 0 auto"><option>200</option><option selected>500</option><option>1000</option><option value="0">所有</option></select></div>
     </div>
-    <table id="table"><thead><tr>
-      <th data-sort="date" style="width:110px">日期</th>
-      <th data-sort="league" style="width:180px">联赛</th>
-      <th data-sort="match" style="width:200px">比赛</th>
-      <th data-sort="description" style="width:160px">内容</th>
-      <th data-sort="odds" class="right" style="width:90px">赔率</th>
-      <th data-sort="stake" class="right" style="width:90px">金额</th>
-      <th data-sort="result" style="width:70px">结果</th>
-      <th class="right" style="width:110px">返还</th>
-      <th class="right" style="width:110px">收益</th>
-      <th class="right" style="width:110px">余额</th>
-      <th style="width:140px">操作</th>
-    </tr></thead><tbody id="tbody"></tbody></table>
-    <div class="row" style="margin-top:8px;align-items:center"><div class="small muted" id="pagerInfo">—</div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn sec" id="prevPage">上一页</button><button class="btn sec" id="nextPage">下一页</button></div></div>
+    <!-- 表格视图 -->
+    <div id="tableView" class="table-view-container">
+      <table id="table"><thead><tr id="tableHeader">
+        <th data-sort="date" style="width:110px">日期</th>
+        <th data-sort="league" style="width:180px">联赛</th>
+        <th data-sort="match" style="width:200px">比赛</th>
+        <th data-sort="description" style="width:160px">内容</th>
+        <th id="oddsHeader" data-sort="odds" class="right" style="width:90px">赔率</th>
+        <th id="stakeHeader" data-sort="stake" class="right" style="width:90px">金额</th>
+        <th data-sort="result" style="width:70px">结果</th>
+        <th id="returnHeader" class="right" style="width:110px">返还</th>
+        <th id="profitHeader" class="right" style="width:110px">收益</th>
+        <th class="right" style="width:110px">余额</th>
+        <th style="width:140px">操作</th>
+      </tr></thead><tbody id="tbody"></tbody></table>
+      <div class="row" style="margin-top:8px;align-items:center"><div class="small muted" id="pagerInfo">—</div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn sec" id="prevPage">上一页</button><button class="btn sec" id="nextPage">下一页</button></div></div>
+    </div>
+    
+    <!-- 日期视图 -->
+    <div id="dateView" class="date-view-container">
+      <!-- 日期分组的内容将在这里动态生成 -->
+    </div>
+    
     <div class="small" style="margin:12px 0;color:#64748b">数据保存在Supabase云数据库中。导出 CSV 可备份/迁移。</div>
   </div>
 <!-- 抽屉与遮罩 -->
@@ -200,6 +331,7 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
           <div class="tab-buttons" style="display:flex;gap:2px;background:#f1f5f9;border-radius:6px;padding:2px">
             <button id="tabSingle" class="tab-btn active" style="padding:4px 12px;border:none;background:white;border-radius:4px;font-size:12px;cursor:pointer;color:#334155">单条录入</button>
             <button id="tabBatch" class="tab-btn" style="padding:4px 12px;border:none;background:transparent;border-radius:4px;font-size:12px;cursor:pointer;color:#64748b">xGScore批量</button>
+            <button id="tabDailyBatch" class="tab-btn" style="padding:4px 12px;border:none;background:transparent;border-radius:4px;font-size:12px;cursor:pointer;color:#64748b">每日批量</button>
           </div>
         </div>
         <div style="display:flex;gap:4px">
@@ -210,12 +342,40 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
           </button>
         </div>
+        <!-- 每日批量录入面板 -->
+        <div id="dailyBatchEntryPanel" style="display:none">
+          <div style="margin-bottom:8px">
+            <label style="display:block;margin-bottom:4px;font-size:12px;color:#334155">每日批量数据 (简化格式)</label>
+            <textarea id="dailyBatchData" placeholder="请输入每日比赛数据，格式：&#10;联赛 | 时间 | 比赛 | 预测&#10;&#10;示例：&#10;英超 | 20:00 | 曼城 vs 阿森纳 | 主胜&#10;西甲 | 22:30 | 皇马 vs 巴萨 | 客胜&#10;德甲 | 21:30 | 拜仁 vs 多特 | 大2.5球&#10;&#10;注意：赔率默认2.0，金额默认50" style="width:100%;height:120px;resize:vertical;font-family:monospace;font-size:11px"></textarea>
+          </div>
+          <div class="row" style="margin-top:10px;gap:8px">
+            <button id="parseDailyBatch" class="btn">解析数据</button>
+            <button id="importDailyBatch" class="btn sec" disabled>批量导入</button>
+            <button id="clearDailyBatch" class="btn sec">清空</button>
+          </div>
+          <div id="dailyBatchPreview" style="margin-top:12px;display:none">
+            <div style="font-size:12px;color:#334155;margin-bottom:6px">预览 (<span id="dailyPreviewCount">0</span> 条记录)</div>
+            <div style="max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc">
+              <table style="width:100%;font-size:11px" id="dailyPreviewTable">
+                <thead style="background:#e2e8f0;position:sticky;top:0">
+                  <tr><th style="padding:4px;text-align:left">日期</th><th style="padding:4px;text-align:left">联赛</th><th style="padding:4px;text-align:left">比赛</th><th style="padding:4px;text-align:left">预测</th><th style="padding:4px;text-align:left">赔率</th><th style="padding:4px;text-align:left">金额</th></tr>
+                </thead>
+                <tbody id="dailyPreviewBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="entryCardContent">
         <!-- 单条录入面板 -->
         <div id="singleEntryPanel">
           <div class="row under"><div><label>日期</label><input id="date" type="date"/></div><div><label>联赛</label><div style="position:relative"><input id="league" type="text" placeholder="例如 英超" list="leagueList" autocomplete="off"/><datalist id="leagueList"></datalist></div></div><div><label>比赛</label><input id="match" type="text" placeholder="例如 曼城 vs 阿森纳"/></div></div>
-          <div class="row under" style="margin-top:8px"><div><label>下注内容</label><div style="position:relative"><input id="description" type="text" placeholder="例：曼城胜" list="descList" autocomplete="off"/><datalist id="descList"></datalist></div></div><div><label>赔率 (小数)</label><input id="odds" type="number" step="0.01" min="1" placeholder="例如 1.85"/></div><div><label>金额</label><input id="stake" type="number" step="0.01" min="0" placeholder="例如 50"/></div><div><label>结果</label><select id="result"><option value="pending">待定</option><option value="win">赢</option><option value="loss">输</option></select></div></div>
+          <div class="row under" style="margin-top:8px">
+            <div><label>下注内容</label><div style="position:relative"><input id="description" type="text" placeholder="例：曼城胜" list="descList" autocomplete="off"/><datalist id="descList"></datalist></div></div>
+            <div id="oddsField"><label>赔率 (小数)</label><input id="odds" type="number" step="0.01" min="1" placeholder="例如 1.85"/></div>
+            <div id="stakeField"><label>金额</label><input id="stake" type="number" step="0.01" min="0" placeholder="例如 50"/></div>
+            <div><label>结果</label><select id="result"><option value="pending">待定</option><option value="win">赢</option><option value="loss">输</option></select></div>
+          </div>
           <div class="row" style="margin-top:10px"><button id="add" class="btn">+ 录入</button><button id="resetForm" class="btn sec">清空表单</button></div>
         </div>
         <!-- xGScore批量录入面板 -->
@@ -272,11 +432,8 @@ tbody tr.loss{background:rgba(239,68,68,.08)}
 </div></div>
 <script>
 // Supabase 配置
-// Supabase 配置
 const SUPABASE_URL = 'https://hutlxrvwqrmidragxmtx.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1dGx4cnZ3cXJtaWRyYWd4bXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMjk3ODMsImV4cCI6MjA3MTYwNTc4M30.KhDGniZHLEnmYJQWugq-U0o6EyZwmCPiXNbat_8Tyg4';
-
-// Supabase 配置已完成
 
 // 初始化 Supabase 客户端
 let supabase;
@@ -618,13 +775,14 @@ const db = {
       throw error;
     }
   }
-};
+}; // 修复db对象的闭合大括号
 
 const DEFAULT_PROFILES={
   "under95":{label:"Under 95",settingsKey:"bet_settings_under95",betsKey:"bet_records_under95",exportName:"under 95.csv",categorizer:(b)=>{const d=String(b.description||"");const m=d.match(/\\b(under|over)\\s*([0-9]+(?:\\.[0-9]+)?)\\b/i);if(m){const k=(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase())+" "+(+m[2]).toFixed(m[2].includes('.')?1:0);return [k]}return firstWordCats(d)}},
   "hoods-web":{label:"hoods-web",settingsKey:"bet_settings_hoods_web",betsKey:"bet_records_hoods_web",exportName:"hoods-web.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/home\s*win/i,/away\s*win/i,/draw/i,/btts\s*yes/i,/btts\s*no/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
   "hoods-whatsapp":{label:"hoods-whatsapp",settingsKey:"bet_settings_hoods_whatsapp",betsKey:"bet_records_hoods_whatsapp",exportName:"hoods-whatsapp.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/first\s*half/i,/second\s*half/i,/corner/i,/card/i,/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
-  "supertips":{label:"SuperTipsAPP",settingsKey:"bet_settings_supertips",betsKey:"bet_records_supertips",exportName:"supertips.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i,/home\s*win/i,/away\s*win/i,/draw/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}}
+  "supertips":{label:"SuperTipsAPP",settingsKey:"bet_settings_supertips",betsKey:"bet_records_supertips",exportName:"supertips.csv",categorizer:(b)=>{const d=String(b.description||"");const ks=[/over\s*[0-9]+(\.[0-9]+)?/i,/under\s*[0-9]+(\.[0-9]+)?/i,/home\s*win/i,/away\s*win/i,/draw/i].filter(k=>k.test(d)).map(k=>d.match(k)[0].replace(/\s+/g,' ').trim());return ks.length?ks:firstWordCats(d)}},
+  "daily-match":{label:"每日比赛整理",settingsKey:"bet_settings_daily_match",betsKey:"bet_records_daily_match",exportName:"daily-match.csv",isSpecial:true,categorizer:(b)=>{const d=String(b.description||"");return firstWordCats(d)}}
 };
 const $=s=>document.querySelector(s);const navEl=$('#nav');
 let PROFILES=DEFAULT_PROFILES; // 临时初始化，将从数据库加载
@@ -640,6 +798,8 @@ async function loadProfiles() {
       if(current) location.hash = current;
     }
     renderNav();
+    // 确保everyday分类存在
+    await ensureEverydayProfile();
   } catch (error) {
     console.error('加载profiles配置失败:', error);
     PROFILES = DEFAULT_PROFILES;
@@ -648,6 +808,63 @@ async function loadProfiles() {
       if(current) location.hash = current;
     }
     renderNav();
+    // 确保everyday分类存在
+    await ensureEverydayProfile();
+  }
+}
+
+// 确保特殊分类存在
+async function ensureEverydayProfile() {
+  try {
+    // 确保daily-match分类存在并具有isSpecial属性
+    if (!PROFILES['daily-match']) {
+      const dailyMatchProfile = {
+        label: '每日比赛整理',
+        settingsKey: 'bet_settings_daily_match',
+        betsKey: 'bet_records_daily_match',
+        exportName: 'daily-match.csv',
+        color: '#8b5cf6',
+        isSpecial: true, // 标记为特殊分类，不可删除和修改
+        categorizer: (b) => {
+          const d = String(b.description || '');
+          return firstWordCats(d);
+        }
+      };
+      
+      await db.saveProfile('daily-match', dailyMatchProfile);
+      PROFILES = { ...PROFILES, 'daily-match': dailyMatchProfile };
+      renderNav();
+      console.log('已创建每日比赛整理分类');
+    } else {
+      // 如果分类已存在，确保它有isSpecial属性
+      if (!PROFILES['daily-match'].isSpecial) {
+        PROFILES['daily-match'].isSpecial = true;
+        await db.saveProfile('daily-match', PROFILES['daily-match']);
+        console.log('已更新每日比赛整理分类的isSpecial属性');
+      }
+    }
+    
+    // 保持向后兼容，如果有旧的everyday分类也保留
+    if (!PROFILES['everyday']) {
+      const everydayProfile = {
+        label: '每日比赛整理(旧)',
+        settingsKey: 'bet_settings_everyday',
+        betsKey: 'bet_records_everyday',
+        exportName: 'everyday.csv',
+        color: '#8b5cf6',
+        isSpecial: true,
+        categorizer: (b) => {
+          const d = String(b.description || '');
+          return firstWordCats(d);
+        }
+      };
+      
+      await db.saveProfile('everyday', everydayProfile);
+      PROFILES = { ...PROFILES, everyday: everydayProfile };
+      renderNav();
+    }
+  } catch (error) {
+    console.error('创建特殊分类失败:', error);
   }
 }
 
@@ -709,8 +926,66 @@ const PROFILE_COLORS={"under95":"#60a5fa","hoods-web":"#f59e0b","hoods-whatsapp"
 function renderNav(){navEl.innerHTML=Object.entries(PROFILES).map(([slug,p])=>{ const c=PROFILE_COLORS[slug]||"#94a3b8"; return `<a href="#${slug}" class="${slug===current?'active':''}"><span class="dot" style="background:${c}"></span><span>${p.label}</span></a>`; }).join('')}
 window.addEventListener('hashchange',()=>{const slug=location.hash.slice(1);if(slug&&PROFILES[slug]){current=slug;renderNav();applyProfile();render()}});
 function prof(){return PROFILES[current]} // shorthand
-let settings={initial:0,currency:'CNY'};let bets=[];let sortBy='created',sortDir='desc',page=1;
-async function applyProfile(){page=1;await loadData()}
+let settings={initial:0,currency:'CNY'};let bets=[];let sortBy='date',sortDir='desc',page=1;
+async function applyProfile(){
+  page=1;
+  await loadData();
+  
+  // 检查当前分类是否为特殊分类
+  const profileObj = prof();
+  const isSpecialCategory = profileObj.isSpecial;
+  console.log('当前分类:', current, '是否特殊分类:', isSpecialCategory);
+  console.log('完整Profile对象:', JSON.stringify(profileObj, null, 2));
+  console.log('PROFILES对象:', JSON.stringify(PROFILES, null, 2));
+  
+  // 检查是否为"每日比赛整理"分类，如果是则默认显示日期视图
+  if (current === 'everyday-profile' || profileObj.label === '每日比赛整理') {
+    switchView('date');
+  } else {
+    // 其他分类默认显示表格视图
+    switchView('table');
+  }
+  
+  // 动态隐藏/显示赔率和金额字段
+  const oddsField = document.getElementById('oddsField');
+  const stakeField = document.getElementById('stakeField');
+  
+  console.log('找到的元素:', {oddsField, stakeField});
+  
+  if (oddsField) {
+    oddsField.style.display = isSpecialCategory ? 'none' : 'block';
+    console.log('设置oddsField显示:', isSpecialCategory ? 'none' : 'block');
+  }
+  if (stakeField) {
+    stakeField.style.display = isSpecialCategory ? 'none' : 'block';
+    console.log('设置stakeField显示:', isSpecialCategory ? 'none' : 'block');
+  }
+  
+  // 动态隐藏/显示表格列头
+  const oddsHeader = document.getElementById('oddsHeader');
+  const stakeHeader = document.getElementById('stakeHeader');
+  const returnHeader = document.getElementById('returnHeader');
+  const profitHeader = document.getElementById('profitHeader');
+  
+  console.log('找到的表头元素:', {oddsHeader, stakeHeader, returnHeader, profitHeader});
+  
+  if (oddsHeader) {
+    oddsHeader.style.display = isSpecialCategory ? 'none' : 'table-cell';
+    console.log('设置oddsHeader显示:', isSpecialCategory ? 'none' : 'table-cell');
+  }
+  if (stakeHeader) {
+    stakeHeader.style.display = isSpecialCategory ? 'none' : 'table-cell';
+    console.log('设置stakeHeader显示:', isSpecialCategory ? 'none' : 'table-cell');
+  }
+  if (returnHeader) {
+    returnHeader.style.display = isSpecialCategory ? 'none' : 'table-cell';
+    console.log('设置returnHeader显示:', isSpecialCategory ? 'none' : 'table-cell');
+  }
+  if (profitHeader) {
+    profitHeader.style.display = isSpecialCategory ? 'none' : 'table-cell';
+    console.log('设置profitHeader显示:', isSpecialCategory ? 'none' : 'table-cell');
+  }
+}
 function symbol(){return settings.currency||''}
 function fmtNum(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
 function compute(b){let ret=null,profit=null;if(b.result==='win'){ret=+b.stake*+b.odds;profit=ret-+b.stake}else if(b.result==='loss'){ret=0;profit=-+b.stake}return {ret,profit}}
@@ -723,7 +998,7 @@ function updateBalances(pageRows) {
   allRows.sort((a,b)=>{
     let r=0;
     if(sortBy==='created')r=a.i-b.i;
-    else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));
+    else if(sortBy==='date')r=new Date(a.date||'1900-01-01') - new Date(b.date||'1900-01-01');
     else{
       const va=a[sortBy]??'';
       const vb=b[sortBy]??'';
@@ -752,22 +1027,24 @@ function updateBalances(pageRows) {
   }
 }
 
-function render(){const cur=$('#search').value.trim().toLowerCase();let rows=bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.description,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));rows.sort((a,b)=>{let r=0;if(sortBy==='created')r=a.i-b.i;else if(sortBy==='date')r=String(a.date??'').localeCompare(String(b.date??''));else{const va=a[sortBy]??'';const vb=b[sortBy]??'';r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))}if(r===0)r=a.i-b.i;return sortDir==='asc'?r:-r});const psValue=$('#pageSize').value;const ps=psValue==='0'?rows.length:(+psValue||500);const total=rows.length;const pages=Math.max(1,Math.ceil(total/ps));if(page>pages)page=pages;const start=(page-1)*ps;const pageRows=rows.slice(start,start+ps);$('#tbody').innerHTML=pageRows.map(r=>rowHTML(r)).join('')||`<tr><td colspan="12" class="muted">暂无数据</td></tr>`;$('#pagerInfo').textContent=psValue==='0'?`显示全部 ${total} 条`:`第 ${page}/${pages} 页，共 ${total} 条`;$('#prevPage').disabled=page<=1||psValue==='0';$('#nextPage').disabled=page>=pages||psValue==='0';updateBalances(pageRows);updateKPIs();updateLeagueList();updateDescList()}
+function render(){const cur=$('#search').value.trim().toLowerCase();let rows=bets.map((b,i)=>({...b,i})).filter(b=>[b.date,b.league,b.match,b.description,b.result].some(x=>String(x||'').toLowerCase().includes(cur)));rows.sort((a,b)=>{let r=0;if(sortBy==='created')r=a.i-b.i;else if(sortBy==='date')r=new Date(a.date||'1900-01-01') - new Date(b.date||'1900-01-01');else{const va=a[sortBy]??'';const vb=b[sortBy]??'';r=(typeof va==='number'||typeof vb==='number')?((+va)-(+vb)):String(va).localeCompare(String(vb))}if(r===0)r=a.i-b.i;return sortDir==='asc'?r:-r});const psValue=$('#pageSize').value;const ps=psValue==='0'?rows.length:(+psValue||500);const total=rows.length;const pages=Math.max(1,Math.ceil(total/ps));if(page>pages)page=pages;const start=(page-1)*ps;const pageRows=rows.slice(start,start+ps);$('#tbody').innerHTML=pageRows.map(r=>rowHTML(r)).join('')||`<tr><td colspan="12" class="muted">暂无数据</td></tr>`;$('#pagerInfo').textContent=psValue==='0'?`显示全部 ${total} 条`:`第 ${page}/${pages} 页，共 ${total} 条`;$('#prevPage').disabled=page<=1||psValue==='0';$('#nextPage').disabled=page>=pages||psValue==='0';updateBalances(pageRows);updateKPIs();updateLeagueList();updateDescList()}
 function rowHTML(b){
   const {ret,profit}=compute(b);
   const retTxt=ret==null?'—':symbol()+Number(ret).toFixed(2);
   const pTxt=profit==null?'—':(profit>=0?'+':'')+symbol()+Number(Math.abs(profit)).toFixed(2);
   const pColor=profit==null?'':(profit>=0?'#16a34a':'#b91c1c');
+  const isSpecialCategory = PROFILES[current] && PROFILES[current].isSpecial; // 检查是否为特殊分类
+  
   return `<tr class="${b.result==='win'?'win':(b.result==='loss'?'loss':'')}">
     <td contenteditable data-act="edit" data-field="date" data-idx="${b.i}">${b.date||''}</td>
     <td contenteditable data-act="edit" data-field="league" data-idx="${b.i}">${escapeHTML(b.league||'')}</td>
     <td contenteditable data-act="edit" data-field="match" data-idx="${b.i}">${escapeHTML(b.match||'')}</td>
     <td contenteditable data-act="edit" data-field="description" data-idx="${b.i}">${escapeHTML(b.description||'')}</td>
-    <td class="right" contenteditable data-act="edit" data-field="odds" data-idx="${b.i}">${(+b.odds).toFixed(3)}</td>
-    <td class="right" contenteditable data-act="edit" data-field="stake" data-idx="${b.i}">${symbol()+Number(b.stake).toFixed(2)}</td>
+    ${isSpecialCategory ? '' : `<td class="right" contenteditable data-act="edit" data-field="odds" data-idx="${b.i}">${(+b.odds).toFixed(3)}</td>`}
+    ${isSpecialCategory ? '' : `<td class="right" contenteditable data-act="edit" data-field="stake" data-idx="${b.i}">${symbol()+Number(b.stake).toFixed(2)}</td>`}
     <td><span class="result-tag ${b.result==='win'?'result-win':(b.result==='loss'?'result-loss':'result-pending')}">${b.result==='win'?'赢':(b.result==='loss'?'输':'待定')}</span></td>
-    <td class="right">${retTxt}</td>
-    <td class="right" style="color:${pColor};font-weight:700;font-size:15px">${pTxt}</td>
+    ${isSpecialCategory ? '' : `<td class="right">${retTxt}</td>`}
+    ${isSpecialCategory ? '' : `<td class="right" style="color:${pColor};font-weight:700;font-size:15px">${pTxt}</td>`}
     <td class="right" id="balance-${b.i}">${symbol()}0.00</td>
     <td><div class="row ops-line" style="gap:8px;align-items:center;flex-wrap:nowrap"><button class="link" data-act="set" data-value="pending" data-idx="${b.i}">待</button><button class="link win" data-act="set" data-value="win" data-idx="${b.i}">✓</button><button class="link loss" data-act="set" data-value="loss" data-idx="${b.i}">✗</button><button class="link" data-act="del" data-idx="${b.i}">🗑</button></div></td>
   </tr>`;
@@ -884,18 +1161,20 @@ function renderProfileList(){
   const rows=Object.entries(PROFILES).map(([slug,p])=>{
     const c=(p.color||PROFILE_COLORS[slug]||'#94a3b8');
     const active=slug===current;
+    const isSpecial = p.isSpecial; // 检查是否为特殊分类
     return `<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center">
-      <input data-k="label" data-slug="${slug}" value="${escapeHTML(p.label)}"/>
-      <input data-k="color" data-slug="${slug}" value="${c}" style="width:80px"/>
+      <input data-k="label" data-slug="${slug}" value="${escapeHTML(p.label)}" ${isSpecial ? 'readonly' : ''}/>
+      <input data-k="color" data-slug="${slug}" value="${c}" style="width:80px" ${isSpecial ? 'readonly' : ''}/>
       <button data-act="switch" data-slug="${slug}" class="icon-btn" title="切换到此分类">${active?'✅':'↪️'}</button>
-      <button data-act="delete" data-slug="${slug}" class="icon-btn" title="删除分类">🗑</button>
+      ${isSpecial ? '<span class="icon-btn" title="特殊分类，不可删除" style="color:#94a3b8">🔒</span>' : `<button data-act="delete" data-slug="${slug}" class="icon-btn" title="删除分类">🗑</button>`}
     </div>`
   }).join('');
   el.innerHTML=rows||'<div class="muted">暂无分类</div>';
 }
 $('#profileList').addEventListener('input',e=>{
   const t=e.target; const slug=t.getAttribute('data-slug'); const k=t.getAttribute('data-k'); if(!slug||!k) return;
-  if(!PROFILES[slug]) return; PROFILES[slug]={...PROFILES[slug],[k]:t.value}; 
+  if(!PROFILES[slug] || PROFILES[slug].isSpecial) return; // 禁止修改特殊分类
+  PROFILES[slug]={...PROFILES[slug],[k]:t.value}; 
   // 不再使用localStorage，PROFILES只在内存中管理
   renderNav();
 });
@@ -903,7 +1182,7 @@ $('#profileList').addEventListener('click',e=>{
   const t=e.target; const act=t.getAttribute('data-act'); const slug=t.getAttribute('data-slug'); if(!act||!slug) return;
   if(act==='switch'){ if(PROFILES[slug]){ location.hash=slug; } }
   if(act==='delete'){
-    if(!PROFILES[slug]) return; 
+    if(!PROFILES[slug] || PROFILES[slug].isSpecial) return; // 禁止删除特殊分类
     if(!confirm('删除该分类？此操作将同时删除数据库中该分类的所有数据，包括投注记录和设置。此操作不可恢复！')) return;
     
     // 删除数据库中的所有数据和配置
@@ -960,12 +1239,52 @@ function toggleTable(tableId) {
   }
 }
 function getStakeRange(stake){if(stake<=10)return '0-10';if(stake<=20)return '11-20';if(stake<=30)return '21-30';if(stake<=50)return '31-50';if(stake<=100)return '51-100';if(stake<=200)return '101-200';if(stake<=500)return '201-500';return '500+'}
-async function addBet(){const b={date:$('#date').value||new Date().toISOString().slice(0,10),league:($('#league').value||'').trim(),match:($('#match').value||'').trim(),description:($('#description').value||'').trim(),odds:+$('#odds').value,stake:+$('#stake').value,result:$('#result').value};if(!b.description){alert('请填写下注内容');return}if(!(b.odds>=1)){alert('请填写正确的赔率');return}if(!(b.stake>0)){alert('请填写正确的金额');return}showLoading();try{const newBet=await db.addBet(b,current);bets.unshift({...b,id:newBet.id,i:0});bets.forEach((bet,index)=>bet.i=index);sortBy='created';sortDir='desc';page=1;render();$('#description').value='';$('#odds').value='';$('#stake').value='';$('#result').value='pending'}catch(error){console.error('添加记录失败:',error);alert('添加记录失败，请重试')}finally{hideLoading()}}
+async function addBet(){
+  const isSpecialCategory = PROFILES[current] && PROFILES[current].isSpecial;
+  
+  const b={
+    date:$('#date').value||new Date().toISOString().slice(0,10),
+    league:($('#league').value||'').trim(),
+    match:($('#match').value||'').trim(),
+    description:($('#description').value||'').trim(),
+    odds: isSpecialCategory ? 2.0 : (+$('#odds').value),
+    stake: isSpecialCategory ? 0 : (+$('#stake').value),
+    result:$('#result').value
+  };
+  
+  if(!b.description){alert('请填写下注内容');return}
+  
+  // 对于特殊分类，跳过赔率和金额验证
+  if(!isSpecialCategory) {
+    if(!(b.odds>=1)){alert('请填写正确的赔率');return}
+    if(!(b.stake>0)){alert('请填写正确的金额');return}
+  }
+  
+  showLoading();
+  try{
+    const newBet=await db.addBet(b,current);
+    bets.unshift({...b,id:newBet.id,i:0});
+    bets.forEach((bet,index)=>bet.i=index);
+    sortBy='date';
+    sortDir='desc';
+    page=1;
+    render();
+    $('#description').value='';
+    $('#odds').value='';
+    $('#stake').value='';
+    $('#result').value='pending'
+  }catch(error){
+    console.error('添加记录失败:',error);
+    alert('添加记录失败，请重试')
+  }finally{
+    hideLoading()
+  }
+}
 async function setResult(i,v){showLoading();try{const bet=bets[i];await db.updateBet(bet.id,{result:v});bets[i].result=v;render()}catch(error){console.error('更新结果失败:',error);alert('更新失败，请重试')}finally{hideLoading()}}async function delBet(i){if(confirm('确定删除该记录？')){showLoading();try{const bet=bets[i];await db.deleteBet(bet.id);bets.splice(i,1);bets.forEach((bet,index)=>bet.i=index);render()}catch(error){console.error('删除记录失败:',error);alert('删除失败，请重试')}finally{hideLoading()}}}
 async function onInlineEdit(e){const td=e.target;if(td.dataset.act!=='edit')return;const i=+td.dataset.idx;const field=td.dataset.field;let val=td.textContent.trim();if(field==='odds'||field==='stake'){val=val.replace(/[^0-9.\-]/g,'');const num=+val;if(!isFinite(num)){alert('数值不正确');render();return}val=num}showLoading();try{const bet=bets[i];await db.updateBet(bet.id,{[field]:val});bets[i][field]=val;render()}catch(error){console.error('更新失败:',error);alert('更新失败，请重试');render()}finally{hideLoading()}}
 async function saveSettings(){const newSettings={initial:+$('#initial').value||0,currency:$('#currency').value.trim()||''};showLoading();try{await db.saveSettings(newSettings,current);settings=newSettings;render()}catch(error){console.error('保存设置失败:',error);alert('保存设置失败，请重试')}finally{hideLoading()}}
 function exportCSV(){const rows=[["kind","date","league","match","description","odds","stake","result"],["settings","initial",settings.initial,",,,,"],["settings","currency",settings.currency,",,,,"]];bets.forEach(b=>rows.push(["bet",b.date,b.league||'',b.match||'',b.description,b.odds,b.stake,b.result]));const csv=toCSV(rows);download(prof().exportName,csv)}
-async function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=async()=>{try{const rows=parseCSV(String(reader.result||''));if(!rows.length){alert('CSV 内容为空');return}const header=rows[0].map(s=>s.toLowerCase());if(header[0]!=="kind"){alert('CSV 格式不兼容');return}if(header[1]==="profile"){showLoading();try{const R={},S={};let profilesUpdated=false;for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();let slug=(r[1]||'').trim().toLowerCase();if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;if(!PROFILES[slug]){const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.description||'');return firstWordCats(d)}};PROFILES={...PROFILES,[slug]:p};profilesUpdated=true;}if(kind==="settings"){const k=(r[2]||'').toLowerCase();const v=r[3]||'';(S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;}if(kind==="bet"){const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');(R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',description:r[descIndex]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});}}for(const [slug,settingsData] of Object.entries(S)){try{await db.saveSettings(settingsData,slug);}catch(error){console.warn(`保存设置失败 ${slug}:`,error);if(error.message&&error.message.includes('duplicate key')){try{await supabase.from('user_settings').delete().eq('profile_key',slug);await db.saveSettings(settingsData,slug);}catch(retryError){console.error(`重试保存设置失败 ${slug}:`,retryError);throw retryError;}}else{throw error;}}}for(const [slug,betsData] of Object.entries(R)){for(const bet of betsData){try{await db.addBet(bet,slug);}catch(error){console.warn(`保存投注记录失败:`,error);}}}if(profilesUpdated){renderNav();}await applyProfile();render();alert('导入成功');}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}return;}const newSettings={...settings};const newBets=[];const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();if(kind==='settings'){const key=(r[1]||'').toLowerCase();const val=r[2]||'';if(key==='initial')newSettings.initial=+val||0;if(key==='currency')newSettings.currency=val}else if(kind==='bet'){let b={};if(rows[0].length>=8){b={date:r[1]||today(),league:r[2]||'',match:r[3]||'',description:r[descIndex]||'',odds:+r[5]||0,stake:+r[6]||0,result:(r[7]||'pending').toLowerCase()}} if(b.description)newBets.push(b)}}showLoading();try{await db.saveSettings(newSettings,current);for(const bet of newBets){await db.addBet(bet,current);}settings=newSettings;const allBets=await db.getBets(current);bets=allBets.map((bet,index)=>({date:bet.date,league:bet.league,match:bet.match,description:bet.description,odds:bet.odds,stake:bet.stake,result:bet.result,id:bet.id,i:index}));sortBy='created';sortDir='desc';page=1;render();alert('导入成功')}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}}catch(e){console.error(e);alert('导入失败：'+e.message)}finally{ev.target.value=''}};reader.readAsText(f)}
+async function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=async()=>{try{const rows=parseCSV(String(reader.result||''));if(!rows.length){alert('CSV 内容为空');return}const header=rows[0].map(s=>s.toLowerCase());if(header[0]!=="kind"){alert('CSV 格式不兼容');return}if(header[1]==="profile"){showLoading();try{const R={},S={};let profilesUpdated=false;for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();let slug=(r[1]||'').trim().toLowerCase();if(!/^[a-z0-9-]{2,}$/.test(slug)) continue;if(!PROFILES[slug]){const p={label:slug,settingsKey:`bet_settings_${slug}`,betsKey:`bet_records_${slug}`,exportName:`${slug}.csv`,categorizer:(b)=>{const d=String(b.description||'');return firstWordCats(d)}};PROFILES={...PROFILES,[slug]:p};profilesUpdated=true;}if(kind==="settings"){const k=(r[2]||'').toLowerCase();const v=r[3]||'';(S[slug]||(S[slug]={initial:0,currency:''}))[k]=k==='initial'?+v||0:v;}if(kind==="bet"){const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');(R[slug]||(R[slug]=[])).push({date:r[2]||today(),league:r[3]||'',match:r[4]||'',description:r[descIndex]||'',odds:+r[6]||0,stake:+r[7]||0,result:(r[8]||'pending').toLowerCase()});}}for(const [slug,settingsData] of Object.entries(S)){try{await db.saveSettings(settingsData,slug);}catch(error){console.warn(`保存设置失败 ${slug}:`,error);if(error.message&&error.message.includes('duplicate key')){try{await supabase.from('user_settings').delete().eq('profile_key',slug);await db.saveSettings(settingsData,slug);}catch(retryError){console.error(`重试保存设置失败 ${slug}:`,retryError);throw retryError;}}else{throw error;}}}for(const [slug,betsData] of Object.entries(R)){for(const bet of betsData){try{await db.addBet(bet,slug);}catch(error){console.warn(`保存投注记录失败:`,error);}}}if(profilesUpdated){renderNav();}await applyProfile();render();alert('导入成功');}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}return;}const newSettings={...settings};const newBets=[];const descIndex=header.indexOf('desc')!==-1?header.indexOf('desc'):header.indexOf('description');for(let i=1;i<rows.length;i++){const r=rows[i];const kind=(r[0]||'').toLowerCase();if(kind==='settings'){const key=(r[1]||'').toLowerCase();const val=r[2]||'';if(key==='initial')newSettings.initial=+val||0;if(key==='currency')newSettings.currency=val}else if(kind==='bet'){let b={};if(rows[0].length>=8){b={date:r[1]||today(),league:r[2]||'',match:r[3]||'',description:r[descIndex]||'',odds:+r[5]||0,stake:+r[6]||0,result:(r[7]||'pending').toLowerCase()}} if(b.description)newBets.push(b)}}showLoading();try{await db.saveSettings(newSettings,current);for(const bet of newBets){await db.addBet(bet,current);}settings=newSettings;const allBets=await db.getBets(current);bets=allBets.map((bet,index)=>({date:bet.date,league:bet.league,match:bet.match,description:bet.description,odds:bet.odds,stake:bet.stake,result:bet.result,id:bet.id,i:index}));sortBy='date';sortDir='desc';page=1;render();alert('导入成功')}catch(error){console.error('导入失败:',error);alert('导入失败，请重试')}finally{hideLoading()}}catch(e){console.error(e);alert('导入失败：'+e.message)}finally{ev.target.value=''}};reader.readAsText(f)} // 修复：添加缺失的闭合大括号
 function today(){return new Date().toISOString().slice(0,10)}
 function download(name,content){const blob=new Blob(["\uFEFF"+content],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
 function toCSV(rows){return rows.map(r=>r.map(csvEscape).join(',')).join('\n')}function csvEscape(s){if(s==null)s='';s=String(s);if(/[",\n]/.test(s))s='"'+s.replace(/"/g,'""')+'"';return s}
@@ -974,9 +1293,10 @@ function parseCSV(text){const out=[];let row=[],field='',q=false;for(let i=0;i<t
 async function buildUI(){
   // 首先从数据库加载profiles配置
   await loadProfiles();
+  
   // 然后执行其他初始化操作
   await applyProfile();render();updateLeagueList();updateDescList();
-document.querySelectorAll('th[data-sort]').forEach(th=>{th.addEventListener('click',()=>{const key=th.getAttribute('data-sort');if(sortBy===key){sortDir=sortDir==='asc'?'desc':'asc'}else{sortBy=key;sortDir='asc'};render()})});
+document.querySelectorAll('th[data-sort]').forEach(th=>{th.addEventListener('click',()=>{const key=th.getAttribute('data-sort');if(sortBy===key){sortDir=sortDir==='asc'?'desc':'asc'}else{sortBy=key;sortDir=key==='date'?'desc':'asc'};render()})});;
 $('#prevPage').onclick=()=>{if(page>1){page--;render()}};$('#nextPage').onclick=()=>{page++;render()};
 
 async function exportAllCSV(){
@@ -1112,19 +1432,41 @@ $('#toggleRightPanel').onclick=()=>{
   }
 };
 
+// 视图切换功能
+$('#tableViewBtn').onclick=()=>{
+  switchView('table');
+};
+
+$('#dateViewBtn').onclick=()=>{
+  switchView('date');
+};
+
 // 选项卡切换功能
 $('#tabSingle').onclick=()=>{
   $('#tabSingle').classList.add('active');
   $('#tabBatch').classList.remove('active');
+  $('#tabDailyBatch').classList.remove('active');
   $('#singleEntryPanel').style.display='block';
   $('#batchEntryPanel').style.display='none';
+  $('#dailyBatchEntryPanel').style.display='none';
 };
 
 $('#tabBatch').onclick=()=>{
   $('#tabBatch').classList.add('active');
   $('#tabSingle').classList.remove('active');
+  $('#tabDailyBatch').classList.remove('active');
   $('#singleEntryPanel').style.display='none';
   $('#batchEntryPanel').style.display='block';
+  $('#dailyBatchEntryPanel').style.display='none';
+};
+
+$('#tabDailyBatch').onclick=()=>{
+  $('#tabDailyBatch').classList.add('active');
+  $('#tabSingle').classList.remove('active');
+  $('#tabBatch').classList.remove('active');
+  $('#singleEntryPanel').style.display='none';
+  $('#batchEntryPanel').style.display='none';
+  $('#dailyBatchEntryPanel').style.display='block';
 };
 
 // 批量数据处理功能
@@ -1166,27 +1508,78 @@ $('#parseBatch').onclick=()=>{
   }
 };
 
-$('#importBatch').onclick=()=>{
+$('#importBatch').onclick=async()=>{
   if(parsedBatchData.length===0){
     alert('没有可导入的数据');
     return;
   }
   
   if(confirm(`确定导入${parsedBatchData.length}条记录？`)){
-    bets.push(...parsedBatchData);
-    save(prof().betsKey,bets);
-    sortBy='created';
-    sortDir='desc';
-    page=1;
-    render();
+    showLoading();
+    let successCount = 0;
+    let skipCount = 0;
+    let errorCount = 0;
+    const errors = [];
     
-    // 清空批量输入
-    $('#batchData').value='';
-    $('#batchPreview').style.display='none';
-    $('#importBatch').disabled=true;
-    parsedBatchData=[];
-    
-    alert('批量导入成功');
+    try {
+      // 检查当前profile是否有效
+      if (!current || !PROFILES[current]) {
+        throw new Error('请先选择一个有效的配置文件');
+      }
+      
+      // 逐个添加记录到数据库（带去重）
+      for(let i = 0; i < parsedBatchData.length; i++) {
+        const bet = parsedBatchData[i];
+        try {
+          const newBet = await db.addBetWithDeduplication(bet, current);
+          if (newBet) {
+            // 成功添加新记录
+            bets.unshift({...bet, id: newBet.id, i: 0});
+            successCount++;
+          } else {
+            // 跳过重复记录
+            skipCount++;
+          }
+        } catch(error) {
+          console.error(`导入第${i+1}条记录失败:`, error);
+          errors.push(`第${i+1}条: ${error.message}`);
+          errorCount++;
+        }
+      }
+      
+      // 重新排序索引
+      bets.forEach((bet, index) => bet.i = index);
+      
+      sortBy='date';
+      sortDir='desc';
+      page=1;
+      render();
+      
+      // 清空批量输入
+      $('#batchData').value='';
+      $('#batchPreview').style.display='none';
+      $('#importBatch').disabled=true;
+      parsedBatchData=[];
+      
+      // 显示导入结果
+      let message = `导入完成！\n成功: ${successCount}条\n跳过重复: ${skipCount}条`;
+      if (errorCount > 0) {
+        message += `\n失败: ${errorCount}条`;
+        if (errors.length > 0) {
+          message += `\n错误详情:\n${errors.slice(0, 5).join('\n')}`;
+          if (errors.length > 5) {
+            message += `\n...还有${errors.length - 5}个错误`;
+          }
+        }
+      }
+      alert(message);
+      
+    } catch(error) {
+      console.error('批量导入过程失败:', error);
+      alert(`批量导入失败: ${error.message}`);
+    } finally {
+      hideLoading();
+    }
   }
 };
 
@@ -1195,6 +1588,143 @@ $('#clearBatch').onclick=()=>{
   $('#batchPreview').style.display='none';
   $('#importBatch').disabled=true;
   parsedBatchData=[];
+};
+
+// 每日批量数据处理功能
+let parsedDailyBatchData=[];
+
+$('#parseDailyBatch').onclick=()=>{
+  const data=$('#dailyBatchData').value.trim();
+  if(!data){
+    alert('请输入每日批量数据');
+    return;
+  }
+  
+  try{
+    parsedDailyBatchData=parseDailyBatchData(data);
+    if(parsedDailyBatchData.length===0){
+      alert('未找到有效数据');
+      return;
+    }
+    
+    // 显示预览
+    $('#dailyPreviewCount').textContent=parsedDailyBatchData.length;
+    const tbody=$('#dailyPreviewBody');
+    tbody.innerHTML=parsedDailyBatchData.map(item=>
+      `<tr>
+        <td style="padding:4px">${item.date}</td>
+        <td style="padding:4px">${item.league}</td>
+        <td style="padding:4px">${item.match}</td>
+        <td style="padding:4px">${item.description}</td>
+        <td style="padding:4px">${item.odds}</td>
+        <td style="padding:4px">${item.stake}</td>
+      </tr>`
+    ).join('');
+    
+    $('#dailyBatchPreview').style.display='block';
+    $('#importDailyBatch').disabled=false;
+  }catch(e){
+    alert('数据解析失败：'+e.message);
+  }
+};
+
+$('#importDailyBatch').onclick=async()=>{
+  if(parsedDailyBatchData.length===0){
+    alert('没有可导入的数据');
+    return;
+  }
+  
+  if(confirm(`确定导入${parsedDailyBatchData.length}条记录到everyday分类？`)){
+    showLoading();
+    let successCount = 0;
+    let skipCount = 0;
+    let errorCount = 0;
+    const errors = [];
+    
+    try {
+      // 强制使用everyday分类
+      const targetProfile = 'everyday';
+      if (!PROFILES[targetProfile]) {
+        throw new Error('everyday分类不存在，请刷新页面重试');
+      }
+      
+      // 逐个添加记录到数据库（带去重）
+      for(let i = 0; i < parsedDailyBatchData.length; i++) {
+        const bet = parsedDailyBatchData[i];
+        try {
+          const newBet = await db.addBetWithDeduplication(bet, targetProfile);
+          if (newBet) {
+            // 成功添加新记录
+            if (current === targetProfile) {
+              bets.unshift({...bet, id: newBet.id, i: 0});
+            }
+            successCount++;
+          } else {
+            // 跳过重复记录
+            skipCount++;
+          }
+        } catch(error) {
+          console.error(`导入第${i+1}条记录失败:`, error);
+          errors.push(`第${i+1}条: ${error.message}`);
+          errorCount++;
+        }
+      }
+      
+      // 如果当前不是everyday分类，提示用户切换
+      if (current !== targetProfile) {
+        const switchToEveryday = confirm(`记录已导入到everyday分类。是否切换到everyday分类查看？`);
+        if (switchToEveryday) {
+          location.hash = targetProfile;
+          return; // 页面会自动刷新，不需要继续执行
+        }
+      } else {
+        // 重新排序索引
+        bets.forEach((bet, index) => bet.i = index);
+        
+        sortBy='date';
+        sortDir='desc';
+        page=1;
+        render();
+      }
+      
+      sortBy='date';
+      sortDir='desc';
+      page=1;
+      render();
+      
+      // 清空每日批量输入
+      $('#dailyBatchData').value='';
+      $('#dailyBatchPreview').style.display='none';
+      $('#importDailyBatch').disabled=true;
+      parsedDailyBatchData=[];
+      
+      // 显示导入结果
+      let message = `导入完成！\n成功: ${successCount}条\n跳过重复: ${skipCount}条`;
+      if (errorCount > 0) {
+        message += `\n失败: ${errorCount}条`;
+        if (errors.length > 0) {
+          message += `\n错误详情:\n${errors.slice(0, 5).join('\n')}`;
+          if (errors.length > 5) {
+            message += `\n...还有${errors.length - 5}个错误`;
+          }
+        }
+      }
+      alert(message);
+      
+    } catch(error) {
+      console.error('每日批量导入过程失败:', error);
+      alert(`每日批量导入失败: ${error.message}`);
+    } finally {
+      hideLoading();
+    }
+  }
+};
+
+$('#clearDailyBatch').onclick=()=>{
+  $('#dailyBatchData').value='';
+  $('#dailyBatchPreview').style.display='none';
+  $('#importDailyBatch').disabled=true;
+  parsedDailyBatchData=[];
 };
 
 // 解析批量数据函数
@@ -1250,6 +1780,12 @@ function parseBatchData(text){
       else if(resultStr==='输')result='loss';
       else if(resultStr==='平')result='push';
       
+      // 跳过结果为"平"的记录
+      if(result==='push'){
+        console.log('跳过平局记录:', `${homeTeam} vs ${awayTeam}`);
+        continue;
+      }
+      
       results.push({
         date:date,
         league:league,
@@ -1266,8 +1802,313 @@ function parseBatchData(text){
   
   return results;
 }
+
+} // buildUI函数的闭合大括号
+
+// 解析每日批量数据函数（专门用于everyday分类）
+function parseDailyBatchData(text){
+  const lines=text.split('\n').map(line=>line.trim()).filter(line=>line);
+  if(lines.length<1)throw new Error('请输入有效的每日批量数据');
+  
+  const results=[];
+  const today = new Date().toISOString().split('T')[0]; // 获取今天的日期
+  
+  for(let i=0;i<lines.length;i++){
+    const line=lines[i];
+    // 支持 | 分隔符，格式：联赛|时间|比赛|预测
+    const parts=line.split('|').map(p=>p.trim()).filter(p=>p);
+    
+    if(parts.length<4)continue; // 跳过不完整的行
+    
+    try{
+      const league=parts[0];
+      const time=parts[1];
+      const match=parts[2];
+      const prediction=parts[3];
+      
+      // 验证数据有效性
+      if(!league || !time || !match || !prediction)continue;
+      
+      results.push({
+        date: today, // 使用今天的日期
+        league: league,
+        match: match,
+        description: prediction, // 预测作为投注内容
+        odds: 2.0, // 默认赔率2.0
+        stake: 50, // 默认投注金额50
+        result: 'pending' // 默认结果为待定
+      });
+    }catch(e){
+      console.warn('跳过无效行：',line,e.message);
+    }
+  }
+  
+  return results;
 }
 
-document.addEventListener('DOMContentLoaded', buildUI);
+// 视图切换功能
+let currentView = 'table'; // 'table' 或 'date'
+
+function switchView(view) {
+  currentView = view;
+  
+  // 更新按钮状态
+  document.getElementById('tableViewBtn').classList.toggle('active', view === 'table');
+  document.getElementById('dateViewBtn').classList.toggle('active', view === 'date');
+  
+  // 切换视图容器
+  document.getElementById('tableView').classList.toggle('active', view === 'table');
+  document.getElementById('dateView').classList.toggle('active', view === 'date');
+  
+  if (view === 'date') {
+    renderDateView();
+  }
+}
+
+// 按日期分组渲染函数
+function renderDateView() {
+  const cur = document.getElementById('search').value.trim().toLowerCase();
+  
+  // 过滤数据
+  let filteredBets = bets.filter(b => 
+    [b.date, b.league, b.match, b.description, b.result]
+      .some(x => String(x || '').toLowerCase().includes(cur))
+  );
+  
+  // 按日期分组
+  const groupedByDate = {};
+  filteredBets.forEach(bet => {
+    const date = bet.date || '未知日期';
+    if (!groupedByDate[date]) {
+      groupedByDate[date] = [];
+    }
+    groupedByDate[date].push(bet);
+  });
+  
+  // 按日期排序（最新的在前）
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => {
+    if (a === '未知日期') return 1;
+    if (b === '未知日期') return -1;
+    return new Date(b) - new Date(a);
+  });
+  
+  // 生成HTML - 先显示按日期分组的表格
+  let html = '';
+  if (sortedDates.length === 0) {
+    html = '<div class="date-card"><div class="date-content">暂无数据</div></div>';
+  } else {
+    // 按日期分组的表格
+    sortedDates.forEach(date => {
+      const dayBets = groupedByDate[date];
+      const dayStats = calculateDayStats(dayBets);
+      
+      html += `
+        <div class="date-card">
+          <div class="date-header">
+            <div class="date-title">${formatDateTitle(date)}</div>
+            <div class="date-stats">
+              <span class="stat-item">共${dayBets.length}场</span>
+              <span class="stat-item">胜率${dayStats.winRate}%</span>
+              <span class="stat-item ${dayStats.profit >= 0 ? 'profit-positive' : 'profit-negative'}">
+                收益${dayStats.profit >= 0 ? '+' : ''}${dayStats.profit.toFixed(2)}
+              </span>
+            </div>
+          </div>
+          <div class="date-content">
+            <table class="date-table">
+              <thead>
+                <tr>
+                  <th>联赛</th>
+                  <th>比赛</th>
+                  <th>内容</th>
+                  <th class="right">赔率</th>
+                  <th class="right">金额</th>
+                  <th>结果</th>
+                  <th class="right">收益</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${dayBets.map(bet => renderDateRowHTML(bet)).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    });
+    
+    // 在最下方添加总表格
+    const totalStats = calculateTotalStats(filteredBets);
+    html += `
+      <div class="date-card total-summary">
+        <div class="date-header">
+          <div class="date-title">总计汇总</div>
+          <div class="date-stats">
+            <span class="stat-item">共${filteredBets.length}场</span>
+            <span class="stat-item">胜率${totalStats.winRate}%</span>
+            <span class="stat-item ${totalStats.profit >= 0 ? 'profit-positive' : 'profit-negative'}">
+              总收益${totalStats.profit >= 0 ? '+' : ''}${totalStats.profit.toFixed(2)}
+            </span>
+          </div>
+        </div>
+        <div class="date-content">
+          <table class="date-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>联赛</th>
+                <th>比赛</th>
+                <th>内容</th>
+                <th class="right">赔率</th>
+                <th class="right">金额</th>
+                <th>结果</th>
+                <th class="right">收益</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filteredBets.map(bet => renderTotalRowHTML(bet)).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+  
+  document.getElementById('dateView').innerHTML = html;
+}
+
+// 计算总统计
+function calculateTotalStats(allBets) {
+  const totalBets = allBets.length;
+  const winBets = allBets.filter(bet => bet.result === 'win').length;
+  const winRate = totalBets > 0 ? Math.round((winBets / totalBets) * 100) : 0;
+  
+  let profit = 0;
+  allBets.forEach(bet => {
+    if (bet.result === 'win') {
+      profit += (bet.odds - 1) * bet.stake;
+    } else if (bet.result === 'loss') {
+      profit -= bet.stake;
+    }
+  });
+  
+  return { totalBets, winBets, winRate, profit };
+}
+
+// 渲染总表格中的行HTML
+function renderTotalRowHTML(bet) {
+  const profit = bet.result === 'win' ? (bet.odds - 1) * bet.stake : 
+                 bet.result === 'loss' ? -bet.stake : 0;
+  
+  const resultClass = bet.result === 'win' ? 'win' : 
+                     bet.result === 'loss' ? 'loss' : '';
+  
+  return `
+    <tr class="${resultClass}">
+      <td>${bet.date || ''}</td>
+      <td>${bet.league || ''}</td>
+      <td>${bet.match || ''}</td>
+      <td>${bet.description || ''}</td>
+      <td class="right">${bet.odds ? bet.odds.toFixed(2) : ''}</td>
+      <td class="right">${bet.stake ? bet.stake.toFixed(0) : ''}</td>
+      <td>
+        <select onchange="updateResult(${bet.i}, this.value)" style="width:70px;padding:2px;font-size:12px">
+          <option value="pending" ${bet.result === 'pending' ? 'selected' : ''}>待定</option>
+          <option value="win" ${bet.result === 'win' ? 'selected' : ''}>赢</option>
+          <option value="loss" ${bet.result === 'loss' ? 'selected' : ''}>输</option>
+          <option value="push" ${bet.result === 'push' ? 'selected' : ''}>平</option>
+        </select>
+      </td>
+      <td class="right ${profit >= 0 ? 'profit-positive' : 'profit-negative'}">
+        ${profit !== 0 ? (profit >= 0 ? '+' : '') + profit.toFixed(2) : ''}
+      </td>
+      <td>
+        <button onclick="editBet(${bet.i})" class="btn sec small">编辑</button>
+        <button onclick="deleteBet(${bet.i})" class="btn sec small" style="margin-left:4px">删除</button>
+      </td>
+    </tr>
+  `;
+}
+
+// 计算单日统计
+function calculateDayStats(dayBets) {
+  const totalBets = dayBets.length;
+  const winBets = dayBets.filter(bet => bet.result === 'win').length;
+  const winRate = totalBets > 0 ? Math.round((winBets / totalBets) * 100) : 0;
+  
+  let profit = 0;
+  dayBets.forEach(bet => {
+    if (bet.result === 'win') {
+      profit += (bet.odds - 1) * bet.stake;
+    } else if (bet.result === 'loss') {
+      profit -= bet.stake;
+    }
+  });
+  
+  return { totalBets, winBets, winRate, profit };
+}
+
+// 格式化日期标题
+function formatDateTitle(date) {
+  if (date === '未知日期') return date;
+  
+  try {
+    const d = new Date(date);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (d.toDateString() === today.toDateString()) {
+      return `今天 (${date})`;
+    } else if (d.toDateString() === yesterday.toDateString()) {
+      return `昨天 (${date})`;
+    } else {
+      const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      return `${date} ${weekdays[d.getDay()]}`;
+    }
+  } catch (e) {
+    return date;
+  }
+}
+
+// 渲染日期视图中的行HTML
+function renderDateRowHTML(bet) {
+  const profit = bet.result === 'win' ? (bet.odds - 1) * bet.stake : 
+                 bet.result === 'loss' ? -bet.stake : 0;
+  
+  const resultClass = bet.result === 'win' ? 'win' : 
+                     bet.result === 'loss' ? 'loss' : '';
+  
+  return `
+    <tr class="${resultClass}">
+      <td>${bet.league || ''}</td>
+      <td>${bet.match || ''}</td>
+      <td>${bet.description || ''}</td>
+      <td class="right">${bet.odds ? bet.odds.toFixed(2) : ''}</td>
+      <td class="right">${bet.stake ? bet.stake.toFixed(0) : ''}</td>
+      <td>
+        <select onchange="updateResult(${bet.i}, this.value)" style="width:70px;padding:2px;font-size:12px">
+          <option value="pending" ${bet.result === 'pending' ? 'selected' : ''}>待定</option>
+          <option value="win" ${bet.result === 'win' ? 'selected' : ''}>赢</option>
+          <option value="loss" ${bet.result === 'loss' ? 'selected' : ''}>输</option>
+          <option value="push" ${bet.result === 'push' ? 'selected' : ''}>平</option>
+        </select>
+      </td>
+      <td class="right ${profit >= 0 ? 'profit-positive' : 'profit-negative'}">
+        ${profit !== 0 ? (profit >= 0 ? '+' : '') + profit.toFixed(2) : ''}
+      </td>
+      <td>
+        <button onclick="editBet(${bet.i})" class="btn sec small">编辑</button>
+        <button onclick="deleteBet(${bet.i})" class="btn sec small" style="margin-left:4px">删除</button>
+      </td>
+    </tr>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // 不再自动跳转，直接初始化页面
+  buildUI();
+}); // 添加缺失的闭合大括号
 </script></body></html>
 

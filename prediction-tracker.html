@@ -49,27 +49,24 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
 .tab-content.active{display:block}
 
 /* 日历样式 */
-.calendar{background:white;border-radius:8px;overflow:hidden}
-.calendar-header{background:#3b82f6;color:white;padding:16px;display:flex;align-items:center;justify-content:space-between}
-.calendar-nav{background:transparent;border:none;color:white;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:4px;transition:all 0.2s}
-.calendar-nav:hover{background:rgba(255,255,255,0.1)}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr)}
-.calendar-day-header{background:#f8fafc;padding:12px 8px;text-align:center;font-weight:600;color:#475569;font-size:12px}
-.calendar-day{padding:12px 8px;text-align:center;border:1px solid #f1f5f9;cursor:pointer;transition:all 0.2s;position:relative;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.calendar-day:hover{background:#f8fafc}
-.calendar-day.other-month{color:#94a3b8;background:#fafafa}
-.calendar-day.today{background:#eff6ff;border-color:#3b82f6;font-weight:600}
-.calendar-day.win{background:#dcfce7;color:#166534}
-.calendar-day.loss{background:#fee2e2;color:#991b1b}
-.calendar-day-number{font-size:14px;margin-bottom:4px}
-.calendar-day-status{font-size:10px;padding:2px 4px;border-radius:3px;background:rgba(0,0,0,0.1)}
+.calendar{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.12);border:1px solid rgba(255,255,255,0.1)}
+.calendar-header{background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.calendar-nav{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#f7fafc;font-size:16px;cursor:pointer;padding:8px 12px;border-radius:6px;transition:all 0.3s ease;font-weight:500}
+.calendar-nav:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);background:#ffffff}
+.calendar-day-header{background:linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);padding:14px 8px;text-align:center;font-weight:700;color:#2d3748;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid #cbd5e0}
+.calendar-day{padding:14px 8px;text-align:center;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.3s ease;position:relative;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#ffffff}
+.calendar-day:hover{background:linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08);border-color:#a0aec0}
+.calendar-day.other-month{color:#a0aec0;background:#f8f9fa;opacity:0.6}
+.calendar-day.today{background:linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);border:2px solid #3182ce;font-weight:700;color:#1a365d;box-shadow:0 0 0 3px rgba(49,130,206,0.1)}
+.calendar-day.win{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.calendar-day.win::after{content:'胜';position:absolute;top:50%;right:8px;transform:translateY(-50%);font-size:12px;background:#16a34a;color:white;padding:2px 6px;border-radius:6px;font-weight:700}
+.calendar-day.loss{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.calendar-day.loss::after{content:'负';position:absolute;top:50%;right:8px;transform:translateY(-50%);font-size:12px;background:#dc2626;color:white;padding:2px 6px;border-radius:6px;font-weight:700}
+.calendar-day-number{font-size:15px;margin-bottom:4px;font-weight:600}
+.calendar-day-status{font-size:10px;padding:3px 6px;border-radius:4px;background:rgba(45,55,72,0.1);color:#2d3748;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
 
-/* 统计图表样式 */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
-.stat-card{background:white;border-radius:8px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.stat-number{font-size:24px;font-weight:700;color:#3b82f6;margin-bottom:4px}
-.stat-label{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}
-.chart-container{background:white;border-radius:8px;padding:20px;margin-bottom:20px}
+
 
 /* 来源管理样式 */
 .source-item{border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin-bottom:8px;transition:all 0.2s}
@@ -79,19 +76,94 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
 .source-description{font-size:12px;color:#64748b;line-height:1.4}
 .source-actions{display:flex;gap:4px}
 
+/* 来源按钮样式 */
+.source-btn{background:linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);color:#2d3748;border:1px solid #cbd5e0;border-radius:8px;padding:10px 18px;cursor:pointer;font-size:14px;transition:all 0.3s ease;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.05);position:relative}
+.source-btn:hover{background:linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);border-color:#a0aec0;transform:translateY(-1px);box-shadow:0 4px 8px rgba(0,0,0,0.1)}
+.source-btn.active{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:#ffffff;border-color:#667eea;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
+
+/* 评级下划线样式 */
+.source-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;border-radius:0 0 6px 6px;transition:all 0.2s ease}
+.source-btn.rating-1::after{background:linear-gradient(90deg, #9ca3af, #6b7280)}
+.source-btn.rating-2::after{background:linear-gradient(90deg, #6b7280, #4b5563)}
+.source-btn.rating-3::after{background:linear-gradient(90deg, #4b5563, #374151)}
+.source-btn.rating-4::after{background:linear-gradient(90deg, #22c55e, #16a34a)}
+.source-btn.rating-5::after{background:linear-gradient(90deg, #8b5cf6, #7c3aed)}
+
+/* 多月历样式 */
+.month-calendar{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:10px;overflow:hidden;margin-bottom:18px;box-shadow:0 6px 24px rgba(0,0,0,0.1);border:1px solid rgba(255,255,255,0.1)}
+.month-calendar:last-child{margin-bottom:0}
+.month-calendar-header{background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;padding:14px 18px;font-size:15px;font-weight:700;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+.month-calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);background:#ffffff}
+.month-calendar-day-header{background:linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);padding:10px 4px;text-align:center;font-weight:700;color:#2d3748;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #cbd5e0}
+.month-calendar-day{padding:10px 4px;text-align:center;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.3s ease;position:relative;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#ffffff}
+.month-calendar-day:hover{background:linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.06);border-color:#a0aec0}
+.month-calendar-day.other-month{color:#a0aec0;background:#f8f9fa;opacity:0.5}
+.month-calendar-day.today{background:linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);border:2px solid #3182ce;font-weight:700;color:#1a365d;box-shadow:0 0 0 2px rgba(49,130,206,0.1)}
+.month-calendar-day.win{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.month-calendar-day.win::after{content:'胜';position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:10px;background:#16a34a;color:white;padding:1px 4px;border-radius:4px;font-weight:700}
+.month-calendar-day.loss{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.month-calendar-day.loss::after{content:'负';position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:10px;background:#dc2626;color:white;padding:1px 4px;border-radius:4px;font-weight:700}
+.month-calendar-day-number{font-size:13px;margin-bottom:2px;font-weight:600}
+.month-calendar-day-status{font-size:9px;padding:2px 4px;border-radius:3px;background:rgba(45,55,72,0.1);color:#2d3748;font-weight:500;text-transform:uppercase;letter-spacing:0.2px}
+
+/* 历史月份日历样式 */
+.history-calendar{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:8px;overflow:hidden;flex:1;box-shadow:0 4px 16px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.1)}
+.history-calendar-header{background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;padding:8px 12px;font-size:12px;font-weight:700;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+.history-calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);background:#ffffff}
+.history-calendar-day-header{background:linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);padding:4px 2px;text-align:center;font-weight:700;color:#2d3748;font-size:8px;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #cbd5e0}
+.history-calendar-day{padding:4px 2px;text-align:center;border:1px solid #e2e8f0;cursor:pointer;transition:all 0.2s ease;position:relative;min-height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#ffffff;font-size:10px}
+.history-calendar-day:hover{background:linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);transform:translateY(-1px);box-shadow:0 1px 4px rgba(0,0,0,0.06);border-color:#a0aec0}
+.history-calendar-day.other-month{color:#a0aec0;background:#f8f9fa;opacity:0.4}
+.history-calendar-day.today{background:linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);border:1px solid #3182ce;font-weight:700;color:#1a365d;box-shadow:0 0 0 1px rgba(49,130,206,0.1)}
+.history-calendar-day.win{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.history-calendar-day.win::after{content:'胜';position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:7px;background:#16a34a;color:white;padding:1px 2px;border-radius:2px;font-weight:700}
+.history-calendar-day.loss{background:transparent;color:#2d3748;border:1px solid #d1d5db;font-weight:600;box-shadow:none;position:relative;transform:none}
+.history-calendar-day.loss::after{content:'负';position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:7px;background:#dc2626;color:white;padding:1px 2px;border-radius:2px;font-weight:700}
+.history-calendar-day-number{font-size:10px;font-weight:600}
+
+/* 统计表格样式 */
+.stats-row{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;transition:all 0.3s ease;background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);margin-bottom:2px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.stats-row:hover{background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);transform:translateY(-2px) scale(1.01);box-shadow:0 4px 16px rgba(59,130,246,0.15)}
+.stats-row:last-child{border-bottom:none}
+.stats-row:first-child{border-radius:8px 8px 0 0}
+.stats-row span:first-child{color:#475569;font-weight:600;font-size:14px;letter-spacing:0.3px}
+.stats-row span:last-child{color:#1e293b;font-weight:800;font-size:16px;padding:4px 12px;border-radius:8px;min-width:60px;text-align:center}
+.stats-row.correct span:last-child{background:#16a34a;color:white}
+.stats-row.incorrect span:last-child{background:#dc2626;color:white}
+.card{background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.1);overflow:hidden;margin-bottom:24px}
+.card h4{background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;margin:0;padding:20px;font-weight:800;font-size:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:12px 12px 0 0}
+.card .stats-container{padding:8px}
+
 /* 响应式设计 */
 @media(max-width:768px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .calendar-day{min-height:50px;padding:8px 4px}
-  .calendar-day-number{font-size:12px}
+  .calendar-day{min-height:55px;padding:10px 4px}
+  .calendar-day-number{font-size:13px}
+  .calendar-header{padding:16px 18px}
+  .calendar-nav{padding:6px 10px;font-size:14px}
   .tab-nav{flex-wrap:wrap}
   .tab-btn{flex:1;min-width:120px}
+  .row{flex-direction:column}
+  .history-calendar-day{min-height:24px;padding:2px 1px}
+  .history-calendar-day-number{font-size:9px}
+  .history-calendar-header{padding:6px 8px;font-size:11px}
+  #historyCalendarsContainer{flex-direction:column;gap:8px}
+  .history-calendar{margin-bottom:8px}
 }
 
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr}
-  .calendar-grid{font-size:12px}
-  .calendar-day{min-height:40px;padding:6px 2px}
+  .calendar-grid{font-size:11px}
+  .calendar-day{min-height:45px;padding:8px 2px}
+  .calendar-day-number{font-size:12px}
+  .calendar-day-status{font-size:9px;padding:2px 4px}
+  .calendar-header{padding:14px 16px}
+  .calendar-nav{padding:5px 8px;font-size:13px}
+  .history-calendar-day{min-height:20px;padding:2px 1px}
+  .history-calendar-day-number{font-size:8px}
+  .history-calendar-header{padding:4px 6px;font-size:10px}
+  .source-btn{padding:6px 12px;font-size:12px}
+  #historyMonthsRange{font-size:12px;min-width:150px}
 }
 </style>
 </head>
@@ -112,6 +184,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
         <button class="icon-btn active" title="预测来源记录验证">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/><path d="M20 16V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1"/><path d="M15 2v5"/><path d="M9 2v5"/><path d="M3 9h18"/><circle cx="16" cy="16" r="2"/><path d="m21 21-1.5-1.5"/></svg>
         </button>
+        <button class="icon-btn" title="记事本" onclick="window.location.href='notebook.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        </button>
+        <button class="icon-btn" title="xG 追踪分析" onclick="window.location.href='xg-tracker.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12l3-3 3 3 5-5"/><circle cx="7" cy="12" r="1"/><circle cx="10" cy="9" r="1"/><circle cx="13" cy="12" r="1"/><circle cx="18" cy="7" r="1"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -122,13 +200,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
   <div class="card">
     <!-- 标签页导航 -->
     <div class="tab-nav">
-      <button class="tab-btn active" data-tab="sources">📝 预测来源管理</button>
-      <button class="tab-btn" data-tab="calendar">📅 日历记录</button>
-      <button class="tab-btn" data-tab="statistics">📊 统计报表</button>
+      <button class="tab-btn" data-tab="sources">📝 预测来源管理</button>
+      <button class="tab-btn active" data-tab="calendar">📅 日历记录</button>
     </div>
 
     <!-- 预测来源管理标签页 -->
-    <div class="tab-content active" id="sources">
+    <div class="tab-content" id="sources">
       <div class="row" style="gap:16px">
         <!-- 左侧：添加新来源 -->
         <div class="col" style="flex:1">
@@ -138,6 +215,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
               <label>来源名称 <span style="color:#ef4444">*</span></label>
               <input id="sourceName" placeholder="如：专家A、网站B、自己分析等">
             </div>
+            <div class="field" style="margin-bottom:12px">
+              <label>来源评级 <span style="color:#ef4444">*</span></label>
+              <select id="sourceRating">
+                <option value="">请选择评级</option>
+                <option value="1">⭐ 1星 - 一般</option>
+                <option value="2">⭐⭐ 2星 - 较好</option>
+                <option value="3">⭐⭐⭐ 3星 - 良好</option>
+                <option value="4">⭐⭐⭐⭐ 4星 - 优秀</option>
+                <option value="5">⭐⭐⭐⭐⭐ 5星 - 卓越</option>
+              </select>
+            </div>
             <div class="field" style="margin-bottom:16px">
               <label>详细说明</label>
               <textarea id="sourceDescription" rows="4" placeholder="描述该预测来源的特点、准确率、分析方法等详细信息..."></textarea>
@@ -145,6 +233,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
             <div class="row">
               <button id="addSourceBtn" class="btn">保存来源</button>
               <button id="clearSourceForm" class="btn sec">清空</button>
+            </div>
+            <div class="row" style="margin-top:12px">
+              <button id="exportDataBtn" class="btn" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:white;box-shadow:0 4px 12px rgba(16,185,129,0.3);border:none">导出数据</button>
+              <button id="importDataBtn" class="btn" style="background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%);color:white;box-shadow:0 4px 12px rgba(245,158,11,0.3);border:none">导入数据</button>
+              <input type="file" id="importFileInput" accept=".json" style="display:none">
             </div>
           </div>
         </div>
@@ -162,99 +255,105 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;box-sh
     </div>
 
     <!-- 日历记录标签页 -->
-    <div class="tab-content" id="calendar">
-      <div class="row" style="gap:16px;margin-bottom:16px">
-        <div class="field" style="flex:1">
-          <label>选择预测来源</label>
-          <select id="calendarSourceSelect">
-            <option value="">请选择预测来源</option>
-          </select>
+    <div class="tab-content active" id="calendar">
+      <!-- 预测来源按钮组 -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:600;color:#374151">选择预测来源</label>
+        <div id="sourceButtons" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <!-- 来源按钮将在这里动态生成 -->
         </div>
-        <div class="field" style="flex:1">
-          <label>快速操作</label>
-          <div class="row">
-            <button id="markWinBtn" class="btn" style="background:#22c55e">标记今日为赢</button>
-            <button id="markLossBtn" class="btn" style="background:#ef4444">标记今日为输</button>
-          </div>
-        </div>
+
       </div>
       
-      <div class="calendar" id="calendar">
-        <div class="calendar-header">
-          <button class="calendar-nav" id="prevMonth">‹</button>
-          <h3 id="currentMonth" style="margin:0;font-size:18px">2024年1月</h3>
-          <button class="calendar-nav" id="nextMonth">›</button>
+      <!-- 主要内容区域：上方当前月历，下方历史月历，右边统计 -->
+      <div class="row" style="gap:20px;align-items:flex-start">
+        <!-- 左侧：日历区域 -->
+        <div class="col" style="flex:2">
+          <!-- 当前月份日历 -->
+          <div id="currentMonthCalendar" style="margin-bottom:20px">
+            <!-- 当前月份的完整日历将在这里生成 -->
+          </div>
+          
+          <!-- 历史月份导航和日历 -->
+          <div style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border-radius:12px;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.1)">
+            <!-- 导航控件 -->
+            <div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;gap:20px">
+              <button id="prevMonthsBtn" class="calendar-nav" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);color:#3b82f6">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"></polyline></svg>
+              </button>
+              <span id="historyMonthsRange" style="font-weight:600;color:#374151;min-width:200px;text-align:center"></span>
+              <button id="nextMonthsBtn" class="calendar-nav" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);color:#3b82f6">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"></polyline></svg>
+              </button>
+            </div>
+            
+            <!-- 历史三个月的日历 -->
+            <div id="historyCalendarsContainer" style="display:flex;gap:12px">
+              <!-- 历史三个月的日历将在这里生成 -->
+            </div>
+          </div>
         </div>
-        <div class="calendar-grid" id="calendarGrid">
-          <!-- 日历网格将在这里动态生成 -->
+        
+        <!-- 右侧：统计表格 -->
+        <div class="col" style="flex:1">
+          <!-- 所有时间统计 -->
+          <div style="margin-bottom:16px">
+            <h4 style="background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;margin:0;padding:20px;font-weight:800;font-size:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:12px 12px 0 0">📊 所有时间统计</h4>
+            <div class="stats-container" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border-radius:0 0 12px 12px;box-shadow:0 8px 32px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.1);border-top:none;padding:8px">
+              <div class="stats-row">
+                <span>总预测天数</span>
+                <span id="allTotalDays">0</span>
+              </div>
+              <div class="stats-row correct">
+                <span>预测正确</span>
+                <span id="allWinDays">0</span>
+              </div>
+              <div class="stats-row incorrect">
+                <span>预测错误</span>
+                <span id="allLossDays">0</span>
+              </div>
+              <div class="stats-row">
+                <span>准确率</span>
+                <span id="allWinRate">0%</span>
+              </div>
+              <div class="stats-row">
+                <span>当前连续</span>
+                <span id="allCurrentStreak">0</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 当月统计 -->
+          <div>
+            <h4 style="background:linear-gradient(135deg, #2d3748 0%, #4a5568 100%);color:#f7fafc;margin:0;padding:20px;font-weight:800;font-size:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:12px 12px 0 0">📅 当月统计</h4>
+            <div class="stats-container" style="background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);border-radius:0 0 12px 12px;box-shadow:0 8px 32px rgba(0,0,0,0.08);border:1px solid rgba(255,255,255,0.1);border-top:none;padding:8px">
+              <div class="stats-row">
+                <span>本月预测天数</span>
+                <span id="monthTotalDays">0</span>
+              </div>
+              <div class="stats-row correct">
+                <span>预测正确</span>
+                <span id="monthWinDays">0</span>
+              </div>
+              <div class="stats-row incorrect">
+                <span>预测错误</span>
+                <span id="monthLossDays">0</span>
+              </div>
+              <div class="stats-row">
+                <span>准确率</span>
+                <span id="monthWinRate">0%</span>
+              </div>
+              <div class="stats-row">
+                <span>本月连续</span>
+                <span id="monthCurrentStreak">0</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 统计报表标签页 -->
-    <div class="tab-content" id="statistics">
-      <div class="row" style="margin-bottom:16px">
-        <div class="field" style="flex:1">
-          <label>选择预测来源</label>
-          <select id="statsSourceSelect">
-            <option value="">请选择预测来源</option>
-          </select>
-        </div>
-        <div class="field" style="flex:1">
-          <label>统计时间范围</label>
-          <select id="statsTimeRange">
-            <option value="30">最近30天</option>
-            <option value="90">最近90天</option>
-            <option value="180">最近半年</option>
-            <option value="365">最近一年</option>
-            <option value="all">全部时间</option>
-          </select>
-        </div>
-      </div>
-      
-      <!-- 统计卡片 -->
-      <div class="stats-grid" id="statsGrid">
-        <div class="stat-card">
-          <div class="stat-number" id="totalDays">0</div>
-          <div class="stat-label">总预测天数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="winDays">0</div>
-          <div class="stat-label">预测正确天数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="lossDays">0</div>
-          <div class="stat-label">预测错误天数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="winRate">0%</div>
-          <div class="stat-label">预测准确率</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="currentStreak">0</div>
-          <div class="stat-label">当前连续天数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="bestStreak">0</div>
-          <div class="stat-label">最佳连胜记录</div>
-        </div>
-      </div>
-      
-      <!-- 图表容器 -->
-      <div class="chart-container">
-        <h4 style="margin:0 0 16px;color:#334155">📈 预测趋势图</h4>
-        <div id="trendChart" style="height:300px;display:flex;align-items:center;justify-content:center;color:#64748b">
-          请选择预测来源查看趋势图
-        </div>
-      </div>
-      
-      <div class="chart-container">
-        <h4 style="margin:0 0 16px;color:#334155">📊 连胜连败分析</h4>
-        <div id="streakChart" style="height:200px;display:flex;align-items:center;justify-content:center;color:#64748b">
-          请选择预测来源查看连胜连败分析
-        </div>
-      </div>
-    </div>
+
   </div>
 </div>
 
@@ -264,6 +363,7 @@ let predictionSources = JSON.parse(localStorage.getItem('predictionSources') || 
 let predictionRecords = JSON.parse(localStorage.getItem('predictionRecords') || '{}');
 let currentDate = new Date();
 let selectedSource = null;
+let historyMonthOffset = 0; // 历史月份偏移量，0表示显示当前月前3个月
 
 // 工具函数
 function $(selector) {
@@ -306,10 +406,8 @@ function initTabs() {
         renderSourcesList();
       } else if (tabId === 'calendar') {
         updateSourceSelects();
-        renderCalendar();
-      } else if (tabId === 'statistics') {
-        updateSourceSelects();
-        updateStatistics();
+        renderMultipleCalendars();
+        updateCalendarStatistics();
       }
     });
   });
@@ -319,15 +417,32 @@ function initTabs() {
 function initSourcesManagement() {
   $('#addSourceBtn').addEventListener('click', addSource);
   $('#clearSourceForm').addEventListener('click', clearSourceForm);
+  
+  // 导出数据
+  $('#exportDataBtn').addEventListener('click', exportData);
+  
+  // 导入数据
+  $('#importDataBtn').addEventListener('click', () => {
+    $('#importFileInput').click();
+  });
+  
+  $('#importFileInput').addEventListener('change', importData);
+  
   renderSourcesList();
 }
 
 function addSource() {
   const name = $('#sourceName').value.trim();
+  const rating = $('#sourceRating').value;
   const description = $('#sourceDescription').value.trim();
   
   if (!name) {
     alert('请输入来源名称');
+    return;
+  }
+  
+  if (!rating) {
+    alert('请选择来源评级');
     return;
   }
   
@@ -340,6 +455,7 @@ function addSource() {
   const newSource = {
     id: Date.now(),
     name: name,
+    rating: parseInt(rating),
     description: description,
     createdAt: new Date().toISOString()
   };
@@ -355,6 +471,7 @@ function addSource() {
 
 function clearSourceForm() {
   $('#sourceName').value = '';
+  $('#sourceRating').value = '';
   $('#sourceDescription').value = '';
 }
 
@@ -366,10 +483,17 @@ function renderSourcesList() {
     return;
   }
   
-  container.innerHTML = predictionSources.map(source => `
+  container.innerHTML = predictionSources.map(source => {
+    const ratingStars = '⭐'.repeat(source.rating || 1);
+    const ratingText = ['', '一般', '较好', '良好', '优秀', '卓越'][source.rating || 1];
+    
+    return `
     <div class="source-item">
       <div class="source-header">
-        <div class="source-name">${source.name}</div>
+        <div class="source-name">
+          ${source.name}
+          <span style="margin-left:8px;color:#6b7280;font-size:12px">${ratingStars} ${ratingText}</span>
+        </div>
         <div class="source-actions">
           <button class="btn-small" onclick="editSource(${source.id})">编辑</button>
           <button class="btn-small warn" onclick="deleteSource(${source.id})">删除</button>
@@ -378,7 +502,8 @@ function renderSourcesList() {
       ${source.description ? `<div class="source-description">${source.description}</div>` : ''}
       <div class="small muted" style="margin-top:8px">创建时间：${new Date(source.createdAt).toLocaleString()}</div>
     </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function editSource(id) {
@@ -399,10 +524,22 @@ function editSource(id) {
     return;
   }
   
+  const ratingOptions = ['1星 - 一般', '2星 - 较好', '3星 - 良好', '4星 - 优秀', '5星 - 卓越'];
+  const currentRatingText = ratingOptions[source.rating - 1] || '1星 - 一般';
+  const newRatingText = prompt(`请选择新的评级（输入1-5）：\n1 - 一般\n2 - 较好\n3 - 良好\n4 - 优秀\n5 - 卓越\n\n当前评级：${currentRatingText}`, source.rating || 1);
+  if (newRatingText === null) return;
+  
+  const newRating = parseInt(newRatingText);
+  if (isNaN(newRating) || newRating < 1 || newRating > 5) {
+    alert('评级必须是1-5之间的数字');
+    return;
+  }
+  
   const newDescription = prompt('请输入新的详细说明：', source.description || '');
   if (newDescription === null) return;
   
   source.name = newName.trim();
+  source.rating = newRating;
   source.description = newDescription.trim();
   
   saveData();
@@ -442,126 +579,116 @@ function deleteSource(id) {
   alert('预测来源删除成功！');
 }
 
-// 更新来源选择下拉框
+// 更新来源选择下拉框和按钮
 function updateSourceSelects() {
-  const selects = ['#calendarSourceSelect', '#statsSourceSelect'];
-  
-  selects.forEach(selector => {
-    const select = $(selector);
-    if (!select) return;
-    
-    const currentValue = select.value;
-    select.innerHTML = '<option value="">请选择预测来源</option>' + 
+  // 更新统计页面的下拉框
+  const statsSelect = $('#statsSourceSelect');
+  if (statsSelect) {
+    const currentValue = statsSelect.value;
+    statsSelect.innerHTML = '<option value="">请选择预测来源</option>' + 
       predictionSources.map(source => 
         `<option value="${source.id}">${source.name}</option>`
       ).join('');
     
     // 恢复之前的选择
     if (currentValue && predictionSources.some(s => s.id == currentValue)) {
-      select.value = currentValue;
+      statsSelect.value = currentValue;
     }
+  }
+  
+  // 更新日历页面的来源按钮
+  updateSourceButtons();
+}
+
+// 更新来源按钮
+function updateSourceButtons() {
+  const container = $('#sourceButtons');
+  if (!container) return;
+  
+  if (predictionSources.length === 0) {
+    container.innerHTML = '<div style="color:#64748b;font-style:italic">暂无预测来源，请先添加预测来源</div>';
+    return;
+  }
+  
+  container.innerHTML = predictionSources.map(source => 
+    `<button class="source-btn rating-${source.rating || 1}" data-source-id="${source.id}">${source.name}</button>`
+  ).join('');
+  
+  // 添加点击事件
+  container.querySelectorAll('.source-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // 移除其他按钮的active状态
+      container.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+      // 添加当前按钮的active状态
+      btn.classList.add('active');
+      // 设置选中的来源
+      selectedSource = parseInt(btn.dataset.sourceId);
+      // 重新渲染日历和统计
+      renderMultipleCalendars();
+      updateCalendarStatistics();
+    });
   });
 }
 
 // 日历功能
 function initCalendar() {
-  $('#prevMonth').addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
-  });
-  
-  $('#nextMonth').addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
-  });
-  
-  $('#calendarSourceSelect').addEventListener('change', (e) => {
-    selectedSource = e.target.value ? parseInt(e.target.value) : null;
-    renderCalendar();
-  });
-  
-  $('#markWinBtn').addEventListener('click', () => markToday('win'));
-  $('#markLossBtn').addEventListener('click', () => markToday('loss'));
-  
-  renderCalendar();
+  renderCurrentMonthCalendar();
+  renderHistoryCalendars();
+  initHistoryNavigation();
 }
 
-function markToday(result) {
-  if (!selectedSource) {
-    alert('请先选择预测来源');
-    return;
+// 初始化历史月份导航
+function initHistoryNavigation() {
+  $('#prevMonthsBtn').addEventListener('click', () => {
+    historyMonthOffset--;
+    renderHistoryCalendars();
+    updateHistoryMonthsRange();
+  });
+  
+  $('#nextMonthsBtn').addEventListener('click', () => {
+    historyMonthOffset++;
+    renderHistoryCalendars();
+    updateHistoryMonthsRange();
+  });
+  
+  updateHistoryMonthsRange();
+}
+
+// 更新历史月份范围显示
+function updateHistoryMonthsRange() {
+  const today = new Date();
+  const baseMonth = new Date(today.getFullYear(), today.getMonth() + historyMonthOffset - 2, 1);
+  const months = [];
+  
+  for (let i = 0; i < 3; i++) {
+    const monthDate = new Date(baseMonth);
+    monthDate.setMonth(baseMonth.getMonth() + i);
+    months.push(`${monthDate.getFullYear()}年${monthDate.getMonth() + 1}月`);
   }
   
-  const today = formatDate(new Date());
-  setDayResult(today, selectedSource, result);
-  renderCalendar();
-  updateStatistics();
+  $('#historyMonthsRange').textContent = months.join(' • ');
 }
 
-function renderCalendar() {
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+// 渲染当前月份日历
+function renderCurrentMonthCalendar() {
+  const container = $('#currentMonthCalendar');
+  if (!container) return;
   
-  // 更新月份标题
-  $('#currentMonth').textContent = `${year}年${month + 1}月`;
-  
-  // 获取月份信息
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const startDate = new Date(firstDay);
-  startDate.setDate(startDate.getDate() - firstDay.getDay());
-  
-  const grid = $('#calendarGrid');
-  grid.innerHTML = '';
-  
-  // 添加星期标题
-  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-  weekdays.forEach(day => {
-    const header = document.createElement('div');
-    header.className = 'calendar-day-header';
-    header.textContent = day;
-    grid.appendChild(header);
-  });
-  
-  // 添加日期
   const today = new Date();
-  const todayStr = formatDate(today);
+  const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   
-  for (let i = 0; i < 42; i++) {
-    const date = new Date(startDate);
-    date.setDate(startDate.getDate() + i);
-    const dateStr = formatDate(date);
-    
-    const dayElement = document.createElement('div');
-    dayElement.className = 'calendar-day';
-    
-    // 添加样式类
-    if (date.getMonth() !== month) {
-      dayElement.classList.add('other-month');
-    }
-    if (dateStr === todayStr) {
-      dayElement.classList.add('today');
-    }
-    
-    // 获取该日期的预测结果
-    let dayResult = null;
-    if (selectedSource && predictionRecords[dateStr] && predictionRecords[dateStr][selectedSource]) {
-      dayResult = predictionRecords[dateStr][selectedSource];
-      dayElement.classList.add(dayResult);
-    }
-    
-    // 添加日期内容
-    dayElement.innerHTML = `
-      <div class="calendar-day-number">${date.getDate()}</div>
-      ${dayResult ? `<div class="calendar-day-status">${dayResult === 'win' ? '赢' : '输'}</div>` : ''}
-    `;
-    
-    // 添加点击事件
+  container.innerHTML = renderSingleCalendar(currentMonth, 'current');
+  
+  // 为当前月日历添加点击事件
+  container.querySelectorAll('.calendar-day').forEach(dayElement => {
     dayElement.addEventListener('click', () => {
       if (!selectedSource) {
         alert('请先选择预测来源');
         return;
       }
+      
+      const dateStr = dayElement.dataset.date;
+      if (!dateStr) return;
       
       const currentResult = predictionRecords[dateStr] && predictionRecords[dateStr][selectedSource];
       let newResult;
@@ -575,12 +702,294 @@ function renderCalendar() {
       }
       
       setDayResult(dateStr, selectedSource, newResult);
-      renderCalendar();
-      updateStatistics();
+      renderCurrentMonthCalendar();
+      renderHistoryCalendars();
+      updateCalendarStatistics();
     });
-    
-    grid.appendChild(dayElement);
+  });
+}
+
+// 渲染历史三个月的日历
+function renderHistoryCalendars() {
+  const container = $('#historyCalendarsContainer');
+  if (!container) return;
+  
+  const today = new Date();
+  const baseMonth = new Date(today.getFullYear(), today.getMonth() + historyMonthOffset - 2, 1);
+  
+  // 生成三个历史月份
+  const months = [];
+  for (let i = 0; i < 3; i++) {
+    const monthDate = new Date(baseMonth);
+    monthDate.setMonth(baseMonth.getMonth() + i);
+    months.push(monthDate);
   }
+  
+  container.innerHTML = months.map(monthDate => {
+    return renderHistoryCalendar(monthDate);
+  }).join('');
+  
+  // 为历史日历添加点击事件
+  container.querySelectorAll('.history-calendar-day').forEach(dayElement => {
+    dayElement.addEventListener('click', () => {
+      if (!selectedSource) {
+        alert('请先选择预测来源');
+        return;
+      }
+      
+      const dateStr = dayElement.dataset.date;
+      if (!dateStr) return;
+      
+      const currentResult = predictionRecords[dateStr] && predictionRecords[dateStr][selectedSource];
+      let newResult;
+      
+      if (!currentResult) {
+        newResult = 'win';
+      } else if (currentResult === 'win') {
+        newResult = 'loss';
+      } else {
+        newResult = null; // 清除记录
+      }
+      
+      setDayResult(dateStr, selectedSource, newResult);
+      renderCurrentMonthCalendar();
+      renderHistoryCalendars();
+      updateCalendarStatistics();
+    });
+  });
+}
+
+// 兼容旧函数名
+function renderMultipleCalendars() {
+  renderCurrentMonthCalendar();
+  renderHistoryCalendars();
+}
+
+// 渲染单个月的日历（当前月份用）
+function renderSingleCalendar(monthDate, type = 'current') {
+  const year = monthDate.getFullYear();
+  const month = monthDate.getMonth();
+  
+  // 获取月份信息
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDate = new Date(firstDay);
+  startDate.setDate(startDate.getDate() - firstDay.getDay());
+  
+  // 星期标题
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekdayHeaders = weekdays.map(day => 
+    `<div class="calendar-day-header">${day}</div>`
+  ).join('');
+  
+  // 生成日期
+  const today = new Date();
+  const todayStr = formatDate(today);
+  let daysHtml = '';
+  
+  for (let i = 0; i < 42; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    const dateStr = formatDate(date);
+    
+    let dayClasses = ['calendar-day'];
+    
+    // 添加样式类
+    if (date.getMonth() !== month) {
+      dayClasses.push('other-month');
+    }
+    if (dateStr === todayStr) {
+      dayClasses.push('today');
+    }
+    
+    // 获取该日期的预测结果
+    let dayResult = null;
+    if (selectedSource && predictionRecords[dateStr] && predictionRecords[dateStr][selectedSource]) {
+      dayResult = predictionRecords[dateStr][selectedSource];
+      dayClasses.push(dayResult);
+    }
+    
+    // 生成日期HTML
+    daysHtml += `
+      <div class="${dayClasses.join(' ')}" data-date="${dateStr}">
+        <div class="calendar-day-number">${date.getDate()}</div>
+      </div>
+    `;
+  }
+  
+  return `
+    <div class="calendar">
+      <div class="calendar-header">
+        <span>${year}年${month + 1}月</span>
+      </div>
+      <div class="calendar-grid">
+        ${weekdayHeaders}
+        ${daysHtml}
+      </div>
+    </div>
+  `;
+}
+
+// 渲染历史月份的小日历
+function renderHistoryCalendar(monthDate) {
+  const year = monthDate.getFullYear();
+  const month = monthDate.getMonth();
+  
+  // 获取月份信息
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDate = new Date(firstDay);
+  startDate.setDate(startDate.getDate() - firstDay.getDay());
+  
+  // 星期标题
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekdayHeaders = weekdays.map(day => 
+    `<div class="history-calendar-day-header">${day}</div>`
+  ).join('');
+  
+  // 生成日期
+  const today = new Date();
+  const todayStr = formatDate(today);
+  let daysHtml = '';
+  
+  for (let i = 0; i < 42; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    const dateStr = formatDate(date);
+    
+    let dayClasses = ['history-calendar-day'];
+    
+    // 添加样式类
+    if (date.getMonth() !== month) {
+      dayClasses.push('other-month');
+    }
+    if (dateStr === todayStr) {
+      dayClasses.push('today');
+    }
+    
+    // 获取该日期的预测结果
+    let dayResult = null;
+    if (selectedSource && predictionRecords[dateStr] && predictionRecords[dateStr][selectedSource]) {
+      dayResult = predictionRecords[dateStr][selectedSource];
+      dayClasses.push(dayResult);
+    }
+    
+    // 生成日期HTML
+    daysHtml += `
+      <div class="${dayClasses.join(' ')}" data-date="${dateStr}">
+        <div class="history-calendar-day-number">${date.getDate()}</div>
+      </div>
+    `;
+  }
+  
+  return `
+    <div class="history-calendar">
+      <div class="history-calendar-header">${year}年${month + 1}月</div>
+      <div class="history-calendar-grid">
+        ${weekdayHeaders}
+        ${daysHtml}
+      </div>
+    </div>
+  `;
+}
+
+// 更新日历页面的统计信息
+function updateCalendarStatistics() {
+  if (!selectedSource) {
+    // 清空统计显示
+    $('#allTotalDays').textContent = '0';
+    $('#allWinDays').textContent = '0';
+    $('#allLossDays').textContent = '0';
+    $('#allWinRate').textContent = '0%';
+    $('#allCurrentStreak').textContent = '0';
+    
+    $('#monthTotalDays').textContent = '0';
+    $('#monthWinDays').textContent = '0';
+    $('#monthLossDays').textContent = '0';
+    $('#monthWinRate').textContent = '0%';
+    $('#monthCurrentStreak').textContent = '0';
+    return;
+  }
+  
+  // 获取所有时间的记录
+  const allRecords = [];
+  Object.keys(predictionRecords).forEach(dateStr => {
+    if (predictionRecords[dateStr][selectedSource]) {
+      allRecords.push({
+        date: dateStr,
+        result: predictionRecords[dateStr][selectedSource]
+      });
+    }
+  });
+  
+  // 按日期排序
+  allRecords.sort((a, b) => a.date.localeCompare(b.date));
+  
+  // 计算所有时间统计
+  const allTotalDays = allRecords.length;
+  const allWinDays = allRecords.filter(r => r.result === 'win').length;
+  const allLossDays = allRecords.filter(r => r.result === 'loss').length;
+  const allWinRate = allTotalDays > 0 ? Math.round((allWinDays / allTotalDays) * 100) : 0;
+  
+  // 计算当前连续
+  let allCurrentStreak = 0;
+  let allCurrentStreakType = '';
+  if (allRecords.length > 0) {
+    const lastResult = allRecords[allRecords.length - 1].result;
+    allCurrentStreakType = lastResult;
+    for (let i = allRecords.length - 1; i >= 0; i--) {
+      if (allRecords[i].result === lastResult) {
+        allCurrentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+  
+  // 获取当月记录
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const monthRecords = allRecords.filter(record => {
+    const recordDate = new Date(record.date);
+    return recordDate.getFullYear() === currentYear && recordDate.getMonth() === currentMonth;
+  });
+  
+  // 计算当月统计
+  const monthTotalDays = monthRecords.length;
+  const monthWinDays = monthRecords.filter(r => r.result === 'win').length;
+  const monthLossDays = monthRecords.filter(r => r.result === 'loss').length;
+  const monthWinRate = monthTotalDays > 0 ? Math.round((monthWinDays / monthTotalDays) * 100) : 0;
+  
+  // 计算当月连续
+  let monthCurrentStreak = 0;
+  let monthCurrentStreakType = '';
+  if (monthRecords.length > 0) {
+    const lastResult = monthRecords[monthRecords.length - 1].result;
+    monthCurrentStreakType = lastResult;
+    for (let i = monthRecords.length - 1; i >= 0; i--) {
+      if (monthRecords[i].result === lastResult) {
+        monthCurrentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+  
+  // 更新显示
+  $('#allTotalDays').textContent = allTotalDays;
+  $('#allWinDays').textContent = allWinDays;
+  $('#allLossDays').textContent = allLossDays;
+  $('#allWinRate').textContent = allWinRate + '%';
+  $('#allCurrentStreak').textContent = allCurrentStreak > 0 ? 
+    allCurrentStreak + (allCurrentStreakType === 'win' ? '连胜' : '连败') : '0';
+  
+  $('#monthTotalDays').textContent = monthTotalDays;
+  $('#monthWinDays').textContent = monthWinDays;
+  $('#monthLossDays').textContent = monthLossDays;
+  $('#monthWinRate').textContent = monthWinRate + '%';
+  $('#monthCurrentStreak').textContent = monthCurrentStreak > 0 ? 
+    monthCurrentStreak + (monthCurrentStreakType === 'win' ? '连胜' : '连败') : '0';
 }
 
 function setDayResult(dateStr, sourceId, result) {
@@ -600,178 +1009,87 @@ function setDayResult(dateStr, sourceId, result) {
   saveData();
 }
 
-// 统计功能
-function initStatistics() {
-  $('#statsSourceSelect').addEventListener('change', updateStatistics);
-  $('#statsTimeRange').addEventListener('change', updateStatistics);
-  updateStatistics();
+
+
+// 导出数据功能
+function exportData() {
+  const data = {
+    predictionSources: predictionSources,
+    predictionRecords: predictionRecords,
+    exportTime: new Date().toISOString()
+  };
+  
+  const dataStr = JSON.stringify(data, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(dataBlob);
+  link.download = `prediction-data-${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  
+  alert('数据导出成功！');
 }
 
-function updateStatistics() {
-  const sourceId = $('#statsSourceSelect').value;
-  const timeRange = $('#statsTimeRange').value;
+// 导入数据功能
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
   
-  if (!sourceId) {
-    // 清空统计显示
-    $('#totalDays').textContent = '0';
-    $('#winDays').textContent = '0';
-    $('#lossDays').textContent = '0';
-    $('#winRate').textContent = '0%';
-    $('#currentStreak').textContent = '0';
-    $('#bestStreak').textContent = '0';
-    $('#trendChart').innerHTML = '请选择预测来源查看趋势图';
-    $('#streakChart').innerHTML = '请选择预测来源查看连胜连败分析';
-    return;
-  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      
+      if (!data.predictionSources || !data.predictionRecords) {
+        alert('导入文件格式不正确！');
+        return;
+      }
+      
+      
+      
+      predictionSources = data.predictionSources;
+      predictionRecords = data.predictionRecords;
+      
+      saveData();
+      renderSourcesList();
+      updateSourceSelects();
+      renderMultipleCalendars();
+      updateCalendarStatistics();
+      
+      alert('数据导入成功！');
+    } catch (error) {
+      alert('导入文件格式错误：' + error.message);
+    }
+  };
   
-  // 获取时间范围
-  const endDate = new Date();
-  let startDate;
-  if (timeRange === 'all') {
-    startDate = new Date('2020-01-01'); // 足够早的日期
-  } else {
-    startDate = new Date();
-    startDate.setDate(startDate.getDate() - parseInt(timeRange));
-  }
+  reader.readAsText(file);
   
-  // 收集该来源在时间范围内的记录
-  const records = [];
-  Object.keys(predictionRecords).forEach(dateStr => {
-    const date = new Date(dateStr);
-    if (date >= startDate && date <= endDate && predictionRecords[dateStr][sourceId]) {
-      records.push({
-        date: dateStr,
-        result: predictionRecords[dateStr][sourceId]
-      });
+  // 清空文件输入
+  event.target.value = '';
+}
+
+// 数据迁移：为旧数据添加默认评级
+function migrateData() {
+  let needsSave = false;
+  predictionSources.forEach(source => {
+    if (!source.rating) {
+      source.rating = 3; // 默认3星评级
+      needsSave = true;
     }
   });
   
-  // 按日期排序
-  records.sort((a, b) => a.date.localeCompare(b.date));
-  
-  // 计算统计数据
-  const totalDays = records.length;
-  const winDays = records.filter(r => r.result === 'win').length;
-  const lossDays = records.filter(r => r.result === 'loss').length;
-  const winRate = totalDays > 0 ? Math.round((winDays / totalDays) * 100) : 0;
-  
-  // 计算连胜连败
-  let currentStreak = 0;
-  let bestWinStreak = 0;
-  let bestLossStreak = 0;
-  let tempWinStreak = 0;
-  let tempLossStreak = 0;
-  
-  for (let i = records.length - 1; i >= 0; i--) {
-    const result = records[i].result;
-    
-    // 计算当前连续（从最新记录开始）
-    if (i === records.length - 1) {
-      currentStreak = 1;
-    } else if (records[i + 1].result === result) {
-      currentStreak++;
-    } else {
-      break;
-    }
+  if (needsSave) {
+    saveData();
   }
-  
-  // 计算最佳连胜连败
-  records.forEach(record => {
-    if (record.result === 'win') {
-      tempWinStreak++;
-      tempLossStreak = 0;
-      bestWinStreak = Math.max(bestWinStreak, tempWinStreak);
-    } else {
-      tempLossStreak++;
-      tempWinStreak = 0;
-      bestLossStreak = Math.max(bestLossStreak, tempLossStreak);
-    }
-  });
-  
-  // 更新显示
-  $('#totalDays').textContent = totalDays;
-  $('#winDays').textContent = winDays;
-  $('#lossDays').textContent = lossDays;
-  $('#winRate').textContent = winRate + '%';
-  
-  // 显示当前连续状态
-  if (records.length > 0) {
-    const lastResult = records[records.length - 1].result;
-    $('#currentStreak').textContent = currentStreak + (lastResult === 'win' ? '连胜' : '连败');
-  } else {
-    $('#currentStreak').textContent = '0';
-  }
-  
-  $('#bestStreak').textContent = Math.max(bestWinStreak, bestLossStreak) + (bestWinStreak >= bestLossStreak ? '连胜' : '连败');
-  
-  // 更新图表
-  updateCharts(records);
-}
-
-function updateCharts(records) {
-  // 简单的文本图表显示
-  const trendChart = $('#trendChart');
-  const streakChart = $('#streakChart');
-  
-  if (records.length === 0) {
-    trendChart.innerHTML = '暂无数据';
-    streakChart.innerHTML = '暂无数据';
-    return;
-  }
-  
-  // 趋势图：显示最近的记录
-  const recentRecords = records.slice(-30); // 最近30条记录
-  const trendHtml = recentRecords.map(record => {
-    const color = record.result === 'win' ? '#22c55e' : '#ef4444';
-    const symbol = record.result === 'win' ? '●' : '●';
-    return `<span style="color:${color};margin:0 2px;font-size:16px" title="${record.date}: ${record.result === 'win' ? '赢' : '输'}">${symbol}</span>`;
-  }).join('');
-  
-  trendChart.innerHTML = `
-    <div style="text-align:center">
-      <div style="margin-bottom:10px;color:#64748b;font-size:12px">最近${recentRecords.length}天预测结果（绿色=赢，红色=输）</div>
-      <div style="line-height:1.5">${trendHtml}</div>
-    </div>
-  `;
-  
-  // 连胜连败分析
-  const streaks = [];
-  let currentStreak = { type: records[0].result, count: 1, start: records[0].date };
-  
-  for (let i = 1; i < records.length; i++) {
-    if (records[i].result === currentStreak.type) {
-      currentStreak.count++;
-    } else {
-      currentStreak.end = records[i - 1].date;
-      streaks.push(currentStreak);
-      currentStreak = { type: records[i].result, count: 1, start: records[i].date };
-    }
-  }
-  currentStreak.end = records[records.length - 1].date;
-  streaks.push(currentStreak);
-  
-  // 显示最长的几个连胜连败
-  const topStreaks = streaks
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5)
-    .map(streak => {
-      const color = streak.type === 'win' ? '#22c55e' : '#ef4444';
-      const text = streak.type === 'win' ? '连胜' : '连败';
-      return `<div style="margin:4px 0;padding:4px 8px;background:${color}20;border-left:3px solid ${color};border-radius:3px">
-        <strong>${streak.count}${text}</strong> 
-        <span style="color:#64748b;font-size:12px">(${streak.start} ~ ${streak.end})</span>
-      </div>`;
-    }).join('');
-  
-  streakChart.innerHTML = topStreaks || '<div style="color:#64748b">暂无连胜连败记录</div>';
 }
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
+  migrateData();
   initTabs();
   initSourcesManagement();
   initCalendar();
-  initStatistics();
+
   updateSourceSelects();
 });
 </script>
